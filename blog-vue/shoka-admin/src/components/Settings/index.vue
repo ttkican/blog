@@ -1,0 +1,89 @@
+<template>
+    <el-drawer v-model="showSettings" :withHeader="false" direction="rtl" size="300px">
+        <div class="drawer-container">
+            <h3 class="drawer-title">系统布局配置</h3>
+            <div class="drawer-item">
+                <span>开启 Tag-View</span>
+                <span class="comp-style">
+                    <el-switch v-model="tagView" class="drawer-switch" />
+                </span>
+            </div>
+            <div class="drawer-item">
+                <span>固定 Header</span>
+                <span class="comp-style">
+                    <el-switch v-model="fixedHeader" class="drawer-switch" />
+                </span>
+            </div>
+            <div class="drawer-item">
+                <span>显示 Logo</span>
+                <span class="comp-style">
+                    <el-switch v-model="sidebarLogo" class="drawer-switch" />
+                </span>
+            </div>
+        </div>
+    </el-drawer>
+</template>
+
+<script setup lang="ts">
+import useStore from '@/store';
+import { reactive, ref, toRefs, watch } from "vue";
+const { setting } = useStore();
+const data = reactive({
+    fixedHeader: setting.fixedHeader,
+    tagView: setting.tagView,
+    sidebarLogo: setting.sidebarLogo
+});
+const { fixedHeader, tagView, sidebarLogo } = toRefs(data);
+const showSettings = ref(false);
+const openSetting = () => {
+    showSettings.value = true;
+};
+watch(
+    () => fixedHeader.value,
+    value => {
+        setting.changeSetting({ key: 'fixedHeader', value: value });
+    }
+);
+watch(
+    () => tagView.value,
+    value => {
+        setting.changeSetting({ key: 'tagView', value: value });
+    }
+);
+watch(
+    () => sidebarLogo.value,
+    value => {
+        setting.changeSetting({ key: 'sidebarLogo', value: value });
+    }
+);
+defineExpose({
+    openSetting,
+})
+</script>
+
+<style lang="scss" scoped>
+.drawer-container {
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+
+    .drawer-title {
+        margin-bottom: 12px;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .drawer-item {
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 14px;
+        padding: 12px 0;
+
+        .comp-style {
+            float: right;
+            margin: -3px 8px 0 0;
+        }
+    }
+
+}
+</style>

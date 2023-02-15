@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.TagMapper">
+    <insert id="saveBatchTag">
+        insert into t_tag(tag_name) values
+        <foreach collection="newTagList" item="tag" separator=",">
+            (#{tag.tagName})
+        </foreach>
+    </insert>
+
+    <select id="selectTagBackVO" resultType="com.ican.model.vo.TagBackVO">
+        SELECT t.id, t.tag_name, COUNT(tat.article_id) as article_count, t.create_time
+        FROM t_tag t
+        LEFT JOIN t_article_tag tat
+        ON t.id = tat.tag_id
+        <where>
+            <if test="keyword != null">
+                tag_name like concat('%',#{keyword},'%')
+            </if>
+        </where>
+        GROUP BY t.id
+        ORDER BY t.id DESC
+        LIMIT #{limit},#{size}
+    </select>
+
+    <select id="selectTagList" resultType="com.ican.entity.Tag">
+        select id, tag_name from t_tag where tag_name in
+        <foreach collection="tagNameList" item="tagName" open="(" separator="," close=")">
+            #{tagName}
+        </foreach>
+    </select>
+
+    <select id="selectTagNameByArticleId" resultType="java.lang.String">
+        SELECT tag_name
+        FROM t_tag t
+                 INNER JOIN t_article_tag tat ON t.id = tat.tag_id
+        WHERE article_id = #{articleId}
+    </select>
+
+    <select id="selectTagVOList" resultType="com.ican.model.vo.TagVO">
+        SELECT t.id,
+               t.tag_name,
+               COUNT(tat.tag_id) AS article_count
+        FROM t_tag t
+                 LEFT JOIN t_article_tag tat ON t.id = tat.tag_id
+        GROUP BY t.id
+    </select>
+
+    <select id="selectTagOptionList" resultType="com.ican.model.vo.TagOptionVO">
+        select id, tag_name
+        from t_tag
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.AlbumMapper">
+
+    <select id="selectAlbumBackVO" resultType="com.ican.model.vo.AlbumBackVO">
+        SELECT a.id,
+        a.album_name,
+        a.album_cover,
+        a.album_desc,
+        COUNT(p.id) AS photo_count,
+        a.`status`
+        FROM t_album a
+        LEFT JOIN t_photo p ON a.id = p.album_id
+        <where>
+            <if test="keyword != null">
+                and album_name like concat('%',#{keyword},'%')
+            </if>
+        </where>
+        GROUP BY a.id
+        ORDER BY a.id DESC
+        LIMIT #{limit}, #{size}
+    </select>
+
+    <select id="selectAlbumById" resultType="com.ican.model.dto.AlbumDTO">
+        select id, album_name, album_desc, album_cover, status
+        from t_album
+        where id = #{albumId}
+    </select>
+
+    <select id="selectAlbumInfoById" resultType="com.ican.model.vo.AlbumBackVO">
+        select id, album_name, album_desc, album_cover, status
+        from t_album
+        where id = #{albumId}
+    </select>
+
+    <select id="selectAlbumVOList" resultType="com.ican.model.vo.AlbumVO">
+        select id, album_name, album_desc, album_cover
+        from t_album
+    </select>
+</mapper>

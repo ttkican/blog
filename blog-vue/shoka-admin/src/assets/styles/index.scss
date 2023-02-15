@@ -1,0 +1,140 @@
+@import './variables.module.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+//main-container全局样式
+.app-container {
+  padding: 20px;
+}
+
+.pagination-container {
+  justify-content: flex-end;
+  margin: 1.25rem 0;
+}
+
+.top-right-btn {
+  margin-left: auto;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.create-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-border {
+  width: 100%;
+  margin-top: 5px;
+  border: 1px solid #e5e6e7;
+  border-radius: 4px;
+  background: #FFFFFF none;
+}
+
+.picture-list .el-checkbox {
+  display: inline-block !important;
+}
+
+.picture-list .el-checkbox__input {
+  position: absolute !important;
+  top: 0.3rem;
+  left: 0.8rem;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+}
+
+.vch__container {
+  .vch__legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .vch__external-legend-wrapper {
+    margin: 0 8px;
+  }
+}

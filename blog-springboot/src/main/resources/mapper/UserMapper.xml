@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.UserMapper">
+
+    <resultMap id="UserBackMap" type="com.ican.model.vo.UserBackVO">
+        <id column="id" property="id"/>
+        <result column="nickname" property="nickname"/>
+        <result column="avatar" property="avatar"/>
+        <result column="ip_address" property="ipAddress"/>
+        <result column="ip_source" property="ipSource"/>
+        <result column="login_type" property="loginType"/>
+        <result column="is_disable" property="isDisable"/>
+        <result column="login_time" property="loginTime"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="roleList" ofType="com.ican.model.vo.UserRoleVO">
+            <id column="role_id" property="id"/>
+            <id column="role_name" property="roleName"/>
+        </collection>
+    </resultMap>
+
+    <select id="countUser" resultType="java.lang.Long">
+        SELECT
+        count(id)
+        FROM
+        t_user
+        <where>
+            <if test="condition.keyword != null">
+                nickname like concat('%',#{condition.keyword},'%')
+            </if>
+            <if test="condition.loginType != null">
+                and login_type = #{condition.loginType}
+            </if>
+        </where>
+    </select>
+
+    <select id="listUserBackVO" resultMap="UserBackMap">
+        SELECT
+        u.id,
+        nickname,
+        avatar,
+        ip_address,
+        ip_source,
+        login_type,
+        r.id AS role_id,
+        r.role_name,
+        u.is_disable,
+        login_time,
+        u.create_time
+        FROM
+        ( SELECT id FROM t_user
+        <where>
+            <if test="condition.keyword != null">
+                nickname like concat('%',#{condition.keyword},'%')
+            </if>
+            <if test="condition.loginType != null">
+                and login_type = #{condition.loginType}
+            </if>
+        </where>
+        LIMIT #{limit},#{size}
+        ) temp
+        LEFT JOIN t_user u ON temp.id = u.id
+        LEFT JOIN t_user_role ur ON temp.id = ur.user_id
+        LEFT JOIN t_role r ON ur.role_id = r.id
+    </select>
+</mapper>

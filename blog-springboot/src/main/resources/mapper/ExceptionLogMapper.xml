@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.ExceptionLogMapper">
+    <select id="selectExceptionLogList" resultType="com.ican.entity.ExceptionLog">
+        SELECT
+        tel.id,
+        `module`,
+        uri,
+        `name`,
+        description,
+        error_method,
+        message,
+        request_method,
+        ip_address,
+        ip_source,
+        os,
+        browser,
+        create_time
+        FROM
+        ( SELECT id FROM t_exception_log
+        <where>
+            <if test="condition.optModule!=null">
+                `module` like concat('%',#{condition.optModule},'%')
+            </if>
+            <if test="condition.keyword!=null">
+                OR description like concat('%',#{condition.keyword},'%')
+            </if>
+        </where>
+        ORDER BY id DESC LIMIT #{limit},#{size} ) temp
+        LEFT JOIN t_exception_log tel ON temp.id = tel.id
+    </select>
+</mapper>

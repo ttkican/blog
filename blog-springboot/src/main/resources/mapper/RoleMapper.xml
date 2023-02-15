@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.RoleMapper">
+    <select id="selectRoleListByUserId" resultType="java.lang.String">
+        SELECT r.id
+        FROM t_role r
+                 INNER JOIN t_user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+          AND r.is_disable = 0
+    </select>
+
+    <select id="selectCountRoleVO" resultType="java.lang.Long">
+        SELECT
+        COUNT(id)
+        FROM
+        t_role
+        <where>
+            <if test="condition.keyword != null">
+                role_name like concat('%',#{condition.keyword},'%')
+            </if>
+            <if test="condition.isDisable != null">
+                and is_disable = #{condition.isDisable}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectRoleVOList" resultType="com.ican.model.vo.RoleVO">
+        SELECT id,
+        role_name,
+        role_desc,
+        is_disable,
+        create_time
+        FROM t_role
+        <where>
+            <if test="condition.keyword != null">
+                role_name like concat('%',#{condition.keyword},'%')
+            </if>
+            <if test="condition.isDisable != null">
+                and is_disable = #{condition.isDisable}
+            </if>
+        </where>
+        ORDER BY id
+        LIMIT #{limit},#{size}
+    </select>
+
+    <select id="selectUserRoleList" resultType="com.ican.model.vo.UserRoleVO">
+        select id, role_name
+        from t_role
+    </select>
+</mapper>

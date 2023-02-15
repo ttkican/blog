@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.MenuMapper">
+
+    <select id="selectPermissionByRoleId" resultType="java.lang.String">
+        SELECT DISTINCT m.perms
+        FROM t_menu m
+                 INNER JOIN t_role_menu rm ON m.id = rm.menu_id
+        WHERE rm.role_id = #{roleId}
+          AND m.is_disable = 0
+    </select>
+
+    <select id="selectMenuVOList" resultType="com.ican.model.vo.MenuVO">
+        SELECT id,
+        parent_id,
+        menu_type,
+        menu_name,
+        path,
+        icon,
+        component,
+        perms,
+        is_hidden,
+        is_disable,
+        order_num,
+        create_time
+        FROM t_menu
+        <where>
+            <if test="condition.keyword != null">
+                and menu_name like concat('%', #{condition.keyword}, '%')
+            </if>
+            <if test="condition.isDisable != null">
+                and is_disable = #{condition.isDisable}
+            </if>
+        </where>
+        order by order_num
+    </select>
+
+    <select id="selectMenuByUserId" resultType="com.ican.model.vo.UserMenuVO">
+        SELECT DISTINCT m.id,
+                        m.parent_id,
+                        m.menu_name,
+                        m.menu_type,
+                        m.path,
+                        m.icon,
+                        m.component,
+                        m.is_hidden
+        FROM t_menu m
+                 INNER JOIN t_role_menu rm ON m.id = rm.menu_id
+                 INNER JOIN t_user_role ur ON rm.role_id = ur.role_id
+                 INNER JOIN t_role r ON ur.role_id = r.id
+        WHERE m.menu_type in ('M', 'C')
+          AND m.is_disable = 0
+          AND r.is_disable = 0
+          AND ur.user_id = #{userId}
+    </select>
+
+    <select id="selectMenuTree" resultType="com.ican.model.vo.MenuTree">
+        SELECT id,
+               parent_id,
+               menu_name as label
+        FROM t_menu
+        WHERE is_disable = 0
+        ORDER BY order_num
+    </select>
+
+    <select id="selectMenuOptions" resultType="com.ican.model.vo.MenuOption">
+        SELECT id        as `value`,
+               parent_id,
+               menu_name as label
+        FROM t_menu
+        WHERE is_disable = 0
+          AND menu_type IN ('M', 'C')
+        ORDER BY order_num
+    </select>
+
+    <select id="selectMenuById" resultType="com.ican.model.dto.MenuDTO">
+        SELECT id,
+               parent_id,
+               menu_type,
+               menu_name,
+               path,
+               icon,
+               component,
+               perms,
+               is_hidden,
+               is_disable,
+               order_num
+        FROM t_menu
+        WHERE id = #{menuId}
+    </select>
+
+</mapper>

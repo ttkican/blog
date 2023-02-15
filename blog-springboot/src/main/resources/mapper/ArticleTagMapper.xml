@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ican.mapper.ArticleTagMapper">
+
+    <insert id="saveBatchArticleTag">
+        insert into t_article_tag(article_id,tag_id) values
+        <foreach collection="tagIdList" item="tagId" separator=",">
+            (#{articleId},#{tagId})
+        </foreach>
+    </insert>
+</mapper>
