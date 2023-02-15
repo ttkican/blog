@@ -27,8 +27,7 @@
                     </div>
                     <div class="sub-reply-item" v-for="reply of comment.replyVOList" :key="reply.id">
                         <div class="sub-user-info">
-                            <img class="sub-reply-avatar"
-                                src="https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg" />
+                            <img class="sub-reply-avatar" :src="reply.avatar" />
                             <div class="sub-user-name">{{ reply.fromNickname }}</div>
                             <svg-icon v-if="reply.fromUid == 1" icon-class="badge" style="margin-left: 5px;"></svg-icon>
                         </div>
