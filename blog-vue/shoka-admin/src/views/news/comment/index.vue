@@ -83,7 +83,7 @@
             <el-table-column prop="isCheck" label="状态" width="90" align="center">
                 <template #default="scope">
                     <el-tag v-if="scope.row.isCheck == 0" type="warning">审核中</el-tag>
-                    <el-tag v-if="scope.row.isCheck == 1" type="success">正常</el-tag>
+                    <el-tag v-if="scope.row.isCheck == 1" type="success">通过</el-tag>
                 </template>
             </el-table-column>
             <!-- 来源 -->
