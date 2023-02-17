@@ -3,8 +3,7 @@
     <div class="message-container">
         <h1 class="message-title">留言板</h1>
         <div class="message-input">
-            <input class="input" v-model="messageContent" @click="show = true" @keyup.enter="send"
-                placeholder="说点什么吧" />
+            <input class="input" v-model="messageContent" @click="show = true" @keyup.enter="send" placeholder="说点什么吧" />
             <button class="send" @click="send" v-show="show">发送</button>
         </div>
     </div>
@@ -27,7 +26,7 @@ import { addMessage, getMessageList } from '@/api/message';
 import { Message } from '@/api/message/types';
 import useStore from "@/store";
 import vueDanmaku from 'vue3-danmaku';
-const { blog } = useStore();
+const { blog, user } = useStore();
 const messageContent = ref("");
 const show = ref(false);
 const danmaku = ref();
@@ -42,9 +41,11 @@ const send = () => {
         window.$message?.warning("留言内容不能为空");
         return false;
     }
+    const userAvatar = user.avatar ? user.avatar : blog.siteConfig.touristAvatar;
+    const userNickname = user.nickname ? user.nickname : "游客";
     let message = {
-        avatar: "https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg",
-        nickname: "阿冬",
+        avatar: userAvatar,
+        nickname: userNickname,
         messageContent: messageContent.value,
     };
     addMessage(message).then(({ data }) => {
