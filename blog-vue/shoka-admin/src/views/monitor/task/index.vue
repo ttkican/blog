@@ -50,7 +50,7 @@
             <el-table-column label="状态" align="center" width="100">
                 <template #default="scope">
                     <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
-                        :active-value="0" :inactive-value="1"></el-switch>
+                        :active-value="0" :inactive-value="1" @change="handleChangeStatus(scope.row)"></el-switch>
                 </template>
             </el-table-column>
             <!-- 备注 -->
@@ -259,7 +259,7 @@
 </template>
 
 <script setup lang="ts">
-import { addTask, deleteTask, getTaskList, runTask, updateTask } from "@/api/task";
+import { addTask, deleteTask, getTaskList, runTask, updateTask, updateTaskStatus } from "@/api/task";
 import { Task, TaskForm, TaskQuery } from "@/api/task/types";
 import Crontab from '@/components/Crontab/index.vue';
 import { formatDate, formatDateTime } from "@/utils/date";
@@ -316,6 +316,18 @@ const {
     openCron,
     expression,
 } = toRefs(data);
+const handleChangeStatus = (task: Task) => {
+    let text = task.status === 0 ? "开启" : "停止";
+    messageConfirm("确定要" + text + "该任务吗?").then(() => {
+        updateTaskStatus({ id: task.id, status: task.status }).then(({ data }) => {
+            if (data.flag) {
+                notifySuccess(data.msg);
+            } else {
+                task.status = task.status === 0 ? 1 : 0;
+            }
+        })
+    }).catch(() => { task.status = task.status === 0 ? 1 : 0; });
+};
 const handleTaskLog = () => {
     router.push("/log/task");
 };
