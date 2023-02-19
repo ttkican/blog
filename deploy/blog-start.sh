@@ -1,12 +1,13 @@
-#源jar路径
+#!/bin/bash
+# 源jar路径
 SOURCE_PATH=/usr/local/docker
-#docker 镜像/容器名字或者jar名字 这里都命名为这个
+# docker 镜像/容器名字或者jar名字 这里都命名为这个
 SERVER_NAME=blog-springboot-2.0.jar
 TAG=latest
 SERVER_PORT=8080
-#容器id
+# 容器id
 CID=$(docker ps | grep "$SERVER_NAME" | awk '{print $1}')
-#镜像id
+# 镜像id
 IID=$(docker images | grep "$SERVER_NAME:$TAG" | awk '{print $3}')
 if [ -n "$CID" ]; then
   echo "存在容器$SERVER_NAME, CID-$CID"

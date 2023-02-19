@@ -1,0 +1,67 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: redis
+    restart: always
+    command: --requirepass "${REDIS_PASSWORD}"
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION}
+    container_name: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  elasticsearch:
+    image: elasticsearch:${ELASTICSEARCH_VERSION}
+    container_name: elasticsearch
+    restart: always
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms64m -Xmx128m"
+      http.cors.enabled: "true"
+      http.cors.allow-origin: "*"
+      xpack.security.enabled: "true"
+      ELASTIC_PASSWORD: "${ELASTICSEARCH_PASSWORD}"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - es-net
+  kibana:
+    image: kibana:${ELASTICSEARCH_VERSION}
+    container_name: kibana
+    environment:
+      elasticsearch.hosts: "http://elasticsearch:9200"
+      ELASTICSEARCH_USERNAME: "elastic"
+      ELASTICSEARCH_PASSWORD: "${ELASTICSEARCH_PASSWORD}"
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - es-net
+  canal_server:
+    image: canal-server
+    container_name: canal
+    volumes:
+      - "/usr/local/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties"
+      - "/usr/local/canal/canal.properties:/home/admin/canal-server/conf/canal.properties"
+    ports:
+      - "11111:11111"
+networks:
+  es-net:
