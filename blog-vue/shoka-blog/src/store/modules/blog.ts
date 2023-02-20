@@ -1,4 +1,4 @@
-import { BlogInfo, SiteConfig } from "@/api/blog/types";
+import { BlogInfo, SiteConfig } from "@/api/blogInfo/types";
 
 const useBlogStore = defineStore("useBlogStore", {
   state: (): BlogInfo => ({
