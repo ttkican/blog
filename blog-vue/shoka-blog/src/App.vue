@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import useStore from '@/store';
-import { getBlogInfo, report } from "./api/blog";
+import { getBlogInfo, report } from "@/api/blogInfo";
 const { blog } = useStore();
 onMounted(() => {
   console.log(
