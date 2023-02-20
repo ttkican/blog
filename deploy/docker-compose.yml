@@ -1,5 +1,18 @@
 version: "3"
 services:
+  blog-service:
+    build: .
+    image: blog-springboot:latest
+    container_name: blog-springboot
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+    volumes:
+      - "/usr/local/upload:/usr/local/upload"
+    ports:
+      - "8080:8080"
   mysql:
     image: mysql:${MYSQL_VERSION}
     container_name: mysql
@@ -45,10 +58,8 @@ services:
   kibana:
     image: kibana:${ELASTICSEARCH_VERSION}
     container_name: kibana
-    environment:
-      elasticsearch.hosts: "http://elasticsearch:9200"
-      ELASTICSEARCH_USERNAME: "elastic"
-      ELASTICSEARCH_PASSWORD: "${ELASTICSEARCH_PASSWORD}"
+    volumes:
+      - "/usr/local/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml"
     depends_on:
       - elasticsearch
     ports:
@@ -56,12 +67,26 @@ services:
     networks:
       - es-net
   canal_server:
-    image: canal-server
+    image: canal/canal-server:${CANAL_VERSION}
     container_name: canal
     volumes:
       - "/usr/local/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties"
       - "/usr/local/canal/canal.properties:/home/admin/canal-server/conf/canal.properties"
     ports:
       - "11111:11111"
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    container_name: nginx
+    restart: always
+    volumes:
+      - "/usr/local/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "/etc/ssl/certs:/etc/ssl/certs"
+      - "/usr/local/vue:/usr/local/vue"
+      - "/usr/local/upload:/usr/local/upload"
+    privileged: true
+    ports:
+      - "443:443"
+      - "80:80"
 networks:
   es-net:
+    driver: bridge
