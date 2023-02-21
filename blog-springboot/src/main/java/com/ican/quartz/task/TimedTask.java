@@ -23,4 +23,11 @@ public class TimedTask {
     public void clear() {
         redisService.deleteObject(UNIQUE_VISITOR);
     }
+
+    /**
+     * 测试任务
+     */
+    public void test() {
+        System.out.println("测试任务");
+    }
 }
