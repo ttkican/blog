@@ -25,3 +25,16 @@ export function updateSiteConfig(data: SiteConfig): AxiosPromise<Result<null>> {
     data,
   });
 }
+
+/**
+ * 上传网站配置图片
+ * @returns 图片链接
+ */
+export function uploadSiteImg(data: FormData): AxiosPromise<Result<string>> {
+  return request({
+    url: "/admin/site/upload",
+    headers: { "content-type": "multipart/form-data" },
+    method: "post",
+    data,
+  });
+}

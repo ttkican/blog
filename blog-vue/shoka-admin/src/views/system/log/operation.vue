@@ -174,7 +174,7 @@ const handleDelete = (id?: number) => {
         });
     }).catch(() => { });
 };
-const getList = () => {    
+const getList = () => {
     loading.value = true;
     getOperationLogList(queryParams.value).then(({ data }) => {
         logList.value = data.data.recordList;

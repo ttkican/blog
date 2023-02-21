@@ -15,9 +15,9 @@
                     <el-row>
                         <el-col :md="6">
                             <el-form-item label="用户头像">
-                                <el-upload class="avatar-uploader" :headers="authorization"
-                                    action="/api/admin/site/upload" :show-file-list="false" accept="image/*"
-                                    :before-upload="beforeUpload" :on-success="hanldeUserAvatarSuccess">
+                                <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
+                                    :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                                    :on-success="handleUserAvatarSuccess">
                                     <img v-if="siteConfig.userAvatar" :src="siteConfig.userAvatar" class="avatar" />
                                     <el-icon v-else class="avatar-uploader-icon">
                                         <Plus />
@@ -27,11 +27,10 @@
                         </el-col>
                         <el-col :md="6">
                             <el-form-item label="游客头像">
-                                <el-upload class="avatar-uploader" :headers="authorization"
-                                    action="/api/admin/site/upload" :show-file-list="false" accept="image/*"
-                                    :before-upload="beforeUpload" :on-success="handleTouristAvatarSuccess">
-                                    <img v-if="siteConfig.touristAvatar" :src="siteConfig.touristAvatar"
-                                        class="avatar" />
+                                <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
+                                    :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                                    :on-success="handleTouristAvatarSuccess">
+                                    <img v-if="siteConfig.touristAvatar" :src="siteConfig.touristAvatar" class="avatar" />
                                     <el-icon v-else class="avatar-uploader-icon">
                                         <Plus />
                                     </el-icon>
@@ -167,9 +166,9 @@
                     <el-row style="width: 600px" v-if="siteConfig.isReward == 1">
                         <el-col :md="12">
                             <el-form-item label="微信收款码">
-                                <el-upload class="avatar-uploader" :headers="authorization"
-                                    action="/api/admin/site/upload" :show-file-list="false" accept="image/*"
-                                    :before-upload="beforeUpload" :on-success="handleWeiXinSuccess">
+                                <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
+                                    :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                                    :on-success="handleWeiXinSuccess">
                                     <img v-if="siteConfig.weiXinCode" :src="siteConfig.weiXinCode" class="avatar" />
                                     <el-icon v-else class="avatar-uploader-icon">
                                         <Plus />
@@ -179,9 +178,9 @@
                         </el-col>
                         <el-col :md="12">
                             <el-form-item label="支付宝收款码">
-                                <el-upload class="avatar-uploader" :headers="authorization"
-                                    action="/api/admin/site/upload" :show-file-list="false" accept="image/*"
-                                    :before-upload="beforeUpload" :on-success="handleAliSuccess">
+                                <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
+                                    :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                                    :on-success="handleAliSuccess">
                                     <img v-if="siteConfig.aliCode" :src="siteConfig.aliCode" class="avatar" />
                                     <el-icon v-else class="avatar-uploader-icon">
                                         <Plus />
@@ -238,8 +237,7 @@
 </template>
 
 <script setup lang="ts">
-import { uploadArticleCover } from '@/api/article';
-import { getSiteConfig, updateSiteConfig } from '@/api/site';
+import { getSiteConfig, updateSiteConfig, uploadSiteImg } from '@/api/site';
 import { SiteConfig } from '@/api/site/types';
 import EmojiExtension from '@/components/EmojiExtension/index.vue';
 import { toolbars } from '@/components/EmojiExtension/staticConfig';
@@ -272,7 +270,7 @@ const uploadImg = async (files: Array<File>, callback: (urls: string[]) => void)
             return new Promise((rev, rej) => {
                 const form = new FormData();
                 form.append('file', file);
-                uploadArticleCover(form).then(({ data }) => {
+                uploadSiteImg(form).then(({ data }) => {
                     if (data.flag) {
                         rev(data.data);
                     }
@@ -285,7 +283,7 @@ const uploadImg = async (files: Array<File>, callback: (urls: string[]) => void)
 const insert = (generator: InsertContentGenerator) => {
     editorRef.value?.insert(generator);
 };
-const hanldeUserAvatarSuccess = (response: AxiosResponse) => {
+const handleUserAvatarSuccess = (response: AxiosResponse) => {
     siteConfig.value.userAvatar = response.data;
 };
 const handleTouristAvatarSuccess = (response: AxiosResponse) => {

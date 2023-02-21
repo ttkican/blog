@@ -137,6 +137,7 @@ export function updateArticleRecommend(data: Recommend): AxiosPromise<Result<nul
 export function uploadArticleCover(data: FormData): AxiosPromise<Result<string>> {
   return request({
     url: "/admin/article/upload",
+    headers: { "content-type": "multipart/form-data" },
     method: "post",
     data,
   });
