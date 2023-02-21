@@ -17,11 +17,12 @@
 </template>
 
 <script lang="ts" setup>
-import { InsertContentGenerator } from 'md-editor-v3';
+import MdEditor,{ InsertContentGenerator } from 'md-editor-v3';
 import type { PropType } from 'vue';
 import { reactive } from 'vue';
 import { emojis } from './data';
 
+const DropdownToolbar = MdEditor.DropdownToolbar;
 const props = defineProps({
     onInsert: {
         type: Function as PropType<(generator: InsertContentGenerator) => void>,

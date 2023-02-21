@@ -88,12 +88,7 @@
                         <el-input v-model="siteConfig.siteAuthor" style="width: 400px;"></el-input>
                     </el-form-item>
                     <el-form-item label="关于我">
-                        <md-editor ref="editorRef" v-model="siteConfig.aboutMe" @on-upload-img="uploadImg"
-                            :toolbars="toolbars">
-                            <template #defToolbars>
-                                <emoji-extension :on-insert="insert" />
-                            </template>
-                        </md-editor>
+                        <v-md-editor v-model="siteConfig.aboutMe" :left-toolbar="toolList" height="400px" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="handleUpdate">保 存</el-button>
@@ -237,18 +232,16 @@
 </template>
 
 <script setup lang="ts">
-import { getSiteConfig, updateSiteConfig, uploadSiteImg } from '@/api/site';
+import { getSiteConfig, updateSiteConfig } from '@/api/site';
 import { SiteConfig } from '@/api/site/types';
-import EmojiExtension from '@/components/EmojiExtension/index.vue';
-import { toolbars } from '@/components/EmojiExtension/staticConfig';
 import { notifySuccess } from '@/utils/modal';
 import { getToken, token_prefix } from '@/utils/token';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { UploadRawFile } from 'element-plus';
 import * as imageConversion from 'image-conversion';
-import type { ExposeParam, InsertContentGenerator } from 'md-editor-v3';
-import { computed, onMounted, reactive, ref, toRefs } from 'vue';
-const editorRef = ref<ExposeParam>();
+import { computed, onMounted, reactive, toRefs } from 'vue';
+
+const toolList = "undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | emoji tip todo-list";
 const authorization = computed(() => {
     return {
         Authorization: token_prefix + getToken(),
@@ -264,25 +257,6 @@ const {
     socialList,
     loginList,
 } = toRefs(data);
-const uploadImg = async (files: Array<File>, callback: (urls: string[]) => void) => {
-    const res = await Promise.all(
-        files.map((file) => {
-            return new Promise((rev, rej) => {
-                const form = new FormData();
-                form.append('file', file);
-                uploadSiteImg(form).then(({ data }) => {
-                    if (data.flag) {
-                        rev(data.data);
-                    }
-                }).catch((error: AxiosError) => rej(error));
-            });
-        })
-    );
-    callback(res.map((item: any) => item));
-};
-const insert = (generator: InsertContentGenerator) => {
-    editorRef.value?.insert(generator);
-};
 const handleUserAvatarSuccess = (response: AxiosResponse) => {
     siteConfig.value.userAvatar = response.data;
 };

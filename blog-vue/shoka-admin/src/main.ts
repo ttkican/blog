@@ -8,20 +8,28 @@ import * as directive from "@/directive";
 import "@/permission";
 import router from "@/router";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import VMdEditor from "@kangc/v-md-editor";
+import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
+import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
+import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index";
+import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
+import "@kangc/v-md-editor/lib/style/base-editor.css";
+import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
+import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
 import ElementPlus from "element-plus";
 import "element-plus/theme-chalk/index.css";
-import MdEditor from "md-editor-v3";
-import "md-editor-v3/lib/style.css";
 import "nprogress/nprogress.css";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import Prism from "prismjs";
 import "virtual:svg-icons-register";
 import { createApp, Directive } from "vue";
 import App from "./App.vue";
 
 const app = createApp(App);
 const pinia = createPinia();
-const DropdownToolbar = MdEditor.DropdownToolbar;
+
+VMdEditor.use(vuepressTheme, { Prism }).use(createEmojiPlugin()).use(createTodoListPlugin());
 
 Object.keys(directive).forEach((key) => {
   app.directive(key, (directive as { [key: string]: Directive })[key]);
@@ -33,9 +41,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
+app.use(VMdEditor);
 app.component("CalendarHeatmap", CalendarHeatmap);
-app.component("md-editor", MdEditor);
-app.component("dropdown-toolbar", DropdownToolbar);
 app.component("svg-icon", SvgIcon);
 app.component("Pagination", Pagination);
 app.component("RightToolbar", RightToolbar);

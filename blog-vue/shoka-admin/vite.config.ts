@@ -24,7 +24,7 @@ export default defineConfig({
       symbolId: "icon-[dir]-[name]",
     }),
     prismjsPlugin({
-      languages: ["java"],
+      languages: ["java", "python", "go", "html", "json"],
       plugins: ["copy-to-clipboard"],
       theme: "okaidia",
       css: true,
