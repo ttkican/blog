@@ -52,6 +52,7 @@
           AND m.is_disable = 0
           AND r.is_disable = 0
           AND ur.user_id = #{userId}
+        ORDER BY m.order_num
     </select>
 
     <select id="selectMenuTree" resultType="com.ican.model.vo.MenuTree">
