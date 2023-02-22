@@ -42,6 +42,7 @@
                         m.menu_type,
                         m.path,
                         m.icon,
+                        m.order_num,
                         m.component,
                         m.is_hidden
         FROM t_menu m
@@ -52,7 +53,7 @@
           AND m.is_disable = 0
           AND r.is_disable = 0
           AND ur.user_id = #{userId}
-        ORDER BY m.order_num
+        ORDER BY m.parent_id, m.order_num
     </select>
 
     <select id="selectMenuTree" resultType="com.ican.model.vo.MenuTree">
