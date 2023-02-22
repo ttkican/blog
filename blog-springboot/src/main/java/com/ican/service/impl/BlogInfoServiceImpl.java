@@ -119,7 +119,7 @@ public class BlogInfoServiceImpl implements BlogInfoService {
         // 标签数据
         List<TagOptionVO> tagVOList = tagMapper.selectTagOptionList();
         // 查询用户浏览
-        DateTime startTime = DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -8));
+        DateTime startTime = DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -7));
         DateTime endTime = DateUtil.endOfDay(new Date());
         List<UserViewVO> userViewVOList = visitLogMapper.selectUserViewList(startTime, endTime);
         // 文章统计
