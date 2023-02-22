@@ -6,9 +6,7 @@
             公告
         </div>
         <!-- 公告内容 -->
-        <div class="notice-content">
-            {{ blog.siteConfig.siteNotice }}
-        </div>
+        <div class="notice-content" v-html="blog.siteConfig.siteNotice"></div>
     </div>
 </template>
 
@@ -20,6 +18,11 @@ const { blog } = useStore();
 <style lang="scss" scoped>
 .notice-title {
     font-size: 1.2em;
+}
+
+.notice-content {
+    font-size: 0.9rem;
+    line-height: 1.75rem;
 }
 
 .trumpet {
