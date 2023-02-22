@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.VisitLogMapper">
 
+    <delete id="deleteVisitLog">
+        delete
+        from t_visit_log
+        where create_time &lt;= #{endTime}
+    </delete>
+
     <select id="selectVisitLogList" resultType="com.ican.entity.VisitLog">
         SELECT
         tvl.id,

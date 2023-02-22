@@ -35,6 +35,13 @@ public interface VisitLogMapper extends BaseMapper<VisitLog> {
      * @return 用户访问结果
      */
     List<UserViewVO> selectUserViewList(@Param("startTime") DateTime startTime, @Param("endTime") DateTime endTime);
+
+    /**
+     * 清除一周前的访问日志
+     *
+     * @param endTime 结束时间
+     */
+    void deleteVisitLog(@Param("endTime") DateTime endTime);
 }
 
 
