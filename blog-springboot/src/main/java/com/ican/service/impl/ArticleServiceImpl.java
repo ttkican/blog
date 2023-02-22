@@ -4,11 +4,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ican.entity.Article;
-import com.ican.entity.ArticleTag;
-import com.ican.entity.Category;
-import com.ican.entity.Tag;
+import com.ican.entity.*;
 import com.ican.mapper.ArticleMapper;
 import com.ican.mapper.ArticleTagMapper;
 import com.ican.mapper.CategoryMapper;
@@ -32,8 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.ican.constant.CommonConstant.FALSE;
-import static com.ican.constant.RedisConstant.ARTICLE_LIKE_COUNT;
-import static com.ican.constant.RedisConstant.ARTICLE_VIEW_COUNT;
+import static com.ican.constant.RedisConstant.*;
 import static com.ican.enums.ArticleStatusEnum.PUBLIC;
 
 /**
@@ -96,6 +93,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Integer categoryId = saveArticleCategory(article);
         // 添加文章
         Article newArticle = BeanCopyUtils.copyBean(article, Article.class);
+        if (StringUtils.isBlank(newArticle.getArticleCover())) {
+            SiteConfig siteConfig = redisService.getObject(SITE_SETTING);
+            newArticle.setArticleCover(siteConfig.getArticleCover());
+        }
         newArticle.setCategoryId(categoryId);
         newArticle.setUserId(StpUtil.getLoginIdAsInt());
         baseMapper.insert(newArticle);

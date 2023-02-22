@@ -25,7 +25,6 @@ public class ArticleDTO {
     /**
      * 文章缩略图
      */
-    @NotBlank(message = "缩略图不能为空")
     @ApiModelProperty(value = "文章缩略图")
     private String articleCover;
 
