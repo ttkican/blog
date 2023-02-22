@@ -79,7 +79,7 @@ defineExpose({ addText, clear });
     height: 100%;
     min-height: 150px;
     border-radius: 8px;
-    background: #f0f1f4;
+    background: var(--talkBg);
     font-size: 14px;
     line-height: 1.5;
     padding: 6px 12px;
@@ -90,7 +90,6 @@ defineExpose({ addText, clear });
     user-select: text;
     white-space: pre-wrap;
     text-align: left;
-    -webkit-user-modify: read-write-plaintext-only;
 }
 
 .edit-container:empty::before {

@@ -1,7 +1,10 @@
 <template>
     <el-drawer v-model="showSettings" :withHeader="false" direction="rtl" size="300px">
         <div class="drawer-container">
-            <h3 class="drawer-title">系统布局配置</h3>
+            <el-divider>主题</el-divider>
+            <el-switch v-model="isDark" inline-prompt @change="toggleTheme" :active-icon="Sunny"
+                :inactive-icon="Moon"></el-switch>
+            <el-divider>系统布局配置</el-divider>
             <div class="drawer-item">
                 <span>开启 Tag-View</span>
                 <span class="comp-style">
@@ -26,7 +29,10 @@
 
 <script setup lang="ts">
 import useStore from '@/store';
+import { Moon, Sunny } from '@element-plus/icons-vue';
+import { useDark, useToggle } from '@vueuse/core';
 import { reactive, ref, toRefs, watch } from "vue";
+
 const { setting } = useStore();
 const data = reactive({
     fixedHeader: setting.fixedHeader,
@@ -35,6 +41,11 @@ const data = reactive({
 });
 const { fixedHeader, tagView, sidebarLogo } = toRefs(data);
 const showSettings = ref(false);
+const isDark = useDark();
+const toggleTheme = () => {
+    const isDark = useDark();
+    useToggle(isDark);
+};
 const openSetting = () => {
     showSettings.value = true;
 };
@@ -67,15 +78,7 @@ defineExpose({
     line-height: 1.5;
     word-wrap: break-word;
 
-    .drawer-title {
-        margin-bottom: 12px;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 22px;
-    }
-
     .drawer-item {
-        color: rgba(0, 0, 0, 0.65);
         font-size: 14px;
         padding: 12px 0;
 

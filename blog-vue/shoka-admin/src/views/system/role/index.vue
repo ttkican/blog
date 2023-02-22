@@ -190,8 +190,11 @@ const reset = () => {
   menuCheckStrictly.value = false;
   roleFormRef.value?.clearValidate();
 };
-const openModel = (role?: Role) => {
+const openModel = async (role?: Role) => {
   reset();
+  await getMenuTree().then(({ data }) => {
+    treeData.value = data.data;
+  });
   if (role !== undefined) {
     title.value = "修改角色";
     roleForm.value.id = role.id;
@@ -286,18 +289,14 @@ const handleChangeStatus = (role: Role) => {
     });
   }).catch(() => { role.isDisable = role.isDisable === 0 ? 1 : 0; });
 };
+
 const handleQuery = () => {
   queryParams.value.current = 1;
   getList();
 };
 onMounted(() => {
   getList();
-  getMenuTree().then(({ data }) => {
-    treeData.value = data.data;
-  })
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

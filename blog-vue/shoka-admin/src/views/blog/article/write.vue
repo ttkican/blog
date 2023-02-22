@@ -6,8 +6,8 @@
             <el-button type="danger" style="margin-left: 10px" @click="openModel">发布文章</el-button>
         </div>
         <!-- 文章内容 -->
-        <md-editor ref="editorRef" v-model="articleForm.articleContent" class="md-container" :toolbars="toolbars"
-            @on-upload-img="uploadImg" placeholder="请输入文章内容...">
+        <md-editor ref="editorRef" v-model="articleForm.articleContent" :theme="isDark ? 'dark' : 'light'"
+            class="md-container" :toolbars="toolbars" @on-upload-img="uploadImg" placeholder="请输入文章内容...">
             <template #defToolbars>
                 <emoji-extension :on-insert="insert" />
             </template>
@@ -95,13 +95,11 @@
                 </el-form-item>
                 <!-- 置顶 -->
                 <el-form-item label="置顶" prop="isTop">
-                    <el-switch v-model="articleForm.isTop" active-color="#13ce66" inactive-color="#F4F4F5" :active-value="1"
-                        :inactive-value="0"></el-switch>
+                    <el-switch v-model="articleForm.isTop" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
                 <!-- 推荐 -->
                 <el-form-item label="推荐" prop="isRecommend">
-                    <el-switch v-model="articleForm.isRecommend" active-color="#13ce66" inactive-color="#F4F4F5"
-                        :active-value="1" :inactive-value="0"></el-switch>
+                    <el-switch v-model="articleForm.isRecommend" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
                 <!-- 发布形式 -->
                 <el-form-item label="发布形式" prop="status">
@@ -132,7 +130,7 @@ import router from "@/router";
 import useStore from "@/store";
 import { notifySuccess } from "@/utils/modal";
 import { getToken, token_prefix } from '@/utils/token';
-import { useDateFormat } from "@vueuse/core";
+import { useDark, useDateFormat } from '@vueuse/core';
 import { AxiosError, AxiosResponse } from 'axios';
 import { ElMessage, FormInstance, FormRules, UploadRawFile } from 'element-plus';
 import * as imageConversion from 'image-conversion';
@@ -151,13 +149,13 @@ const { tag } = useStore();
 const rules = reactive<FormRules>({
     categoryName: [{ required: true, message: "文章分类不能为空", trigger: "blur" }],
     tagNameList: [{ required: true, message: "文章标签不能为空", trigger: "blur" }],
-    articleCover: [{ required: true, message: "请输上传文章封面", trigger: "blur" }],
 });
 const authorization = computed(() => {
     return {
         Authorization: token_prefix + getToken(),
     }
 });
+const isDark = useDark();
 const tagClass = computed(() => {
     return function (item: string) {
         const index = articleForm.value.tagNameList.indexOf(item);
@@ -327,7 +325,19 @@ const submitForm = () => {
                     if (data.flag) {
                         notifySuccess(data.msg);
                         tag.delView({ path: `/article/write/${articleForm.value.id}` });
-                        router.replace({ path: '/article/list', query: {} });
+                        router.push({ path: "/article/list" });
+                        articleForm.value = {
+                            id: undefined,
+                            articleCover: "",
+                            articleTitle: articleTitle.value,
+                            articleContent: "",
+                            categoryName: "",
+                            tagNameList: [],
+                            articleType: 1,
+                            isTop: 0,
+                            isRecommend: 0,
+                            status: 1,
+                        };
                     }
                     addOrUpdate.value = false;
                 });
@@ -337,6 +347,18 @@ const submitForm = () => {
                         notifySuccess(data.msg);
                         tag.delView({ path: "/article/write" });
                         router.push({ path: "/article/list" });
+                        articleForm.value = {
+                            id: undefined,
+                            articleCover: "",
+                            articleTitle: articleTitle.value,
+                            articleContent: "",
+                            categoryName: "",
+                            tagNameList: [],
+                            articleType: 1,
+                            isTop: 0,
+                            isRecommend: 0,
+                            status: 1,
+                        };
                     }
                     addOrUpdate.value = false;
                 });

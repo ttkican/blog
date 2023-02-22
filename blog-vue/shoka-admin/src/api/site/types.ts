@@ -47,6 +47,10 @@ export interface SiteConfig {
    */
   siteAuthor: string;
   /**
+   * 文章默认封面
+   */
+  articleCover: string;
+  /**
    * 关于我
    */
   aboutMe: string;

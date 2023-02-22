@@ -1,0 +1,15 @@
+html.dark {
+    .navbar {
+        background-color: var(--el-bg-color);
+        color: var(--el-text-color-regular);
+    }
+
+    .right-panel-btn {
+        background-color: var(--el-color-primary-dark);
+    }
+
+    .svg-icon,
+    svg {
+        fill: var(--el-text-color-regular);
+    }
+}

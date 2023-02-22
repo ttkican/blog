@@ -188,9 +188,9 @@ const handleChangeStatus = (user: User) => {
   }).catch(() => { user.isDisable = user.isDisable === 0 ? 1 : 0; });
 };
 const submitForm = () => {
+  userForm.value.roleIdList = roleIdList.value;
   userFormRef.value?.validate((valid) => {
     if (valid) {
-      userForm.value.roleIdList = roleIdList.value;
       updateUser(userForm.value).then(({ data }) => {
         if (data.flag) {
           notifySuccess(data.msg);
@@ -221,6 +221,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

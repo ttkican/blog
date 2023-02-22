@@ -233,9 +233,9 @@ onMounted(() => {
 .tags-view-container {
   height: 34px;
   width: 100%;
-  background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  background-color: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  box-shadow: 0px 1px 1px var(--el-box-shadow-light);
 
   .tags-view-wrapper {
     .tags-view-item {
@@ -244,9 +244,7 @@ onMounted(() => {
       cursor: pointer;
       height: 26px;
       line-height: 26px;
-      border: 1px solid #d8dce5;
-      color: #495060;
-      background: #fff;
+      border: 1px solid var(--el-border-color-light);
       padding: 0 8px;
       font-size: 12px;
       margin-left: 5px;

@@ -49,8 +49,8 @@
             <!-- 状态 -->
             <el-table-column label="状态" align="center" width="100">
                 <template #default="scope">
-                    <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
-                        :active-value="0" :inactive-value="1" @change="handleChangeStatus(scope.row)"></el-switch>
+                    <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949" :active-value="0"
+                        :inactive-value="1" @change="handleChangeStatus(scope.row)"></el-switch>
                 </template>
             </el-table-column>
             <!-- 备注 -->
@@ -118,7 +118,8 @@
                                     </el-tooltip>
                                 </span>
                             </template>
-                            <el-input v-model="taskForm.taskGroup" placeholder="请输入任务分组"></el-input>
+                            <el-input v-model="taskForm.taskGroup" :disabled="title == '修改任务'"
+                                placeholder="请输入任务分组"></el-input>
                         </el-form-item>
                     </el-col>
                     <!-- 调用方法 -->
@@ -186,8 +187,8 @@
                     <!-- 备注 -->
                     <el-col :span="12">
                         <el-form-item label="备注" prop="remark">
-                            <el-input v-model="taskForm.remark" placeholder="备注信息"
-                                :autosize="{ minRows: 2, maxRows: 4 }" resize="none" type="textarea"></el-input>
+                            <el-input v-model="taskForm.remark" placeholder="备注信息" :autosize="{ minRows: 2, maxRows: 4 }"
+                                resize="none" type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -448,6 +449,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

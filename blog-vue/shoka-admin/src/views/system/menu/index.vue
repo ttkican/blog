@@ -275,12 +275,11 @@ const {
   menuForm,
   menuList
 } = toRefs(data);
-
 /** 选择图标 */
 const selected = (name: string) => {
   menuForm.value.icon = name;
   showChooseIcon.value = false;
-}
+};
 const toggleExpandAll = () => {
   refreshTable.value = false;
   isExpandAll.value = !isExpandAll.value;
@@ -288,11 +287,13 @@ const toggleExpandAll = () => {
     refreshTable.value = true;
   });
 };
+// 取消
 const cancel = () => {
   addOrUpdate.value = false;
   menuFormRef.value?.clearValidate();
   reset();
-}
+};
+// 重置表单
 const reset = () => {
   menuForm.value = {
     id: undefined,
@@ -308,8 +309,10 @@ const reset = () => {
     perms: undefined,
   };
 };
-const handleAdd = (menu?: Menu) => {
+// 添加
+const handleAdd = async (menu?: Menu) => {
   reset();
+  await getMenuTree();
   if (menu != undefined && menu.id) {
     menuForm.value.parentId = menu.id;
   } else {
@@ -318,7 +321,9 @@ const handleAdd = (menu?: Menu) => {
   title.value = "添加菜单";
   addOrUpdate.value = true;
 };
-const handleEdit = (menuId: number) => {
+// 编辑
+const handleEdit = async (menuId: number) => {
+  await getMenuTree();
   editMenu(menuId).then(({ data }) => {
     if (data.flag) {
       menuForm.value = data.data;
@@ -327,6 +332,7 @@ const handleEdit = (menuId: number) => {
     }
   })
 };
+// 删除
 const handleDelete = (id: number) => {
   messageConfirm("确认删除已选中的数据项?").then(() => {
     deleteMenu(id).then(({ data }) => {
@@ -337,6 +343,7 @@ const handleDelete = (id: number) => {
     });
   }).catch(() => { });
 };
+// 提交
 const submitForm = () => {
   menuFormRef.value?.validate((valid) => {
     if (valid) {
@@ -360,6 +367,16 @@ const submitForm = () => {
     }
   })
 };
+// 获取菜单树
+const getMenuTree = async () => {
+  const menuTree: MenuOption[] = [];
+  await getMenuOptions().then(({ data }) => {
+    const menuOption: MenuOption = { value: 0, label: "顶级菜单", children: data.data };
+    menuTree.push(menuOption);
+    menuOptions.value = menuTree;
+  })
+};
+// 加载表格内容
 const getList = () => {
   loading.value = true;
   getMenuList(queryParams.value).then(({ data }) => {
@@ -372,9 +389,5 @@ const handleQuery = () => {
 };
 onMounted(() => {
   getList();
-  getMenuOptions().then(({ data }) => {
-    const menuOption: MenuOption = { value: 0, label: "顶级菜单", children: data.data };
-    menuOptions.value.push(menuOption);
-  })
 });
 </script>

@@ -73,6 +73,11 @@ public class SiteConfig {
     private String siteAuthor;
 
     /**
+     * 文章默认封面
+     */
+    private String articleCover;
+
+    /**
      * 关于我
      */
     private String aboutMe;

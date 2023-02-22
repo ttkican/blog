@@ -18,6 +18,7 @@ import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
 import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
 import ElementPlus from "element-plus";
 import "element-plus/theme-chalk/index.css";
+import "element-plus/theme-chalk/dark/css-vars.css";
 import "nprogress/nprogress.css";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -25,7 +26,6 @@ import Prism from "prismjs";
 import "virtual:svg-icons-register";
 import { createApp, Directive } from "vue";
 import App from "./App.vue";
-
 const app = createApp(App);
 const pinia = createPinia();
 

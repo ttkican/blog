@@ -49,7 +49,7 @@
                     </el-form-item>
                     <el-form-item label="网站公告">
                         <el-input style="width: 400px;" v-model="siteConfig.siteNotice"
-                            :autosize="{ minRows: 2, maxRows: 4 }" resize="none" type="textarea"></el-input>
+                            :autosize="{ minRows: 4, maxRows: 5 }" resize="none" type="textarea"></el-input>
                     </el-form-item>
                     <el-form-item label="建站日期">
                         <el-date-picker v-model="siteConfig.createSiteTime" value-format="YYYY-MM-DD" type="date"
@@ -200,6 +200,16 @@
                     </span>
                 </template>
                 <el-form label-width="100px" :model="siteConfig" label-position="left">
+                    <el-form-item label="文章默认封面">
+                        <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
+                            :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
+                            :on-success="handleAuthorAvatarSuccess">
+                            <img v-if="siteConfig.articleCover" :src="siteConfig.articleCover" class="article-cover" />
+                            <el-icon v-else class="avatar-uploader-icon">
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
                     <el-form-item label="邮箱通知">
                         <el-radio-group v-model="siteConfig.emailNotice">
                             <el-radio :label="0">关闭</el-radio>
@@ -234,6 +244,7 @@
 <script setup lang="ts">
 import { getSiteConfig, updateSiteConfig } from '@/api/site';
 import { SiteConfig } from '@/api/site/types';
+import useStore from "@/store";
 import { notifySuccess } from '@/utils/modal';
 import { getToken, token_prefix } from '@/utils/token';
 import { AxiosResponse } from 'axios';
@@ -247,6 +258,7 @@ const authorization = computed(() => {
         Authorization: token_prefix + getToken(),
     }
 });
+const { app } = useStore();
 const data = reactive({
     siteConfig: {} as SiteConfig,
     socialList: [] as string[],
@@ -337,5 +349,9 @@ onMounted(() => {
     width: 120px;
     height: 120px;
     object-fit: contain;
+}
+
+.article-cover {
+    width: 300px;
 }
 </style>

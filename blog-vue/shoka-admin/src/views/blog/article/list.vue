@@ -33,13 +33,15 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="标签">
-                <el-select v-model="queryParams.tagId" placeholder="请选择标签" clearable filterable style="width: 130px">
+                <el-select v-model="queryParams.tagId" placeholder="请选择标签" clearable filterable @visible-change="getTag"
+                    style="width: 130px">
                     <el-option v-for="item in tagList" :key="item.id" :label="item.tagName" :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="分类">
-                <el-select v-model="queryParams.categoryId" placeholder="请选择分类" clearable filterable style="width: 130px">
+                <el-select v-model="queryParams.categoryId" placeholder="请选择分类" clearable filterable
+                    @visible-change="getCategory" style="width: 130px">
                     <el-option v-for="item in categoryList" :key="item.id" :label="item.categoryName" :value="item.id">
                     </el-option>
                 </el-select>
@@ -113,7 +115,7 @@
             <!-- 文章置顶 -->
             <el-table-column prop="isTop" label="置顶" width="70" align="center">
                 <template #default="scope">
-                    <el-switch v-model="scope.row.isTop" active-color="#13ce66" inactive-color="#F4F4F5"
+                    <el-switch v-model="scope.row.isTop" style="--el-switch-on-color: #13ce66;"
                         :disabled="scope.row.isDelete == 1" :active-value="1" :inactive-value="0"
                         @change="handleTop(scope.row)"></el-switch>
                 </template>
@@ -121,7 +123,7 @@
             <!-- 文章推荐 -->
             <el-table-column prop="isRecommend" label="推荐" width="70" align="center">
                 <template #default="scope">
-                    <el-switch v-model="scope.row.isRecommend" active-color="#13ce66" inactive-color="#F4F4F5"
+                    <el-switch v-model="scope.row.isRecommend" style="--el-switch-on-color: #13ce66;"
                         :disabled="scope.row.isDelete == 1" :active-value="1" :inactive-value="0"
                         @change="handleRecommend(scope.row)"></el-switch>
                 </template>
@@ -312,6 +314,20 @@ const handleRecommend = (article: Article) => {
         });
     }).catch(() => { article.isRecommend = article.isRecommend === 0 ? 1 : 0; });
 };
+const getCategory = (val: boolean) => {
+    if (val) {
+        getCategoryOption().then(({ data }) => {
+            categoryList.value = data.data;
+        });
+    }
+};
+const getTag = (val: boolean) => {
+    if (val) {
+        getTagOption().then(({ data }) => {
+            tagList.value = data.data;
+        });
+    }
+};
 const getList = () => {
     loading.value = true;
     getArticleList(queryParams.value).then(({ data }) => {
@@ -326,12 +342,6 @@ const handleQuery = () => {
 };
 onMounted(() => {
     getList();
-    getCategoryOption().then(({ data }) => {
-        categoryList.value = data.data;
-    });
-    getTagOption().then(({ data }) => {
-        tagList.value = data.data;
-    });
 });
 </script>
 

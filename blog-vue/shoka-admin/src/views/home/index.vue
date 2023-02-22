@@ -55,7 +55,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row style="background:#fff;padding:1rem;margin-bottom:32px;">
+    <el-row class="data-card" style="margin-bottom:32px;">
       <div class="title">文章贡献统计🎉</div>
       <calendar-heatmap style=" width: 100%; margin-top: 0.5rem" :values="articleStatisticsList" :end-date="new Date()"
         :range-color="['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']" />
@@ -80,12 +80,11 @@
         </div>
       </el-col>
     </el-row>
-    <el-row style="background:#fff;padding:1rem;">
+    <el-row class="data-card">
       <div class="title">一周访问量✨</div>
       <Echarts :options="userView" height="350px"></Echarts>
     </el-row>
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -273,13 +272,18 @@ onMounted(() => {
 <style lang="scss" scoped>
 .title {
   font-size: 14px;
-  color: #202a34;
+  color: var(--el-text-color-secondary);
   font-weight: 700;
+}
+
+.data-card {
+  background: var(--el-bg-color-overlay);
+  padding: 1rem;
 }
 
 .dashboard-container {
   padding: 32px;
-  background-color: rgb(240, 242, 245);
+  background: var(--el-bg-color-page);
   position: relative;
 
   .github-corner {
@@ -290,7 +294,7 @@ onMounted(() => {
   }
 
   .chart-wrapper {
-    background: #fff;
+    background: var(--el-bg-color-overlay);
     padding: 1rem;
     margin-bottom: 2rem;
   }
@@ -310,7 +314,7 @@ onMounted(() => {
     position: relative;
     overflow: hidden;
     color: #666;
-    background: #fff;
+    background: var(--el-bg-color-overlay);
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
     border-color: rgba(0, 0, 0, .05);
 
@@ -368,7 +372,7 @@ onMounted(() => {
 
       .card-panel-text {
         line-height: 18px;
-        color: rgba(0, 0, 0, 0.45);
+        color: var(--el-text-color-secondary);
         font-size: 16px;
         margin-bottom: 12px;
       }
@@ -390,8 +394,6 @@ onMounted(() => {
   .card-panel-description {
     display: none;
   }
-
-
 
   .card-panel-icon-wrapper {
     float: none !important;
