@@ -89,7 +89,7 @@
                     {{ optLog.name }}
                 </el-form-item>
                 <el-form-item label="请求参数：">
-                    {{ optLog.params }}
+                    <div class="content">{{ optLog.params }}</div>
                 </el-form-item>
                 <el-form-item label="返回数据：">
                     {{ optLog.data }}
@@ -192,5 +192,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
+.content {
+    word-break: break-all;
+}
 </style>
