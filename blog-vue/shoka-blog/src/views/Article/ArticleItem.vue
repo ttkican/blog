@@ -203,10 +203,6 @@ onMounted(() => {
     border-radius: 1rem 0;
     color: var(--grey-0);
     background-image: linear-gradient(to right, var(--color-pink) 0, var(--color-orange) 100%);
-
-    &:hover {
-        transform: translateZ(2.5rem);
-    }
 }
 
 @media (max-width: 767px) {

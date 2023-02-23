@@ -241,13 +241,6 @@ onMounted(() => {
     overflow: hidden;
 }
 
-.popup-title {
-    overflow: hidden;
-    line-height: 34px;
-    padding-top: 6px;
-    background: #f2f2f2;
-}
-
 .popup-result {
     box-sizing: border-box;
     line-height: 24px;
