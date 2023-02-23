@@ -203,7 +203,7 @@
                     <el-form-item label="文章默认封面">
                         <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
                             :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
-                            :on-success="handleAuthorAvatarSuccess">
+                            :on-success="handleArticleSuccess">
                             <img v-if="siteConfig.articleCover" :src="siteConfig.articleCover" class="article-cover" />
                             <el-icon v-else class="avatar-uploader-icon">
                                 <Plus />
@@ -244,7 +244,6 @@
 <script setup lang="ts">
 import { getSiteConfig, updateSiteConfig } from '@/api/site';
 import { SiteConfig } from '@/api/site/types';
-import useStore from "@/store";
 import { notifySuccess } from '@/utils/modal';
 import { getToken, token_prefix } from '@/utils/token';
 import { AxiosResponse } from 'axios';
@@ -258,7 +257,6 @@ const authorization = computed(() => {
         Authorization: token_prefix + getToken(),
     }
 });
-const { app } = useStore();
 const data = reactive({
     siteConfig: {} as SiteConfig,
     socialList: [] as string[],
@@ -283,6 +281,9 @@ const handleWeiXinSuccess = (response: AxiosResponse) => {
 };
 const handleAliSuccess = (response: AxiosResponse) => {
     siteConfig.value.aliCode = response.data;
+};
+const handleArticleSuccess = (response: AxiosResponse) => {
+    siteConfig.value.articleCover = response.data;
 };
 const beforeUpload = (rawFile: UploadRawFile) => {
     return new Promise(resolve => {
