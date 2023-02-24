@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-   <a target="_blank" href="https://github.com/ICAN1999/blog">
+   <a target="_blank" href="https://github.com/ttkican/Blog">
       <img src="https://img.shields.io/badge/JDK-11-green"/>
       <img src="https://img.shields.io/badge/springboot-2.6.14-green"/>
       <img src="https://img.shields.io/badge/saToken-1.34.0-green"/>
@@ -32,7 +32,7 @@
 
 **测试账号：** test@qq.com，**密码**：123456
 
-**Github 地址：** [https://github.com/ICAN1999/blog](https://github.com/ICAN1999/blog)
+**Github 地址：** [https://github.com/ttkican/Blog](https://github.com/ttkican/Blog)
 
 **Gitee 地址：** [https://gitee.com/wu_shengdong/blog](https://gitee.com/wu_shengdong/blog)
 
