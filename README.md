@@ -1,16 +1,16 @@
 ## 博客介绍
 
-<p style="text-align: center">
+<p align="center">
   <a href="https://www.ttkwsd.top">
     <img src="https://foruda.gitee.com/avatar/1662735858745624876/7774198_wu_shengdong_1662735858.png" alt="阿冬的个人博客" style="border-radius: 50%;">
   </a>
 </p>
 
-<p style="text-align: center">
+<p align="center">
    基于Springboot + Vue3 开发的前后端分离博客
 </p>
 
-<p style="text-align: center">
+<p align="center">
    <a target="_blank" href="https://github.com/ICAN1999/blog">
       <img src="https://img.shields.io/badge/JDK-11-green"/>
       <img src="https://img.shields.io/badge/springboot-2.6.14-green"/>
