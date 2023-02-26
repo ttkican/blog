@@ -88,7 +88,8 @@
                         <el-input v-model="siteConfig.siteAuthor" style="width: 400px;"></el-input>
                     </el-form-item>
                     <el-form-item label="关于我">
-                        <v-md-editor v-model="siteConfig.aboutMe" :left-toolbar="toolList" height="400px" />
+                        <v-md-editor v-model="siteConfig.aboutMe" :disabled-menus="[]" :left-toolbar="toolList"
+                            @upload-image="handleUploadImage" height="400px" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="handleUpdate">保 存</el-button>
@@ -242,7 +243,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSiteConfig, updateSiteConfig } from '@/api/site';
+import { getSiteConfig, updateSiteConfig, uploadSiteImg } from '@/api/site';
 import { SiteConfig } from '@/api/site/types';
 import { notifySuccess } from '@/utils/modal';
 import { getToken, token_prefix } from '@/utils/token';
@@ -267,6 +268,19 @@ const {
     socialList,
     loginList,
 } = toRefs(data);
+const handleUploadImage = (event: any, insertImage: any, files: File[]) => {
+    files.forEach(file => {
+        let formData = new FormData();
+        formData.append("file", file);
+        uploadSiteImg(formData).then(({ data }) => {
+            if (data.flag) {
+                insertImage({
+                    url: data.data,
+                });
+            }
+        })
+    });
+};
 const handleUserAvatarSuccess = (response: AxiosResponse) => {
     siteConfig.value.userAvatar = response.data;
 };
