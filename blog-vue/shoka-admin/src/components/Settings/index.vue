@@ -2,7 +2,7 @@
     <el-drawer v-model="showSettings" :withHeader="false" direction="rtl" size="300px">
         <div class="drawer-container">
             <el-divider>主题</el-divider>
-            <el-switch v-model="isDark" inline-prompt @change="toggleTheme" :active-icon="Sunny"
+            <el-switch class="theme-style" v-model="isDark" inline-prompt @change="toggleTheme" :active-icon="Sunny"
                 :inactive-icon="Moon"></el-switch>
             <el-divider>系统布局配置</el-divider>
             <div class="drawer-item">
@@ -88,5 +88,10 @@ defineExpose({
         }
     }
 
+}
+
+.theme-style {
+    display: flex;
+    justify-content: center;
 }
 </style>
