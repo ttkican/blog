@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1 class="page-title">友情链接</h1>
         <img class="page-cover"
-            src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg" alt="">
+            src="https://static.ttkwsd.top/config/c8049b9b880411ebb6edd017c2d2eca2.jpg" alt="">
         <!-- 波浪 -->
         <Waves></Waves>
     </div>

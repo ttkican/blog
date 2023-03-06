@@ -1,8 +1,8 @@
 <template>
     <div class="page-header">
         <h1 class="page-title">归档</h1>
-        <img class="page-cover"
-            src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg" alt="">
+        <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+            alt="">
         <!-- 波浪 -->
         <Waves></Waves>
     </div>
@@ -11,15 +11,17 @@
             <div class="archive-title">文章总览 - {{ count }}</div>
             <div class="archive-list">
                 <div class="archive-item" v-for="archive in archivesList" :key="archive.id">
-                    <a class="article-cover">
+                    <router-link class="article-cover" :to="`/article/${archive.id}`">
                         <img class="cover" v-lazy="archive.articleCover">
-                    </a>
+                    </router-link>
                     <div class="article-info">
                         <div class="article-time">
                             <svg-icon icon-class="calendar" style="margin-right:0.4rem;"></svg-icon>
                             <time>{{ formatDate(archive.createTime) }}</time>
                         </div>
-                        <a class="article-title" href="">{{ archive.articleTitle }}</a>
+                        <router-link class="article-title" :to="`/article/${archive.id}`">
+                            {{ archive.articleTitle }}
+                        </router-link>
                     </div>
                 </div>
             </div>

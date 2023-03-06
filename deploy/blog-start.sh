@@ -1,7 +1,7 @@
 #!/bin/bash
-# 源jar路径
+# 打包之后上传的jar包路径
 SOURCE_PATH=/usr/local/docker
-# docker 镜像/容器名字或者jar名字 这里都命名为这个
+# docker的镜像和容器名称都命名为这个
 SERVER_NAME=blog-springboot
 TAG=latest
 # 容器id

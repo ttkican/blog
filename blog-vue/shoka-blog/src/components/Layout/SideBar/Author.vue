@@ -13,24 +13,24 @@
         <div class="blog-container">
             <!-- 文章 -->
             <div class="blog-item">
-                <a href="">
+                <router-link to="/archive">
                     <div class="count">{{ blog.articleCount }}</div>
                     <div class="name">文章</div>
-                </a>
+                </router-link>
             </div>
             <!-- 分类 -->
             <div class="blog-item">
-                <a href="">
+                <router-link to="/category">
                     <div class="count">{{ blog.categoryCount }}</div>
                     <div class="name">分类</div>
-                </a>
+                </router-link>
             </div>
             <!-- 标签 -->
             <div class="blog-item">
-                <a href="">
+                <router-link to="/tag">
                     <div class="count">{{ blog.tagCount }}</div>
                     <div class="name">标签</div>
-                </a>
+                </router-link>
             </div>
         </div>
         <!-- 社交 -->
@@ -45,8 +45,7 @@
                 <svg-icon icon-class="bilibili" size="1.4rem"></svg-icon>
             </a>
             <a v-if="isShowSocial('qq')" target="_blank"
-                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blog.siteConfig.qq + '&site=qq&menu=yes'"
-                class="social-item">
+                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blog.siteConfig.qq + '&site=qq&menu=yes'" class="social-item">
                 <svg-icon icon-class="qq" size="1.4rem" color="#00a1d6"></svg-icon>
             </a>
         </div>
@@ -59,6 +58,4 @@ const { blog } = useStore();
 const isShowSocial = computed(() => (social: string) => blog.siteConfig.socialList.includes(social));
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
