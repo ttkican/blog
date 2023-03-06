@@ -56,6 +56,10 @@ const useUserStore = defineStore("useUserStore", {
           });
       });
     },
+    forceLogOut() {
+      this.$reset();
+      removeToken();
+    },
     savePath(path: string) {
       this.path = path;
     },

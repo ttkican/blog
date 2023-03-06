@@ -34,7 +34,8 @@ requests.interceptors.response.use(
         break;
       case 402:
         const { user } = useStore();
-        user.LogOut();
+        user.forceLogOut();
+        window.$message?.error(response.data.msg);
         break;
       case 500:
         window.$message?.error(response.data.msg);

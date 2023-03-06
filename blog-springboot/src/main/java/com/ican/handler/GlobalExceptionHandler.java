@@ -4,7 +4,6 @@ import cn.dev33.satoken.exception.DisableServiceException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
-import cn.dev33.satoken.util.SaResult;
 import com.ican.exception.ServiceException;
 import com.ican.model.vo.Result;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
-import static com.ican.enums.StatusCodeEnum.SYSTEM_ERROR;
-import static com.ican.enums.StatusCodeEnum.VALID_ERROR;
+import static com.ican.enums.StatusCodeEnum.*;
 
 /**
  * 全局异常处理
@@ -76,7 +74,7 @@ public class GlobalExceptionHandler {
      * 处理SaToken异常
      */
     @ExceptionHandler(value = NotLoginException.class)
-    public SaResult handlerNotLoginException(NotLoginException nle) {
+    public Result<?> handlerNotLoginException(NotLoginException nle) {
         // 判断场景值，定制化异常信息
         String message;
         if (nle.getType().equals(NotLoginException.NOT_TOKEN)) {
@@ -89,7 +87,7 @@ public class GlobalExceptionHandler {
             message = "当前会话未登录";
         }
         // 返回给前端
-        return SaResult.error(message);
+        return Result.fail(UNAUTHORIZED.getCode(), message);
     }
 
     /**
