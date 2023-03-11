@@ -4,7 +4,10 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.entity.BlogFile;
 import com.ican.entity.Talk;
+import com.ican.enums.FilePathEnum;
+import com.ican.mapper.BlogFileMapper;
 import com.ican.mapper.CommentMapper;
 import com.ican.mapper.TalkMapper;
 import com.ican.model.dto.ConditionDTO;
@@ -12,19 +15,20 @@ import com.ican.model.dto.TalkDTO;
 import com.ican.model.vo.*;
 import com.ican.service.RedisService;
 import com.ican.service.TalkService;
-import com.ican.utils.BeanCopyUtils;
-import com.ican.utils.CommonUtils;
-import com.ican.utils.HTMLUtils;
-import com.ican.utils.PageUtils;
+import com.ican.strategy.context.UploadStrategyContext;
+import com.ican.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.ican.constant.CommonConstant.FALSE;
 import static com.ican.constant.RedisConstant.TALK_LIKE_COUNT;
 import static com.ican.enums.ArticleStatusEnum.PUBLIC;
 import static com.ican.enums.CommentTypeEnum.TALK;
@@ -45,6 +49,12 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private UploadStrategyContext uploadStrategyContext;
+
+    @Autowired
+    private BlogFileMapper blogFileMapper;
 
     @Override
     public PageResult<TalkBackVO> listTalkBackVO(ConditionDTO condition) {
@@ -156,6 +166,37 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
             talkVO.setImgList(CommonUtils.castList(JSON.parseObject(talkVO.getImages(), List.class), String.class));
         }
         return talkVO;
+    }
+
+    @Override
+    public String uploadTalkCover(MultipartFile file) {
+        // 上传文件
+        String url = uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.TALK.getPath());
+        try {
+            // 获取文件md5值
+            String md5 = FileUtils.getMd5(file.getInputStream());
+            // 获取文件扩展名
+            String extName = FileUtils.getExtension(file);
+            BlogFile existFile = blogFileMapper.selectOne(new LambdaQueryWrapper<BlogFile>()
+                    .select(BlogFile::getId)
+                    .eq(BlogFile::getFileName, md5)
+                    .eq(BlogFile::getFilePath, FilePathEnum.TALK.getFilePath()));
+            if (Objects.isNull(existFile)) {
+                // 保存文件信息
+                BlogFile newFile = BlogFile.builder()
+                        .fileUrl(url)
+                        .fileName(md5)
+                        .filePath(FilePathEnum.TALK.getFilePath())
+                        .extendName(extName)
+                        .fileSize((int) file.getSize())
+                        .isDir(FALSE)
+                        .build();
+                blogFileMapper.insert(newFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 }
 

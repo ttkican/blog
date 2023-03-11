@@ -73,4 +73,36 @@ public class FileUtils {
         return tempFile;
     }
 
+    /**
+     * 创建目录
+     *
+     * @param file 文件
+     * @return 是否创建成功
+     */
+    public static boolean mkdir(File file) {
+        if (file == null) {
+            return false;
+        }
+        if (file.exists()) {
+            return false;
+        }
+        return file.mkdirs();
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param src 文件
+     */
+    public static void deleteFile(File src) {
+        for (File file : src.listFiles()) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                deleteFile(file);
+            }
+        }
+        src.delete();
+    }
+
 }

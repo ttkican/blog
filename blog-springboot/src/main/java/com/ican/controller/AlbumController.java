@@ -10,7 +10,6 @@ import com.ican.model.vo.AlbumVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
 import com.ican.service.AlbumService;
-import com.ican.strategy.context.UploadStrategyContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.ican.constant.OptTypeConstant.*;
-import static com.ican.enums.FilePathEnum.PHOTO;
 
 /**
  * 相册控制器
@@ -36,9 +34,6 @@ public class AlbumController {
 
     @Autowired
     private AlbumService albumService;
-
-    @Autowired
-    private UploadStrategyContext uploadStrategyContext;
 
     /**
      * 查看后台相册列表
@@ -65,7 +60,7 @@ public class AlbumController {
     @SaCheckPermission("web:album:upload")
     @PostMapping("/admin/album/upload")
     public Result<String> uploadAlbumCover(@RequestParam("file") MultipartFile file) {
-        return Result.success(uploadStrategyContext.executeUploadStrategy(file, PHOTO.getPath()));
+        return Result.success(albumService.uploadAlbumCover(file));
     }
 
     /**

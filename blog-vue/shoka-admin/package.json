@@ -25,6 +25,7 @@
     "prismjs": "^1.29.0",
     "screenfull": "^6.0.2",
     "tippy.js": "^6.3.7",
+    "v-viewer": "^3.0.11",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

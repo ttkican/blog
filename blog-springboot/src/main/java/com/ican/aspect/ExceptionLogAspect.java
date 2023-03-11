@@ -16,6 +16,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -75,7 +76,11 @@ public class ExceptionLogAspect {
         // 异常信息
         exceptionLog.setMessage(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
         // 请求参数
-        exceptionLog.setParams(JSON.toJSONString(joinPoint.getArgs()));
+        if (joinPoint.getArgs()[0] instanceof MultipartFile) {
+            exceptionLog.setParams(((MultipartFile) joinPoint.getArgs()[0]).getOriginalFilename());
+        } else {
+            exceptionLog.setParams(JSON.toJSONString(joinPoint.getArgs()));
+        }
         // 请求方式
         exceptionLog.setRequestMethod(Objects.requireNonNull(request).getMethod());
         // 操作ip和操作地址

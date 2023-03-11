@@ -11,7 +11,6 @@ import com.ican.model.dto.TalkDTO;
 import com.ican.model.vo.*;
 import com.ican.service.TalkService;
 import com.ican.strategy.context.LikeStrategyContext;
-import com.ican.strategy.context.UploadStrategyContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.ican.constant.OptTypeConstant.*;
-import static com.ican.enums.FilePathEnum.TALK;
 
 /**
  * 说说控制器
@@ -36,9 +34,6 @@ public class TalkController {
 
     @Autowired
     private TalkService talkService;
-
-    @Autowired
-    private UploadStrategyContext uploadStrategyContext;
 
     @Autowired
     private LikeStrategyContext likeStrategyContext;
@@ -68,7 +63,7 @@ public class TalkController {
     @SaCheckPermission("web:talk:upload")
     @PostMapping("/admin/talk/upload")
     public Result<String> uploadTalkCover(@RequestParam("file") MultipartFile file) {
-        return Result.success(uploadStrategyContext.executeUploadStrategy(file, TALK.getPath()));
+        return Result.success(talkService.uploadTalkCover(file));
     }
 
     /**

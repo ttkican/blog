@@ -7,22 +7,23 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.*;
-import com.ican.mapper.ArticleMapper;
-import com.ican.mapper.ArticleTagMapper;
-import com.ican.mapper.CategoryMapper;
-import com.ican.mapper.TagMapper;
+import com.ican.mapper.*;
 import com.ican.model.dto.*;
 import com.ican.model.vo.*;
 import com.ican.service.ArticleService;
 import com.ican.service.RedisService;
 import com.ican.service.TagService;
 import com.ican.strategy.context.SearchStrategyContext;
+import com.ican.strategy.context.UploadStrategyContext;
 import com.ican.utils.BeanCopyUtils;
+import com.ican.utils.FileUtils;
 import com.ican.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import static com.ican.constant.CommonConstant.FALSE;
 import static com.ican.constant.RedisConstant.*;
 import static com.ican.enums.ArticleStatusEnum.PUBLIC;
+import static com.ican.enums.FilePathEnum.ARTICLE;
 
 /**
  * 文章业务接口实现类
@@ -62,6 +64,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private SearchStrategyContext searchStrategyContext;
+
+    @Autowired
+    private UploadStrategyContext uploadStrategyContext;
+
+    @Autowired
+    private BlogFileMapper blogFileMapper;
 
     @Override
     public PageResult<ArticleBackVO> listArticleBackVO(ConditionDTO condition) {
@@ -239,6 +247,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<ArticleRecommendVO> listArticleRecommendVO() {
         return articleMapper.selectArticleRecommend();
+    }
+
+    @Override
+    public String saveArticleImages(MultipartFile file) {
+        // 上传文件
+        String url = uploadStrategyContext.executeUploadStrategy(file, ARTICLE.getPath());
+        try {
+            // 获取文件md5值
+            String md5 = FileUtils.getMd5(file.getInputStream());
+            // 获取文件扩展名
+            String extName = FileUtils.getExtension(file);
+            BlogFile existFile = blogFileMapper.selectOne(new LambdaQueryWrapper<BlogFile>()
+                    .select(BlogFile::getId)
+                    .eq(BlogFile::getFileName, md5)
+                    .eq(BlogFile::getFilePath, ARTICLE.getFilePath()));
+            if (Objects.isNull(existFile)) {
+                // 保存文件信息
+                BlogFile newFile = BlogFile.builder()
+                        .fileUrl(url)
+                        .fileName(md5)
+                        .filePath(ARTICLE.getFilePath())
+                        .extendName(extName)
+                        .fileSize((int) file.getSize())
+                        .isDir(FALSE)
+                        .build();
+                blogFileMapper.insert(newFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
     /**

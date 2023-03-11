@@ -7,6 +7,7 @@ import com.ican.model.dto.ConditionDTO;
 import com.ican.model.vo.AlbumBackVO;
 import com.ican.model.vo.AlbumVO;
 import com.ican.model.vo.PageResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,4 +61,12 @@ public interface AlbumService extends IService<Album> {
      * @return 相册列表
      */
     List<AlbumVO> listAlbumVO();
+
+    /**
+     * 上传相册封面
+     *
+     * @param file 文件
+     * @return 相册封面地址
+     */
+    String uploadAlbumCover(MultipartFile file);
 }

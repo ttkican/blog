@@ -8,6 +8,7 @@ import com.ican.model.vo.PageResult;
 import com.ican.model.vo.TalkBackInfoVO;
 import com.ican.model.vo.TalkBackVO;
 import com.ican.model.vo.TalkVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -76,4 +77,12 @@ public interface TalkService extends IService<Talk> {
      * @return 说说
      */
     TalkVO getTalkById(Integer talkId);
+
+    /**
+     * 上传说说图片
+     *
+     * @param file 文件
+     * @return 说说图片地址
+     */
+    String uploadTalkCover(MultipartFile file);
 }

@@ -123,4 +123,10 @@ public class ConditionDTO {
     @ApiModelProperty(value = "调用目标")
     private String invokeTarget;
 
+    /**
+     * 文件路径
+     */
+    @ApiModelProperty(value = "文件路径")
+    private String filePath;
+
 }

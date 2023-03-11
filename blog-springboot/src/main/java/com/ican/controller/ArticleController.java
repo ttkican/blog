@@ -10,7 +10,6 @@ import com.ican.model.dto.*;
 import com.ican.model.vo.*;
 import com.ican.service.ArticleService;
 import com.ican.strategy.context.LikeStrategyContext;
-import com.ican.strategy.context.UploadStrategyContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.ican.constant.OptTypeConstant.*;
-import static com.ican.enums.FilePathEnum.ARTICLE;
 
 /**
  * 文章控制器
@@ -35,9 +33,6 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
-
-    @Autowired
-    private UploadStrategyContext uploadStrategyContext;
 
     @Autowired
     private LikeStrategyContext likeStrategyContext;
@@ -140,7 +135,7 @@ public class ArticleController {
     @SaCheckPermission("blog:article:upload")
     @PostMapping("/admin/article/upload")
     public Result<String> saveArticleImages(@RequestParam("file") MultipartFile file) {
-        return Result.success(uploadStrategyContext.executeUploadStrategy(file, ARTICLE.getPath()));
+        return Result.success(articleService.saveArticleImages(file));
     }
 
     /**

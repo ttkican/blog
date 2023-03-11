@@ -8,7 +8,6 @@ import com.ican.model.dto.PhotoDTO;
 import com.ican.model.dto.PhotoInfoDTO;
 import com.ican.model.vo.*;
 import com.ican.service.PhotoService;
-import com.ican.strategy.context.UploadStrategyContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.ican.constant.OptTypeConstant.*;
-import static com.ican.enums.FilePathEnum.PHOTO;
 
 /**
  * 照片控制器
@@ -35,9 +33,6 @@ public class PhotoController {
 
     @Autowired
     private PhotoService photoService;
-
-    @Autowired
-    private UploadStrategyContext uploadStrategyContext;
 
     /**
      * 查看后台照片列表
@@ -69,15 +64,15 @@ public class PhotoController {
      * 上传照片
      *
      * @param file 文件
-     * @return {@link Result<String>} 相册封面地址
+     * @return {@link Result<String>} 照片地址
      */
     @OptLogger(value = UPLOAD)
     @ApiOperation(value = "上传照片")
     @ApiImplicitParam(name = "file", value = "照片", required = true, dataType = "MultipartFile")
     @SaCheckPermission("web:photo:upload")
     @PostMapping("/admin/photo/upload")
-    public Result<String> uploadAlbumCover(@RequestParam("file") MultipartFile file) {
-        return Result.success(uploadStrategyContext.executeUploadStrategy(file, PHOTO.getPath()));
+    public Result<String> uploadPhoto(@RequestParam("file") MultipartFile file) {
+        return Result.success(photoService.uploadPhoto(file));
     }
 
     /**
@@ -148,7 +143,7 @@ public class PhotoController {
     @VisitLogger(value = "照片")
     @ApiOperation(value = "查看照片列表")
     @GetMapping("/photo/list")
-    public Result<Map<String,Object>> listPhotoVO(ConditionDTO condition) {
+    public Result<Map<String, Object>> listPhotoVO(ConditionDTO condition) {
         return Result.success(photoService.listPhotoVO(condition));
     }
 

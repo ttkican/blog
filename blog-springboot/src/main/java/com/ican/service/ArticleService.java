@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ican.entity.Article;
 import com.ican.model.dto.*;
 import com.ican.model.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -109,4 +110,12 @@ public interface ArticleService extends IService<Article> {
      * @return 推荐文章
      */
     List<ArticleRecommendVO> listArticleRecommendVO();
+
+    /**
+     * 上传文章图片
+     *
+     * @param file 文件
+     * @return 文章图片地址
+     */
+    String saveArticleImages(MultipartFile file);
 }

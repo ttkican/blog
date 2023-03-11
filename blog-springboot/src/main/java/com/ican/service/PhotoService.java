@@ -8,6 +8,7 @@ import com.ican.model.dto.PhotoInfoDTO;
 import com.ican.model.vo.AlbumBackVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.PhotoBackVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -70,4 +71,12 @@ public interface PhotoService extends IService<Photo> {
      * @return 照片列表
      */
     Map<String, Object> listPhotoVO(ConditionDTO condition);
+
+    /**
+     * 上传照片
+     *
+     * @param file 文件
+     * @return 照片地址
+     */
+    String uploadPhoto(MultipartFile file);
 }

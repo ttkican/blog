@@ -5,7 +5,6 @@ import com.ican.annotation.OptLogger;
 import com.ican.entity.SiteConfig;
 import com.ican.model.vo.Result;
 import com.ican.service.SiteConfigService;
-import com.ican.strategy.context.UploadStrategyContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static com.ican.constant.OptTypeConstant.UPDATE;
 import static com.ican.constant.OptTypeConstant.UPLOAD;
-import static com.ican.enums.FilePathEnum.CONFIG;
 
 /**
  * 网站配置控制器
@@ -28,9 +26,6 @@ public class SiteConfigController {
 
     @Autowired
     private SiteConfigService webConfigService;
-
-    @Autowired
-    private UploadStrategyContext uploadStrategyContext;
 
     /**
      * 获取网站配置
@@ -71,7 +66,7 @@ public class SiteConfigController {
     @SaCheckPermission("web:site:upload")
     @PostMapping("/admin/site/upload")
     public Result<String> uploadSiteImg(@RequestParam("file") MultipartFile file) {
-        return Result.success(uploadStrategyContext.executeUploadStrategy(file, CONFIG.getPath()));
+        return Result.success(webConfigService.uploadSiteImg(file));
     }
 
 }
