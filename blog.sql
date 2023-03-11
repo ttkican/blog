@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 21/02/2023 18:18:57
+ Date: 10/03/2023 23:40:36
 */
 
 SET NAMES utf8mb4;
@@ -57,11 +57,12 @@ CREATE TABLE `t_article`  (
   `create_time` datetime NOT NULL COMMENT '发表时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_article
 -- ----------------------------
+INSERT INTO `t_article` VALUES (61, 1, 50, 'https://static.ttkwsd.top/article/d6a00d059a1e9729e763469deb4870df.jpg', '2023-02-22', '# 字符效果\n\n- ~~删除线~~ <s>删除线（开启识别 HTML 标签时）</s>\n\n- _斜体字_ _斜体字_\n- **粗体** **粗体**\n- **_粗斜体_** **_粗斜体_**\n\n- 上标：X<sub>2</sub>，下标：O<sup>2</sup>\n\n- ==高亮==\n\n- `Inline Code`\n\n> 引用：如果想要插入空白换行（即 `<br>` 标签），在插入处先键入两个以上的空格然后回车即可\n\n# 超链接\n\n- [普通链接](https://www.ttkwsd.top)\n- [_斜体链接_](https://www.ttkwsd.top)\n- [**粗体链接**](https://www.ttkwsd.top)\n\n# 脚注\n\n这是一个简单的脚注 [^1] 而这是一个更长的脚注 [^bignote].\n\n[^1]: 这是第一个脚注.\n[^bignote]: 这是一个非常长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的脚注.\n\n# 图像\n\n下面是一张我家硝子的壁纸?:\n![硝子1](https://i.niupic.com/images/2022/03/11/9Wl7.jpg)\n再来一张好了?：\n![硝子2](https://i.niupic.com/images/2022/03/12/9Wme.jpg)\n\n# 代码\n\n## 行内代码\n\n在 VS Code 中按下 <kbd>Alt</kbd> + <kbd>T</kbd> + <kbd>R</kbd> 执行命令：`npm install marked`\n\n## 代码片\n\n### Python 代码\n\n```python\nclass Animal:\n    \"\"\" 动物类 \"\"\"\n\n    def __init__(self, age: int, name: str):\n        self.age = age\n        self.name = name\n\n    def getInfo(self) -> str:\n        \"\"\" 返回信息 \"\"\"\n        return f\'age: {self.age}; name: {self.name}\'\n\n\nclass Dog(Animal):\n    \"\"\" 狗狗类 \"\"\"\n\n    def __init__(self, age: int, name: str, gender=\'female\', color=\'white\'):\n        super().__init__(age, name)\n        self.gender = gender\n        self.__color = color\n\n    def bark(self):\n        \"\"\" 狗叫 \"\"\"\n        print(\'lololo\')\n\n    @property\n    def color(self):\n        return self.__color\n\n    @color.setter\n    def color(self, color: str):\n        if color not in [\'red\', \'white\', \'black\']:\n            raise ValueError(\'颜色不符合要求\')\n        self.__color = color\n\n\nif __name__ == \'__main__\':\n    dog = Dog(16, \'啸天\', gender=\'male\')\n    # 狗叫\n    dog.bark()\n    # 设置狗狗毛色\n    dog.color = \'blue\'\n```\n\n### HTML 代码\n\n```html\n<!DOCTYPE html>\n<html>\n    <head>\n        <mate charest=\"utf-8\" />\n        <title>Hello world!</title>\n    </head>\n    <body>\n        <h1>Hello world!</h1>\n    </body>\n</html>\n```\n\n# 列表\n\n## 无序列表\n\n- 福建\n  - 厦门\n  - 福州\n- 浙江\n- 江苏\n\n## 有序列表\n\n1. 动物\n   1. 人类\n   2. 犬类\n2. 植物\n3. 微生物\n\n## 任务列表\n\n- [x] 预习计算机网络\n- [ ] 复习现代控制理论\n- [ ] 刷现代控制理论历年卷\n  - [ ] 2019 年期末试卷\n  - [ ] 2020 年期末试卷\n\n# 表格\n\n| 项目   |  价格 | 数量 |\n| ------ | ----: | :--: |\n| 计算机 | $1600 |  5   |\n| 手机   |   $12 |  12  |\n| 管线   |    $1 | 234  |\n\n---\n\n# 特殊符号\n\n&copy; & &uml; &trade; &iexcl; &pound;\n&amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot;\n\nX&sup2; Y&sup3; &frac34; &frac14; &times; &divide; &raquo;\n\n18&ordm;C &quot; &apos;\n\n# Emoji 表情 🎉\n\n- 马：🐎\n- 星星：✨\n- 笑脸：😀\n- 跑步：🏃‍\n\n# 数学公式\n\n行间公式：\n$\\sin(\\alpha)^{\\theta}=\\sum_{i=0}^{n}(x^i + \\cos(f))$\n行内公式 $E=mc^2$\n\n# Tip提示\n\n::: tip\n  在此输入内容\n:::\n::: warning\n  在此输入内容\n:::\n::: danger\n  在此输入内容\n:::\n::: details\n  内容\n:::', 1, 1, 0, 1, 1, '2023-02-22 12:10:21', '2023-03-10 22:36:03');
 
 -- ----------------------------
 -- Table structure for t_article_tag
@@ -72,11 +73,45 @@ CREATE TABLE `t_article_tag`  (
   `article_id` int NOT NULL COMMENT '文章id',
   `tag_id` int NOT NULL COMMENT '标签id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 107 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_article_tag
 -- ----------------------------
+INSERT INTO `t_article_tag` VALUES (106, 61, 15);
+
+-- ----------------------------
+-- Table structure for t_blog_file
+-- ----------------------------
+DROP TABLE IF EXISTS `t_blog_file`;
+CREATE TABLE `t_blog_file`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '文件id',
+  `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件url',
+  `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文件名',
+  `file_size` int NOT NULL DEFAULT 0 COMMENT '文件大小',
+  `extend_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '文件类型',
+  `file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文件路径',
+  `is_dir` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为目录 (0否 1是)',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 125 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_blog_file
+-- ----------------------------
+INSERT INTO `t_blog_file` VALUES (2, NULL, 'talk', 0, '', '/', 1, '2023-03-08 12:16:37', NULL);
+INSERT INTO `t_blog_file` VALUES (3, NULL, 'config', 0, '', '/', 1, '2023-03-08 12:17:10', NULL);
+INSERT INTO `t_blog_file` VALUES (106, NULL, 'photo', 0, '', '/', 1, '2023-03-10 22:33:29', NULL);
+INSERT INTO `t_blog_file` VALUES (107, NULL, 'article', 0, '', '/', 1, '2023-03-10 22:33:33', NULL);
+INSERT INTO `t_blog_file` VALUES (108, 'https://static.ttkwsd.top/article/d6a00d059a1e9729e763469deb4870df.jpg', 'd6a00d059a1e9729e763469deb4870df', 203270, 'jpg', '/article', 0, '2023-03-10 22:36:01', NULL);
+INSERT INTO `t_blog_file` VALUES (109, 'https://static.ttkwsd.top/photo/fcb7cad9dcec4f1ba21781ffd482dd7a.jpg', 'fcb7cad9dcec4f1ba21781ffd482dd7a', 207664, 'jpg', '/photo', 0, '2023-03-10 22:37:38', NULL);
+INSERT INTO `t_blog_file` VALUES (110, 'https://static.ttkwsd.top/config/7b6f25adc2b9627b8918176888bee3b5.png', '7b6f25adc2b9627b8918176888bee3b5', 94649, 'png', '/config', 0, '2023-03-10 22:48:26', NULL);
+INSERT INTO `t_blog_file` VALUES (111, 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '0bca52afdb2b9998132355d716390c9f', 1323, 'png', '/config', 0, '2023-03-10 22:53:35', NULL);
+INSERT INTO `t_blog_file` VALUES (114, 'https://static.ttkwsd.top/config/994a286571b002e93281899cb402bd15.png', '994a286571b002e93281899cb402bd15', 43466, 'png', '/config', 0, '2023-03-10 22:57:18', NULL);
+INSERT INTO `t_blog_file` VALUES (116, 'https://static.ttkwsd.top/config/f0be9dc73e230d8821179b9303a9ff49.jpg', 'f0be9dc73e230d8821179b9303a9ff49', 43981, 'jpg', '/config', 0, '2023-03-10 22:58:21', NULL);
+INSERT INTO `t_blog_file` VALUES (117, 'https://static.ttkwsd.top/config/05409c1ed50047535f28a40464f7b1ab.jpg', '05409c1ed50047535f28a40464f7b1ab', 196780, 'jpg', '/config', 0, '2023-03-10 22:58:53', NULL);
+INSERT INTO `t_blog_file` VALUES (118, 'https://static.ttkwsd.top/config/d6a00d059a1e9729e763469deb4870df.jpg', 'd6a00d059a1e9729e763469deb4870df', 203270, 'jpg', '/config', 0, '2023-03-10 23:00:06', NULL);
 
 -- ----------------------------
 -- Table structure for t_category
@@ -88,11 +123,12 @@ CREATE TABLE `t_category`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_category
 -- ----------------------------
+INSERT INTO `t_category` VALUES (50, '测试分类', '2023-02-22 12:10:21', NULL);
 
 -- ----------------------------
 -- Table structure for t_comment
@@ -111,7 +147,7 @@ CREATE TABLE `t_comment`  (
   `create_time` datetime NOT NULL COMMENT '评论时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_comment
@@ -137,7 +173,7 @@ CREATE TABLE `t_exception_log`  (
   `browser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '浏览器',
   `create_time` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 180 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 248 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_exception_log
@@ -158,7 +194,7 @@ CREATE TABLE `t_friend`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `friend_user`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_friend
@@ -183,7 +219,7 @@ CREATE TABLE `t_menu`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 107 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 127 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_menu
@@ -281,6 +317,10 @@ INSERT INTO `t_menu` VALUES (105, 104, 'B', '删除任务日志', NULL, NULL, NU
 INSERT INTO `t_menu` VALUES (106, 104, 'B', '清空任务日志', NULL, NULL, NULL, 'log:task:clear', 0, 0, 2, '2023-02-14 11:21:28', NULL);
 INSERT INTO `t_menu` VALUES (108, 1, 'C', '发布文章', 'write', 'edit', '/blog/article/write', 'blog:article:list', 0, 0, 1, '2023-02-21 13:32:22', '2023-02-21 15:36:04');
 INSERT INTO `t_menu` VALUES (111, 1, 'C', '修改文章', 'write/:articleId', 'edit', '/blog/article/write', 'blog:article:list', 1, 0, 5, '2023-02-21 15:40:11', '2023-02-21 15:41:07');
+INSERT INTO `t_menu` VALUES (123, 11, 'C', '文件管理', 'file', 'file', '/system/file/index', 'system:file:list', 0, 0, 4, '2023-03-09 10:57:29', NULL);
+INSERT INTO `t_menu` VALUES (124, 123, 'B', '上传文件', NULL, NULL, NULL, 'system:file:upload', 0, 0, 1, '2023-03-10 23:11:33', NULL);
+INSERT INTO `t_menu` VALUES (125, 123, 'B', '新建文件夹', NULL, NULL, NULL, 'system:file:createFolder', 0, 0, 2, '2023-03-10 23:12:11', NULL);
+INSERT INTO `t_menu` VALUES (126, 123, 'B', '删除文件', NULL, NULL, NULL, 'system:file:delete', 0, 0, 3, '2023-03-10 23:12:45', NULL);
 
 -- ----------------------------
 -- Table structure for t_message
@@ -302,87 +342,6 @@ CREATE TABLE `t_message`  (
 -- ----------------------------
 -- Records of t_message
 -- ----------------------------
-INSERT INTO `t_message` VALUES (4, 'Gnaf', 'https://q1.qlogo.cn/g?b=qq&nk=1519467168&s=40', '测试', '223.146.142.215', '中国|湖南省|衡阳市|电信', 1, '2022-08-25 20:32:13', NULL);
-INSERT INTO `t_message` VALUES (6, '彰', 'https://q1.qlogo.cn/g?b=qq&nk=981038470&s=40', '太强了', '39.144.168.207', '中国|移动', 1, '2022-08-25 21:21:51', NULL);
-INSERT INTO `t_message` VALUES (7, '存于心', 'https://q1.qlogo.cn/g?b=qq&nk=2390885491&s=40', '牛蛙牛蛙', '171.34.214.142', '中国|江西省|南昌市|联通', 1, '2022-08-26 14:48:08', NULL);
-INSERT INTO `t_message` VALUES (8, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '111', '27.38.212.223', '中国|广东省|深圳市|联通', 1, '2022-09-08 19:50:35', NULL);
-INSERT INTO `t_message` VALUES (9, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'nice', '171.34.215.57', '中国|江西省|南昌市|联通', 1, '2022-09-12 09:52:40', NULL);
-INSERT INTO `t_message` VALUES (10, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛蛙', '58.37.10.147', '中国|上海|上海市|电信', 1, '2022-09-13 10:37:56', NULL);
-INSERT INTO `t_message` VALUES (11, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '111', '114.93.24.95', '中国|上海|上海市|电信', 1, '2022-09-13 12:04:52', NULL);
-INSERT INTO `t_message` VALUES (12, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '测试', '117.162.73.5', '中国|江西省|吉安市|移动', 1, '2022-09-13 23:24:37', NULL);
-INSERT INTO `t_message` VALUES (13, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'dog', '111.22.252.94', '中国|湖南省|长沙市|移动', 1, '2022-09-14 14:36:40', NULL);
-INSERT INTO `t_message` VALUES (14, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'hello', '223.104.22.206', '中国|广西|南宁市|移动', 1, '2022-09-15 19:04:03', NULL);
-INSERT INTO `t_message` VALUES (15, '故人已往', 'http://thirdqq.qlogo.cn/g?b=oidb&k=pbicG5Ircgp6AfMhdYR3usA&s=40&t=1660705139', '加油', '117.162.73.5', '中国|江西省|吉安市|移动', 1, '2022-09-16 14:49:53', NULL);
-INSERT INTO `t_message` VALUES (16, '故人已往', 'http://thirdqq.qlogo.cn/g?b=oidb&k=pbicG5Ircgp6AfMhdYR3usA&s=40&t=1660705139', '666', '117.162.73.5', '中国|江西省|吉安市|移动', 1, '2022-09-19 11:42:35', NULL);
-INSERT INTO `t_message` VALUES (17, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛啊牛啊', '111.222.51.142', '中国|广东省|深圳市|天威', 1, '2022-09-20 21:20:59', NULL);
-INSERT INTO `t_message` VALUES (18, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '欢迎回访~ https://www.hqxiaozou.top/category/java', '116.22.180.131', '中国|广东省|广州市|电信', 1, '2022-09-22 14:21:57', NULL);
-INSERT INTO `t_message` VALUES (19, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '厉害厉害', '61.242.132.29', '中国|江西省|联通', 1, '2022-09-23 16:26:35', NULL);
-INSERT INTO `t_message` VALUES (20, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'ceshi', '1.202.254.178', '中国|北京|北京市|电信', 1, '2022-09-27 15:28:12', NULL);
-INSERT INTO `t_message` VALUES (21, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '11', '113.247.68.248', '中国|湖南省|长沙市|电信', 1, '2022-09-30 12:21:49', NULL);
-INSERT INTO `t_message` VALUES (22, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '234', '123.180.194.48', '中国|河北省|衡水市|电信', 1, '2022-10-07 09:11:15', NULL);
-INSERT INTO `t_message` VALUES (23, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '测试', '171.34.214.123', '中国|江西省|南昌市|联通', 1, '2022-10-14 22:49:34', NULL);
-INSERT INTO `t_message` VALUES (24, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '非非', '220.200.104.47', '中国|海南省|海口市|联通', 1, '2022-10-16 11:25:36', NULL);
-INSERT INTO `t_message` VALUES (25, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '厉害', '183.157.14.251', '中国|浙江省|杭州市|电信', 1, '2022-11-06 09:23:04', NULL);
-INSERT INTO `t_message` VALUES (26, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '厉害', '117.136.111.102', '中国|浙江省|杭州市|移动', 1, '2022-11-07 09:40:09', NULL);
-INSERT INTO `t_message` VALUES (27, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '321313', '60.4.125.156', '中国|河北省|保定市|联通', 1, '2022-11-08 11:07:03', NULL);
-INSERT INTO `t_message` VALUES (28, '清晨、初阳', 'http://thirdqq.qlogo.cn/g?b=oidb&k=iaY7ulx7PZp2886QNMCZSOA&s=40&t=1551769321', '**', '171.113.123.31', '中国|湖北省|武汉市|电信', 1, '2022-11-08 23:36:17', NULL);
-INSERT INTO `t_message` VALUES (29, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '厉害', '183.157.81.152', '中国|浙江省|杭州市|电信', 1, '2022-11-09 07:22:40', NULL);
-INSERT INTO `t_message` VALUES (30, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '顶顶顶顶顶', '124.119.133.56', '中国|新疆|伊犁|电信', 1, '2022-11-09 12:03:23', NULL);
-INSERT INTO `t_message` VALUES (31, '王小王', 'https://gitee.com/assets/no_portrait.png', '参考一下', '120.245.112.138', '中国|北京|北京市|移动', 1, '2022-11-09 16:06:47', NULL);
-INSERT INTO `t_message` VALUES (32, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛牛', '110.86.200.86', '中国|福建省|厦门市|电信', 1, '2022-11-14 00:09:34', NULL);
-INSERT INTO `t_message` VALUES (33, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '这是真的？', '60.166.99.0', '中国|安徽省|合肥市|电信', 1, '2022-11-14 21:39:39', NULL);
-INSERT INTO `t_message` VALUES (34, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '马走*', '36.143.145.3', '中国|移动', 1, '2022-11-15 15:35:48', NULL);
-INSERT INTO `t_message` VALUES (35, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '666', '211.82.216.136', '中国|河北省|衡水市|教育网', 1, '2022-11-15 20:32:03', NULL);
-INSERT INTO `t_message` VALUES (36, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '这个功能秀啊', '106.224.33.58', '中国|江西省|南昌市|电信', 1, '2022-11-16 10:31:53', NULL);
-INSERT INTO `t_message` VALUES (37, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛啊', '119.36.87.228', '中国|湖北省|武汉市|联通', 1, '2022-11-20 21:55:31', NULL);
-INSERT INTO `t_message` VALUES (38, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛', '113.88.84.236', '中国|广东省|深圳市|电信', 1, '2022-11-22 16:33:03', NULL);
-INSERT INTO `t_message` VALUES (39, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '666666', '117.181.105.64', '中国|广西|南宁市|移动', 1, '2022-11-25 12:26:05', NULL);
-INSERT INTO `t_message` VALUES (40, '小宇宙', 'http://thirdqq.qlogo.cn/g?b=oidb&k=L1m1ugGEjUvppP71vvicgCQ&kti=Y4BEGgAAAAE&s=40&t=1632151073', '请问而放弃阿**的', '117.181.105.64', '中国|广西|南宁市|移动', 1, '2022-11-25 12:34:15', NULL);
-INSERT INTO `t_message` VALUES (41, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '123', '183.197.90.114', '中国|河北省|保定市|移动', 1, '2022-11-28 13:35:33', NULL);
-INSERT INTO `t_message` VALUES (42, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '6', '111.16.58.249', '中国|山东省|临沂市|移动', 1, '2022-12-01 18:43:25', NULL);
-INSERT INTO `t_message` VALUES (43, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '牛哇', '14.150.30.72', '中国|广东省|广州市|电信', 1, '2022-12-02 18:01:56', NULL);
-INSERT INTO `t_message` VALUES (45, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '好漂亮啊', '221.2.69.42', '中国|山东省|临沂市|联通', 1, '2022-12-04 21:22:59', NULL);
-INSERT INTO `t_message` VALUES (47, '游客', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', '请问下音乐播放器怎么让他连图片页也藏起来呀', '115.201.100.204', '中国|浙江省|台州市|电信', 1, '2022-12-24 14:27:54', '2022-12-30 22:30:10');
-INSERT INTO `t_message` VALUES (48, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:05', NULL);
-INSERT INTO `t_message` VALUES (49, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:05', NULL);
-INSERT INTO `t_message` VALUES (50, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:10', NULL);
-INSERT INTO `t_message` VALUES (51, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:11', NULL);
-INSERT INTO `t_message` VALUES (52, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:12', NULL);
-INSERT INTO `t_message` VALUES (53, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:12', NULL);
-INSERT INTO `t_message` VALUES (54, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:13', NULL);
-INSERT INTO `t_message` VALUES (55, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:14', NULL);
-INSERT INTO `t_message` VALUES (56, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:15', NULL);
-INSERT INTO `t_message` VALUES (57, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:15', NULL);
-INSERT INTO `t_message` VALUES (58, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:15', NULL);
-INSERT INTO `t_message` VALUES (59, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:15', NULL);
-INSERT INTO `t_message` VALUES (60, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:15', NULL);
-INSERT INTO `t_message` VALUES (61, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:52:16', NULL);
-INSERT INTO `t_message` VALUES (62, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '哈哈', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:53:02', NULL);
-INSERT INTO `t_message` VALUES (63, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'test', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:58:11', NULL);
-INSERT INTO `t_message` VALUES (64, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'test', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:58:11', NULL);
-INSERT INTO `t_message` VALUES (65, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'test', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:58:13', NULL);
-INSERT INTO `t_message` VALUES (66, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'test', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 11:58:14', NULL);
-INSERT INTO `t_message` VALUES (67, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:04:55', NULL);
-INSERT INTO `t_message` VALUES (68, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:05:01', NULL);
-INSERT INTO `t_message` VALUES (69, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:05:03', NULL);
-INSERT INTO `t_message` VALUES (70, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:05:04', NULL);
-INSERT INTO `t_message` VALUES (71, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:05:11', NULL);
-INSERT INTO `t_message` VALUES (72, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:06:08', NULL);
-INSERT INTO `t_message` VALUES (73, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:06:09', NULL);
-INSERT INTO `t_message` VALUES (74, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:06:10', NULL);
-INSERT INTO `t_message` VALUES (75, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:06:11', NULL);
-INSERT INTO `t_message` VALUES (76, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:07:23', NULL);
-INSERT INTO `t_message` VALUES (77, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'fff', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:07:29', NULL);
-INSERT INTO `t_message` VALUES (78, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'ee', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:07:43', NULL);
-INSERT INTO `t_message` VALUES (79, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'ddd', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:12:34', NULL);
-INSERT INTO `t_message` VALUES (80, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'dd', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:12:36', NULL);
-INSERT INTO `t_message` VALUES (81, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'ddd', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-01 12:12:38', NULL);
-INSERT INTO `t_message` VALUES (82, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', 'dd', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-08 19:17:55', NULL);
-INSERT INTO `t_message` VALUES (83, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '111', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-10 11:21:55', NULL);
-INSERT INTO `t_message` VALUES (84, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '111', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-10 11:35:07', NULL);
-INSERT INTO `t_message` VALUES (85, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '111', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-10 11:35:29', NULL);
-INSERT INTO `t_message` VALUES (86, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '111', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-10 11:40:29', NULL);
-INSERT INTO `t_message` VALUES (87, '阿冬', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '111', '192.168.23.1', '内网IP|内网IP', 1, '2023-02-10 11:40:57', '2023-02-10 11:43:21');
 
 -- ----------------------------
 -- Table structure for t_operation_log
@@ -405,11 +364,12 @@ CREATE TABLE `t_operation_log`  (
   `times` int NOT NULL COMMENT '操作耗时 (毫秒)',
   `create_time` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 833 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1152 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_operation_log
 -- ----------------------------
+INSERT INTO `t_operation_log` VALUES (1151, '文件模块', '上传', '/admin/file/upload', 'com.ican.controller.BlogFileController.uploadFile', '上传文件', 'amili.gif', 'POST', '{\"code\":200,\"flag\":true,\"msg\":\"操作成功\"}', 1, '阿冬', '192.168.23.1', '内网IP|内网IP', 216, '2023-03-10 23:27:15');
 
 -- ----------------------------
 -- Table structure for t_photo
@@ -449,9 +409,9 @@ CREATE TABLE `t_role`  (
 -- ----------------------------
 -- Records of t_role
 -- ----------------------------
-INSERT INTO `t_role` VALUES ('1', 'admin', '管理员', 0, '2022-11-03 17:41:57', '2023-02-21 15:40:28');
-INSERT INTO `t_role` VALUES ('2', 'user', '普通用户', 1, '2022-11-03 17:42:17', '2023-02-21 13:31:28');
-INSERT INTO `t_role` VALUES ('3', 'test', '测试账号', 0, '2022-11-03 17:42:31', '2023-02-21 13:31:31');
+INSERT INTO `t_role` VALUES ('1', 'admin', '管理员', 0, '2022-11-03 17:41:57', '2023-03-10 23:12:59');
+INSERT INTO `t_role` VALUES ('2', 'user', '普通用户', 0, '2022-11-03 17:42:17', '2023-03-10 23:13:11');
+INSERT INTO `t_role` VALUES ('3', 'test', '测试账号', 0, '2022-11-03 17:42:31', '2023-03-10 23:13:17');
 
 -- ----------------------------
 -- Table structure for t_role_menu
@@ -462,159 +422,175 @@ CREATE TABLE `t_role_menu`  (
   `role_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色id',
   `menu_id` int NOT NULL COMMENT '菜单id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3551 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5867 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_role_menu
 -- ----------------------------
-INSERT INTO `t_role_menu` VALUES (4041, '2', 1);
-INSERT INTO `t_role_menu` VALUES (4042, '2', 3);
-INSERT INTO `t_role_menu` VALUES (4043, '2', 4);
-INSERT INTO `t_role_menu` VALUES (4044, '2', 36);
-INSERT INTO `t_role_menu` VALUES (4045, '2', 38);
-INSERT INTO `t_role_menu` VALUES (4046, '2', 99);
-INSERT INTO `t_role_menu` VALUES (4047, '2', 102);
-INSERT INTO `t_role_menu` VALUES (4048, '2', 37);
-INSERT INTO `t_role_menu` VALUES (4049, '2', 11);
-INSERT INTO `t_role_menu` VALUES (4050, '2', 12);
-INSERT INTO `t_role_menu` VALUES (4051, '2', 60);
-INSERT INTO `t_role_menu` VALUES (4052, '2', 13);
-INSERT INTO `t_role_menu` VALUES (4053, '2', 14);
-INSERT INTO `t_role_menu` VALUES (4054, '2', 95);
-INSERT INTO `t_role_menu` VALUES (4055, '2', 96);
-INSERT INTO `t_role_menu` VALUES (4056, '2', 97);
-INSERT INTO `t_role_menu` VALUES (4057, '2', 98);
-INSERT INTO `t_role_menu` VALUES (4058, '2', 21);
-INSERT INTO `t_role_menu` VALUES (4059, '2', 22);
-INSERT INTO `t_role_menu` VALUES (4060, '2', 23);
-INSERT INTO `t_role_menu` VALUES (4061, '2', 93);
-INSERT INTO `t_role_menu` VALUES (4062, '2', 26);
-INSERT INTO `t_role_menu` VALUES (4063, '2', 53);
-INSERT INTO `t_role_menu` VALUES (4064, '2', 27);
-INSERT INTO `t_role_menu` VALUES (4065, '2', 34);
-INSERT INTO `t_role_menu` VALUES (4066, '2', 35);
-INSERT INTO `t_role_menu` VALUES (4067, '2', 61);
-INSERT INTO `t_role_menu` VALUES (4068, '2', 65);
-INSERT INTO `t_role_menu` VALUES (4069, '2', 51);
-INSERT INTO `t_role_menu` VALUES (4070, '2', 57);
-INSERT INTO `t_role_menu` VALUES (4071, '2', 52);
-INSERT INTO `t_role_menu` VALUES (4072, '2', 46);
-INSERT INTO `t_role_menu` VALUES (4073, '3', 1);
-INSERT INTO `t_role_menu` VALUES (4074, '3', 3);
-INSERT INTO `t_role_menu` VALUES (4075, '3', 4);
-INSERT INTO `t_role_menu` VALUES (4076, '3', 36);
-INSERT INTO `t_role_menu` VALUES (4077, '3', 38);
-INSERT INTO `t_role_menu` VALUES (4078, '3', 37);
-INSERT INTO `t_role_menu` VALUES (4079, '3', 11);
-INSERT INTO `t_role_menu` VALUES (4080, '3', 12);
-INSERT INTO `t_role_menu` VALUES (4081, '3', 60);
-INSERT INTO `t_role_menu` VALUES (4082, '3', 13);
-INSERT INTO `t_role_menu` VALUES (4083, '3', 14);
-INSERT INTO `t_role_menu` VALUES (4084, '3', 21);
-INSERT INTO `t_role_menu` VALUES (4085, '3', 22);
-INSERT INTO `t_role_menu` VALUES (4086, '3', 23);
-INSERT INTO `t_role_menu` VALUES (4087, '3', 104);
-INSERT INTO `t_role_menu` VALUES (4088, '3', 93);
-INSERT INTO `t_role_menu` VALUES (4089, '3', 26);
-INSERT INTO `t_role_menu` VALUES (4090, '3', 53);
-INSERT INTO `t_role_menu` VALUES (4091, '3', 27);
-INSERT INTO `t_role_menu` VALUES (4092, '3', 34);
-INSERT INTO `t_role_menu` VALUES (4093, '3', 35);
-INSERT INTO `t_role_menu` VALUES (4094, '3', 61);
-INSERT INTO `t_role_menu` VALUES (4095, '3', 65);
-INSERT INTO `t_role_menu` VALUES (4096, '3', 51);
-INSERT INTO `t_role_menu` VALUES (4097, '3', 57);
-INSERT INTO `t_role_menu` VALUES (4098, '3', 52);
-INSERT INTO `t_role_menu` VALUES (4099, '3', 46);
-INSERT INTO `t_role_menu` VALUES (4542, '1', 1);
-INSERT INTO `t_role_menu` VALUES (4543, '1', 108);
-INSERT INTO `t_role_menu` VALUES (4544, '1', 73);
-INSERT INTO `t_role_menu` VALUES (4545, '1', 80);
-INSERT INTO `t_role_menu` VALUES (4546, '1', 81);
-INSERT INTO `t_role_menu` VALUES (4547, '1', 82);
-INSERT INTO `t_role_menu` VALUES (4548, '1', 83);
-INSERT INTO `t_role_menu` VALUES (4549, '1', 84);
-INSERT INTO `t_role_menu` VALUES (4550, '1', 85);
-INSERT INTO `t_role_menu` VALUES (4551, '1', 86);
-INSERT INTO `t_role_menu` VALUES (4552, '1', 87);
-INSERT INTO `t_role_menu` VALUES (4553, '1', 88);
-INSERT INTO `t_role_menu` VALUES (4554, '1', 3);
-INSERT INTO `t_role_menu` VALUES (4555, '1', 5);
-INSERT INTO `t_role_menu` VALUES (4556, '1', 6);
-INSERT INTO `t_role_menu` VALUES (4557, '1', 7);
-INSERT INTO `t_role_menu` VALUES (4558, '1', 4);
-INSERT INTO `t_role_menu` VALUES (4559, '1', 8);
-INSERT INTO `t_role_menu` VALUES (4560, '1', 9);
-INSERT INTO `t_role_menu` VALUES (4561, '1', 10);
-INSERT INTO `t_role_menu` VALUES (4562, '1', 111);
-INSERT INTO `t_role_menu` VALUES (4563, '1', 36);
-INSERT INTO `t_role_menu` VALUES (4564, '1', 38);
-INSERT INTO `t_role_menu` VALUES (4565, '1', 99);
-INSERT INTO `t_role_menu` VALUES (4566, '1', 100);
-INSERT INTO `t_role_menu` VALUES (4567, '1', 101);
-INSERT INTO `t_role_menu` VALUES (4568, '1', 102);
-INSERT INTO `t_role_menu` VALUES (4569, '1', 37);
-INSERT INTO `t_role_menu` VALUES (4570, '1', 42);
-INSERT INTO `t_role_menu` VALUES (4571, '1', 45);
-INSERT INTO `t_role_menu` VALUES (4572, '1', 11);
-INSERT INTO `t_role_menu` VALUES (4573, '1', 12);
-INSERT INTO `t_role_menu` VALUES (4574, '1', 15);
-INSERT INTO `t_role_menu` VALUES (4575, '1', 16);
-INSERT INTO `t_role_menu` VALUES (4576, '1', 17);
-INSERT INTO `t_role_menu` VALUES (4577, '1', 60);
-INSERT INTO `t_role_menu` VALUES (4578, '1', 13);
-INSERT INTO `t_role_menu` VALUES (4579, '1', 18);
-INSERT INTO `t_role_menu` VALUES (4580, '1', 19);
-INSERT INTO `t_role_menu` VALUES (4581, '1', 20);
-INSERT INTO `t_role_menu` VALUES (4582, '1', 33);
-INSERT INTO `t_role_menu` VALUES (4583, '1', 14);
-INSERT INTO `t_role_menu` VALUES (4584, '1', 69);
-INSERT INTO `t_role_menu` VALUES (4585, '1', 70);
-INSERT INTO `t_role_menu` VALUES (4586, '1', 21);
-INSERT INTO `t_role_menu` VALUES (4587, '1', 22);
-INSERT INTO `t_role_menu` VALUES (4588, '1', 24);
-INSERT INTO `t_role_menu` VALUES (4589, '1', 23);
-INSERT INTO `t_role_menu` VALUES (4590, '1', 25);
-INSERT INTO `t_role_menu` VALUES (4591, '1', 93);
-INSERT INTO `t_role_menu` VALUES (4592, '1', 94);
-INSERT INTO `t_role_menu` VALUES (4593, '1', 104);
-INSERT INTO `t_role_menu` VALUES (4594, '1', 105);
-INSERT INTO `t_role_menu` VALUES (4595, '1', 106);
-INSERT INTO `t_role_menu` VALUES (4596, '1', 26);
-INSERT INTO `t_role_menu` VALUES (4597, '1', 53);
-INSERT INTO `t_role_menu` VALUES (4598, '1', 71);
-INSERT INTO `t_role_menu` VALUES (4599, '1', 27);
-INSERT INTO `t_role_menu` VALUES (4600, '1', 28);
-INSERT INTO `t_role_menu` VALUES (4601, '1', 29);
-INSERT INTO `t_role_menu` VALUES (4602, '1', 30);
-INSERT INTO `t_role_menu` VALUES (4603, '1', 31);
-INSERT INTO `t_role_menu` VALUES (4604, '1', 32);
-INSERT INTO `t_role_menu` VALUES (4605, '1', 34);
-INSERT INTO `t_role_menu` VALUES (4606, '1', 35);
-INSERT INTO `t_role_menu` VALUES (4607, '1', 39);
-INSERT INTO `t_role_menu` VALUES (4608, '1', 40);
-INSERT INTO `t_role_menu` VALUES (4609, '1', 41);
-INSERT INTO `t_role_menu` VALUES (4610, '1', 61);
-INSERT INTO `t_role_menu` VALUES (4611, '1', 62);
-INSERT INTO `t_role_menu` VALUES (4612, '1', 63);
-INSERT INTO `t_role_menu` VALUES (4613, '1', 64);
-INSERT INTO `t_role_menu` VALUES (4614, '1', 65);
-INSERT INTO `t_role_menu` VALUES (4615, '1', 66);
-INSERT INTO `t_role_menu` VALUES (4616, '1', 103);
-INSERT INTO `t_role_menu` VALUES (4617, '1', 51);
-INSERT INTO `t_role_menu` VALUES (4618, '1', 54);
-INSERT INTO `t_role_menu` VALUES (4619, '1', 55);
-INSERT INTO `t_role_menu` VALUES (4620, '1', 56);
-INSERT INTO `t_role_menu` VALUES (4621, '1', 57);
-INSERT INTO `t_role_menu` VALUES (4622, '1', 58);
-INSERT INTO `t_role_menu` VALUES (4623, '1', 52);
-INSERT INTO `t_role_menu` VALUES (4624, '1', 76);
-INSERT INTO `t_role_menu` VALUES (4625, '1', 77);
-INSERT INTO `t_role_menu` VALUES (4626, '1', 78);
-INSERT INTO `t_role_menu` VALUES (4627, '1', 79);
-INSERT INTO `t_role_menu` VALUES (4628, '1', 46);
-INSERT INTO `t_role_menu` VALUES (4629, '1', 67);
-INSERT INTO `t_role_menu` VALUES (4630, '1', 68);
+INSERT INTO `t_role_menu` VALUES (5703, '1', 1);
+INSERT INTO `t_role_menu` VALUES (5704, '1', 108);
+INSERT INTO `t_role_menu` VALUES (5705, '1', 73);
+INSERT INTO `t_role_menu` VALUES (5706, '1', 80);
+INSERT INTO `t_role_menu` VALUES (5707, '1', 81);
+INSERT INTO `t_role_menu` VALUES (5708, '1', 82);
+INSERT INTO `t_role_menu` VALUES (5709, '1', 83);
+INSERT INTO `t_role_menu` VALUES (5710, '1', 84);
+INSERT INTO `t_role_menu` VALUES (5711, '1', 85);
+INSERT INTO `t_role_menu` VALUES (5712, '1', 86);
+INSERT INTO `t_role_menu` VALUES (5713, '1', 87);
+INSERT INTO `t_role_menu` VALUES (5714, '1', 88);
+INSERT INTO `t_role_menu` VALUES (5715, '1', 3);
+INSERT INTO `t_role_menu` VALUES (5716, '1', 5);
+INSERT INTO `t_role_menu` VALUES (5717, '1', 6);
+INSERT INTO `t_role_menu` VALUES (5718, '1', 7);
+INSERT INTO `t_role_menu` VALUES (5719, '1', 4);
+INSERT INTO `t_role_menu` VALUES (5720, '1', 8);
+INSERT INTO `t_role_menu` VALUES (5721, '1', 9);
+INSERT INTO `t_role_menu` VALUES (5722, '1', 10);
+INSERT INTO `t_role_menu` VALUES (5723, '1', 111);
+INSERT INTO `t_role_menu` VALUES (5724, '1', 36);
+INSERT INTO `t_role_menu` VALUES (5725, '1', 38);
+INSERT INTO `t_role_menu` VALUES (5726, '1', 99);
+INSERT INTO `t_role_menu` VALUES (5727, '1', 100);
+INSERT INTO `t_role_menu` VALUES (5728, '1', 101);
+INSERT INTO `t_role_menu` VALUES (5729, '1', 102);
+INSERT INTO `t_role_menu` VALUES (5730, '1', 37);
+INSERT INTO `t_role_menu` VALUES (5731, '1', 42);
+INSERT INTO `t_role_menu` VALUES (5732, '1', 45);
+INSERT INTO `t_role_menu` VALUES (5733, '1', 11);
+INSERT INTO `t_role_menu` VALUES (5734, '1', 12);
+INSERT INTO `t_role_menu` VALUES (5735, '1', 15);
+INSERT INTO `t_role_menu` VALUES (5736, '1', 16);
+INSERT INTO `t_role_menu` VALUES (5737, '1', 17);
+INSERT INTO `t_role_menu` VALUES (5738, '1', 60);
+INSERT INTO `t_role_menu` VALUES (5739, '1', 13);
+INSERT INTO `t_role_menu` VALUES (5740, '1', 18);
+INSERT INTO `t_role_menu` VALUES (5741, '1', 19);
+INSERT INTO `t_role_menu` VALUES (5742, '1', 20);
+INSERT INTO `t_role_menu` VALUES (5743, '1', 33);
+INSERT INTO `t_role_menu` VALUES (5744, '1', 14);
+INSERT INTO `t_role_menu` VALUES (5745, '1', 69);
+INSERT INTO `t_role_menu` VALUES (5746, '1', 70);
+INSERT INTO `t_role_menu` VALUES (5747, '1', 123);
+INSERT INTO `t_role_menu` VALUES (5748, '1', 124);
+INSERT INTO `t_role_menu` VALUES (5749, '1', 125);
+INSERT INTO `t_role_menu` VALUES (5750, '1', 126);
+INSERT INTO `t_role_menu` VALUES (5751, '1', 21);
+INSERT INTO `t_role_menu` VALUES (5752, '1', 22);
+INSERT INTO `t_role_menu` VALUES (5753, '1', 24);
+INSERT INTO `t_role_menu` VALUES (5754, '1', 23);
+INSERT INTO `t_role_menu` VALUES (5755, '1', 25);
+INSERT INTO `t_role_menu` VALUES (5756, '1', 93);
+INSERT INTO `t_role_menu` VALUES (5757, '1', 94);
+INSERT INTO `t_role_menu` VALUES (5758, '1', 104);
+INSERT INTO `t_role_menu` VALUES (5759, '1', 105);
+INSERT INTO `t_role_menu` VALUES (5760, '1', 106);
+INSERT INTO `t_role_menu` VALUES (5761, '1', 26);
+INSERT INTO `t_role_menu` VALUES (5762, '1', 53);
+INSERT INTO `t_role_menu` VALUES (5763, '1', 71);
+INSERT INTO `t_role_menu` VALUES (5764, '1', 27);
+INSERT INTO `t_role_menu` VALUES (5765, '1', 28);
+INSERT INTO `t_role_menu` VALUES (5766, '1', 29);
+INSERT INTO `t_role_menu` VALUES (5767, '1', 30);
+INSERT INTO `t_role_menu` VALUES (5768, '1', 31);
+INSERT INTO `t_role_menu` VALUES (5769, '1', 32);
+INSERT INTO `t_role_menu` VALUES (5770, '1', 34);
+INSERT INTO `t_role_menu` VALUES (5771, '1', 35);
+INSERT INTO `t_role_menu` VALUES (5772, '1', 39);
+INSERT INTO `t_role_menu` VALUES (5773, '1', 40);
+INSERT INTO `t_role_menu` VALUES (5774, '1', 41);
+INSERT INTO `t_role_menu` VALUES (5775, '1', 61);
+INSERT INTO `t_role_menu` VALUES (5776, '1', 62);
+INSERT INTO `t_role_menu` VALUES (5777, '1', 63);
+INSERT INTO `t_role_menu` VALUES (5778, '1', 64);
+INSERT INTO `t_role_menu` VALUES (5779, '1', 65);
+INSERT INTO `t_role_menu` VALUES (5780, '1', 66);
+INSERT INTO `t_role_menu` VALUES (5781, '1', 103);
+INSERT INTO `t_role_menu` VALUES (5782, '1', 51);
+INSERT INTO `t_role_menu` VALUES (5783, '1', 54);
+INSERT INTO `t_role_menu` VALUES (5784, '1', 55);
+INSERT INTO `t_role_menu` VALUES (5785, '1', 56);
+INSERT INTO `t_role_menu` VALUES (5786, '1', 57);
+INSERT INTO `t_role_menu` VALUES (5787, '1', 58);
+INSERT INTO `t_role_menu` VALUES (5788, '1', 52);
+INSERT INTO `t_role_menu` VALUES (5789, '1', 76);
+INSERT INTO `t_role_menu` VALUES (5790, '1', 77);
+INSERT INTO `t_role_menu` VALUES (5791, '1', 78);
+INSERT INTO `t_role_menu` VALUES (5792, '1', 79);
+INSERT INTO `t_role_menu` VALUES (5793, '1', 46);
+INSERT INTO `t_role_menu` VALUES (5794, '1', 67);
+INSERT INTO `t_role_menu` VALUES (5795, '1', 68);
+INSERT INTO `t_role_menu` VALUES (5796, '2', 1);
+INSERT INTO `t_role_menu` VALUES (5797, '2', 108);
+INSERT INTO `t_role_menu` VALUES (5798, '2', 73);
+INSERT INTO `t_role_menu` VALUES (5799, '2', 84);
+INSERT INTO `t_role_menu` VALUES (5800, '2', 88);
+INSERT INTO `t_role_menu` VALUES (5801, '2', 3);
+INSERT INTO `t_role_menu` VALUES (5802, '2', 4);
+INSERT INTO `t_role_menu` VALUES (5803, '2', 111);
+INSERT INTO `t_role_menu` VALUES (5804, '2', 36);
+INSERT INTO `t_role_menu` VALUES (5805, '2', 38);
+INSERT INTO `t_role_menu` VALUES (5806, '2', 99);
+INSERT INTO `t_role_menu` VALUES (5807, '2', 102);
+INSERT INTO `t_role_menu` VALUES (5808, '2', 37);
+INSERT INTO `t_role_menu` VALUES (5809, '2', 11);
+INSERT INTO `t_role_menu` VALUES (5810, '2', 12);
+INSERT INTO `t_role_menu` VALUES (5811, '2', 60);
+INSERT INTO `t_role_menu` VALUES (5812, '2', 13);
+INSERT INTO `t_role_menu` VALUES (5813, '2', 14);
+INSERT INTO `t_role_menu` VALUES (5814, '2', 95);
+INSERT INTO `t_role_menu` VALUES (5815, '2', 96);
+INSERT INTO `t_role_menu` VALUES (5816, '2', 97);
+INSERT INTO `t_role_menu` VALUES (5817, '2', 98);
+INSERT INTO `t_role_menu` VALUES (5818, '2', 123);
+INSERT INTO `t_role_menu` VALUES (5819, '2', 21);
+INSERT INTO `t_role_menu` VALUES (5820, '2', 22);
+INSERT INTO `t_role_menu` VALUES (5821, '2', 23);
+INSERT INTO `t_role_menu` VALUES (5822, '2', 93);
+INSERT INTO `t_role_menu` VALUES (5823, '2', 104);
+INSERT INTO `t_role_menu` VALUES (5824, '2', 26);
+INSERT INTO `t_role_menu` VALUES (5825, '2', 53);
+INSERT INTO `t_role_menu` VALUES (5826, '2', 27);
+INSERT INTO `t_role_menu` VALUES (5827, '2', 34);
+INSERT INTO `t_role_menu` VALUES (5828, '2', 35);
+INSERT INTO `t_role_menu` VALUES (5829, '2', 61);
+INSERT INTO `t_role_menu` VALUES (5830, '2', 65);
+INSERT INTO `t_role_menu` VALUES (5831, '2', 103);
+INSERT INTO `t_role_menu` VALUES (5832, '2', 51);
+INSERT INTO `t_role_menu` VALUES (5833, '2', 57);
+INSERT INTO `t_role_menu` VALUES (5834, '2', 52);
+INSERT INTO `t_role_menu` VALUES (5835, '2', 46);
+INSERT INTO `t_role_menu` VALUES (5836, '3', 1);
+INSERT INTO `t_role_menu` VALUES (5837, '3', 108);
+INSERT INTO `t_role_menu` VALUES (5838, '3', 73);
+INSERT INTO `t_role_menu` VALUES (5839, '3', 3);
+INSERT INTO `t_role_menu` VALUES (5840, '3', 4);
+INSERT INTO `t_role_menu` VALUES (5841, '3', 111);
+INSERT INTO `t_role_menu` VALUES (5842, '3', 36);
+INSERT INTO `t_role_menu` VALUES (5843, '3', 38);
+INSERT INTO `t_role_menu` VALUES (5844, '3', 37);
+INSERT INTO `t_role_menu` VALUES (5845, '3', 11);
+INSERT INTO `t_role_menu` VALUES (5846, '3', 12);
+INSERT INTO `t_role_menu` VALUES (5847, '3', 60);
+INSERT INTO `t_role_menu` VALUES (5848, '3', 13);
+INSERT INTO `t_role_menu` VALUES (5849, '3', 14);
+INSERT INTO `t_role_menu` VALUES (5850, '3', 123);
+INSERT INTO `t_role_menu` VALUES (5851, '3', 21);
+INSERT INTO `t_role_menu` VALUES (5852, '3', 22);
+INSERT INTO `t_role_menu` VALUES (5853, '3', 23);
+INSERT INTO `t_role_menu` VALUES (5854, '3', 93);
+INSERT INTO `t_role_menu` VALUES (5855, '3', 104);
+INSERT INTO `t_role_menu` VALUES (5856, '3', 26);
+INSERT INTO `t_role_menu` VALUES (5857, '3', 53);
+INSERT INTO `t_role_menu` VALUES (5858, '3', 27);
+INSERT INTO `t_role_menu` VALUES (5859, '3', 34);
+INSERT INTO `t_role_menu` VALUES (5860, '3', 35);
+INSERT INTO `t_role_menu` VALUES (5861, '3', 61);
+INSERT INTO `t_role_menu` VALUES (5862, '3', 65);
+INSERT INTO `t_role_menu` VALUES (5863, '3', 51);
+INSERT INTO `t_role_menu` VALUES (5864, '3', 57);
+INSERT INTO `t_role_menu` VALUES (5865, '3', 52);
+INSERT INTO `t_role_menu` VALUES (5866, '3', 46);
 
 -- ----------------------------
 -- Table structure for t_site_config
@@ -627,12 +603,13 @@ CREATE TABLE `t_site_config`  (
   `site_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站名称',
   `site_address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站地址',
   `site_intro` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站简介',
-  `site_notice` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站公告',
+  `site_notice` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站公告',
   `create_site_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '建站日期',
   `record_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '备案号',
   `author_avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作者头像',
   `site_author` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '网站作者',
-  `about_me` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '关于我',
+  `article_cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文章默认封面',
+  `about_me` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '关于我',
   `github` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT 'Github',
   `gitee` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT 'Gitee',
   `bilibili` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '哔哩哔哩',
@@ -655,7 +632,7 @@ CREATE TABLE `t_site_config`  (
 -- ----------------------------
 -- Records of t_site_config
 -- ----------------------------
-INSERT INTO `t_site_config` VALUES (1, 'https://static.ttkwsd.top/config/7b6f25adc2b9627b8918176888bee3b5.png', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'Hello World', 'https://www.ttkwsd.top', '网站介绍', '网站公告', '2022-08-25', '赣ICP备2022007910号', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', '阿冬', '🍀个人简介\n\n想进大厂的小白\n\n感谢大佬们的开源精神💖', 'https://github.com/ICAN1999', 'https://gitee.com/wu_shengdong', 'https://space.bilibili.com/505715511', '1632167813', 0, 0, 1, 'https://static.ttkwsd.top/config/994a286571b002e93281899cb402bd15.png', 'https://static.ttkwsd.top/config/93cc02ba2f2e0926cbfbf0c48be9f649.jpg', 1, 'gitee,bilibili,github,qq', ',gitee', 1, '7611185981', '2023-01-07 19:31:33', '2023-02-14 16:41:40');
+INSERT INTO `t_site_config` VALUES (1, 'https://static.ttkwsd.top/config/7b6f25adc2b9627b8918176888bee3b5.png', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'Hello World', 'https://www.ttkwsd.top', '网站介绍', '后端基于SpringBoot开发，前端基于Vue3 Ts Navie UI开发，<a href=\"https://gitee.com/wu_shengdong/blog\" style=\"color: #49b1f5;\">网站源码</a>', '2022-08-25', '赣ICP备2022007910号', 'https://static.ttkwsd.top/config/05409c1ed50047535f28a40464f7b1ab.jpg', '阿冬', 'https://static.ttkwsd.top/config/d6a00d059a1e9729e763469deb4870df.jpg', '🍀个人简介\n\n想进大厂的小白\n\n感谢大佬们的开源精神💖', 'https://github.com/ICAN1999', 'https://gitee.com/wu_shengdong', 'https://space.bilibili.com/505715511', '1632167813', 0, 0, 1, 'https://static.ttkwsd.top/config/994a286571b002e93281899cb402bd15.png', 'https://static.ttkwsd.top/config/f0be9dc73e230d8821179b9303a9ff49.jpg', 1, 'gitee,bilibili,github,qq', ',gitee,github', 1, '7611185981', '2023-01-07 19:31:33', '2023-03-10 23:00:39');
 
 -- ----------------------------
 -- Table structure for t_tag
@@ -667,12 +644,12 @@ CREATE TABLE `t_tag`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_tag
 -- ----------------------------
-INSERT INTO `t_tag` VALUES (14, '的', '2023-02-21 15:38:05', NULL);
+INSERT INTO `t_tag` VALUES (15, '测试标签', '2023-02-22 12:10:21', NULL);
 
 -- ----------------------------
 -- Table structure for t_talk
@@ -688,11 +665,12 @@ CREATE TABLE `t_talk`  (
   `create_time` datetime NOT NULL COMMENT '发表时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_talk
 -- ----------------------------
+INSERT INTO `t_talk` VALUES (37, 1, '测试说说<img src=\"https://static.ttkwsd.top/emoji/chigua.png\" width=\"24\" height=\"24\" alt=\"[吃瓜]\" style=\"margin: 0 1px;vertical-align: text-bottom\">', '', 0, 1, '2023-02-22 12:04:47', NULL);
 
 -- ----------------------------
 -- Table structure for t_task
@@ -711,13 +689,14 @@ CREATE TABLE `t_task`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_task
 -- ----------------------------
 INSERT INTO `t_task` VALUES (4, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '0 0 0 * * ?', 3, 0, 0, '清除redis中的游客记录', '2023-02-14 09:49:39', '2023-02-18 15:48:41');
 INSERT INTO `t_task` VALUES (5, '测试任务', 'SYSTEM', 'timedTask.test', '0/10 * * * * ? ', 3, 0, 1, '测试任务', '2023-02-17 21:54:47', NULL);
+INSERT INTO `t_task` VALUES (6, '清除访问日志', 'SYSTEM', 'timedTask.clearVistiLog', '0 0 2 * * ?', 3, 0, 0, '清除一周前的访问日志', '2023-02-22 15:56:32', NULL);
 
 -- ----------------------------
 -- Table structure for t_task_log
@@ -738,22 +717,6 @@ CREATE TABLE `t_task_log`  (
 -- ----------------------------
 -- Records of t_task_log
 -- ----------------------------
-INSERT INTO `t_task_log` VALUES (1, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：6毫秒', 1, NULL, '2023-02-17 21:54:50');
-INSERT INTO `t_task_log` VALUES (2, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：0毫秒', 1, NULL, '2023-02-17 21:55:00');
-INSERT INTO `t_task_log` VALUES (3, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：0毫秒', 1, NULL, '2023-02-17 21:55:10');
-INSERT INTO `t_task_log` VALUES (4, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：0毫秒', 1, NULL, '2023-02-17 21:55:20');
-INSERT INTO `t_task_log` VALUES (5, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：0毫秒', 1, NULL, '2023-02-17 21:55:30');
-INSERT INTO `t_task_log` VALUES (6, '测试任务', 'SYSTEM', 'timedTask.test', '测试任务 总共耗时：0毫秒', 1, NULL, '2023-02-17 21:55:40');
-INSERT INTO `t_task_log` VALUES (7, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：10毫秒', 1, NULL, '2023-02-18 15:46:30');
-INSERT INTO `t_task_log` VALUES (8, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：1毫秒', 1, NULL, '2023-02-18 15:46:40');
-INSERT INTO `t_task_log` VALUES (9, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：1毫秒', 1, NULL, '2023-02-18 15:46:50');
-INSERT INTO `t_task_log` VALUES (10, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：0毫秒', 1, NULL, '2023-02-18 15:47:00');
-INSERT INTO `t_task_log` VALUES (11, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：0毫秒', 1, NULL, '2023-02-18 15:47:10');
-INSERT INTO `t_task_log` VALUES (12, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：0毫秒', 1, NULL, '2023-02-18 15:47:20');
-INSERT INTO `t_task_log` VALUES (13, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：0毫秒', 1, NULL, '2023-02-18 15:47:30');
-INSERT INTO `t_task_log` VALUES (14, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：0毫秒', 1, NULL, '2023-02-18 15:47:40');
-INSERT INTO `t_task_log` VALUES (15, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：1毫秒', 1, NULL, '2023-02-18 15:47:50');
-INSERT INTO `t_task_log` VALUES (16, '清除每日游客访问记录', 'SYSTEM', 'timedTask.clear', '清除每日游客访问记录 总共耗时：1毫秒', 1, NULL, '2023-02-18 15:49:15');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -776,13 +739,13 @@ CREATE TABLE `t_user`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES (1, '阿冬', 'admin@qq.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', NULL, NULL, '1632167813@qq.com', '192.168.23.1', '内网IP|内网IP', 1, 0, '2023-02-21 16:39:27', '2022-11-29 21:45:48', '2023-02-21 16:39:27');
-INSERT INTO `t_user` VALUES (3, '测试账号', 'test@qq.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'https://www.ttkwsd.top', '个人简介', 'test@qq.com', '192.168.23.1', '内网IP|内网IP', 1, 0, '2023-02-21 12:50:37', '2022-11-30 21:34:26', '2023-02-21 12:50:37');
+INSERT INTO `t_user` VALUES (1, '阿冬', 'admin@qq.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg', NULL, NULL, '1632167813@qq.com', '192.168.23.1', '内网IP|内网IP', 1, 0, '2023-03-10 22:26:23', '2022-11-29 21:45:48', '2023-03-10 22:26:23');
+INSERT INTO `t_user` VALUES (3, '测试账号', 'test@qq.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'https://www.ttkwsd.top', '个人简介', 'test@qq.com', '192.168.23.1', '内网IP|内网IP', 1, 0, '2023-02-24 10:45:59', '2022-11-30 21:34:26', '2023-02-24 10:45:59');
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -793,13 +756,13 @@ CREATE TABLE `t_user_role`  (
   `user_id` int NOT NULL COMMENT '用户id',
   `role_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
-INSERT INTO `t_user_role` VALUES (29, 1, '1');
-INSERT INTO `t_user_role` VALUES (36, 3, '3');
+INSERT INTO `t_user_role` VALUES (50, 3, '3');
+INSERT INTO `t_user_role` VALUES (54, 1, '1');
 
 -- ----------------------------
 -- Table structure for t_visit_log
@@ -814,10 +777,46 @@ CREATE TABLE `t_visit_log`  (
   `browser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '浏览器',
   `create_time` datetime NOT NULL COMMENT '访问时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1626 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1671 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_visit_log
 -- ----------------------------
+INSERT INTO `t_visit_log` VALUES (1635, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-22 19:01:49');
+INSERT INTO `t_visit_log` VALUES (1636, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-22 19:02:22');
+INSERT INTO `t_visit_log` VALUES (1637, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-22 19:02:28');
+INSERT INTO `t_visit_log` VALUES (1638, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:39:07');
+INSERT INTO `t_visit_log` VALUES (1639, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:39:07');
+INSERT INTO `t_visit_log` VALUES (1640, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:44:39');
+INSERT INTO `t_visit_log` VALUES (1641, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:45:21');
+INSERT INTO `t_visit_log` VALUES (1642, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:51:26');
+INSERT INTO `t_visit_log` VALUES (1643, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-23 21:55:00');
+INSERT INTO `t_visit_log` VALUES (1644, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-24 21:58:06');
+INSERT INTO `t_visit_log` VALUES (1645, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-24 21:58:07');
+INSERT INTO `t_visit_log` VALUES (1646, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-02-24 21:58:13');
+INSERT INTO `t_visit_log` VALUES (1647, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:43:54');
+INSERT INTO `t_visit_log` VALUES (1648, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:45:44');
+INSERT INTO `t_visit_log` VALUES (1649, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:45:44');
+INSERT INTO `t_visit_log` VALUES (1650, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:47:01');
+INSERT INTO `t_visit_log` VALUES (1651, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:47:14');
+INSERT INTO `t_visit_log` VALUES (1652, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:49:45');
+INSERT INTO `t_visit_log` VALUES (1653, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:50:04');
+INSERT INTO `t_visit_log` VALUES (1654, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:50:19');
+INSERT INTO `t_visit_log` VALUES (1655, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:53:32');
+INSERT INTO `t_visit_log` VALUES (1656, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:53:36');
+INSERT INTO `t_visit_log` VALUES (1657, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:53:46');
+INSERT INTO `t_visit_log` VALUES (1658, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 09:58:04');
+INSERT INTO `t_visit_log` VALUES (1659, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:01:58');
+INSERT INTO `t_visit_log` VALUES (1660, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:02:04');
+INSERT INTO `t_visit_log` VALUES (1661, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:02:19');
+INSERT INTO `t_visit_log` VALUES (1662, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:02:25');
+INSERT INTO `t_visit_log` VALUES (1663, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:03:10');
+INSERT INTO `t_visit_log` VALUES (1664, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:03:16');
+INSERT INTO `t_visit_log` VALUES (1665, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:03:27');
+INSERT INTO `t_visit_log` VALUES (1666, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:04:48');
+INSERT INTO `t_visit_log` VALUES (1667, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:05:02');
+INSERT INTO `t_visit_log` VALUES (1668, '首页', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:05:09');
+INSERT INTO `t_visit_log` VALUES (1669, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:05:27');
+INSERT INTO `t_visit_log` VALUES (1670, '文章', '192.168.23.1', '内网IP|内网IP', 'Windows NT ??', 'Edge 110', '2023-03-06 10:06:04');
 
 SET FOREIGN_KEY_CHECKS = 1;
