@@ -104,19 +104,19 @@ upload:
   strategy: local
   local:
     # nginx映射本地文件路径
-    url: https://你的文件上传子域名/
+    url: https://你的文件上传子域名
     # 本地文件存储路径
-    path: /usr/local/upload/
+    path: /usr/local/upload
   # oss存储
   oss:
-    url: http://Bucket域名/
+    url: http://Bucket域名
     endpoint: OSS配置endpoint
     bucketName: OSS配置bucketName
     accessKeyId: OSS配置accessKeyId
     accesskeySecret: OSS配置accesskeySecret
   # cos存储
   cos:
-    url: https://Bucket域名/
+    url: https://Bucket域名
     secretId: COS配置secretId
     secretKey: COS配置secretKey
     region: COS配置region
