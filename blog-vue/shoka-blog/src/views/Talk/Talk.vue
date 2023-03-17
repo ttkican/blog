@@ -1,16 +1,15 @@
 <template>
     <div class="page-header">
         <h1 class="page-title">说说</h1>
-        <img class="page-cover"
-            src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg" alt="">
+        <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+            alt="">
         <Waves></Waves>
     </div>
     <div class="bg">
         <div class="page-container" v-if="talk">
             <div class="talk-item">
                 <div class="talk-meta">
-                    <img class="user-avatar"
-                        src="https://static.ttkwsd.top/config/9c65807710f54d9d5ad398a78216ebfb.jpg">
+                    <img class="user-avatar" :src="talk.avatar">
                 </div>
                 <div class="talk-content-wrap">
                     <div class="talk-info">
@@ -20,8 +19,7 @@
                     </div>
                     <div class="talk-content" v-html="talk.talkContent"></div>
                     <div class="talk-image" v-viewer v-if="talk.imgList">
-                        <img @click.prevent class="image" v-for="(img, index) in talk.imgList" :key="index"
-                            v-lazy="img" />
+                        <img @click.prevent class="image" v-for="(img, index) in talk.imgList" :key="index" v-lazy="img" />
                     </div>
                     <div class="info" style="margin-top: 0.5rem;">
                         <span class="talk-like info" @click="like">
@@ -95,6 +93,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/mixin.scss";
+
 .talk-item {
     display: flex;
 }
