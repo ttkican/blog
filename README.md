@@ -40,11 +40,12 @@
 
 ## 本地运行
 
-1. SQL 文件位于根目录下的`blog.sql`，将其中的数据导入到自己本地数据库中
-2. ES 映射文件位于`deploy`文件夹下
-3. 修改后端配置文件中的数据库等连接信息，项目中使用到的关于阿里云、腾讯云功能和第三方授权登录等需要自行开通
-4. 一定要将前端`shoka-admin`和`shoka-blog`的 utils 下的 token.ts 中的`{ domain: domain }`给删除，然后再`npm install`、`npm run dev`
-5. 项目启动后，使用`admin@qq.com`管理员账号登录后台，密码为`123456`
+1. MySQL版本为`8.0.27`，npm版本为`9.4.0`，node版本为`v16.18.0`
+2. SQL 文件位于根目录下的`blog.sql`，将其中的数据导入到自己本地数据库中
+3. ES 映射文件位于`deploy`文件夹下
+4. 修改后端配置文件中的数据库等连接信息，项目中使用到的关于阿里云、腾讯云功能和第三方授权登录等需要自行开通
+5. 一定要将前端`shoka-admin`和`shoka-blog`的 utils 下的 token.ts 中的`{ domain: domain }`给删除，然后再`npm install`、`npm run dev`
+6. 项目启动后，使用`admin@qq.com`管理员账号登录后台，密码为`123456`
 
 ## 项目特点
 
