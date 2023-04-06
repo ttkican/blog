@@ -2,6 +2,7 @@ package com.ican.service;
 
 import com.ican.model.dto.GitDTO;
 import com.ican.model.dto.LoginDTO;
+import com.ican.model.dto.QqLoginDTO;
 import com.ican.model.dto.RegisterDTO;
 
 /**
@@ -49,4 +50,12 @@ public interface LoginService {
      * @return Token
      */
     String githubLogin(GitDTO data);
+
+    /**
+     * QQ登录
+     *
+     * @param qqLogin QQ登录信息
+     * @return token
+     */
+    String qqLogin(QqLoginDTO qqLogin);
 }

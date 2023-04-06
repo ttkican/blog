@@ -12,10 +12,7 @@ import com.ican.entity.UserRole;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.mapper.UserMapper;
 import com.ican.mapper.UserRoleMapper;
-import com.ican.model.dto.GitDTO;
-import com.ican.model.dto.LoginDTO;
-import com.ican.model.dto.MailDTO;
-import com.ican.model.dto.RegisterDTO;
+import com.ican.model.dto.*;
 import com.ican.service.LoginService;
 import com.ican.service.RedisService;
 import com.ican.strategy.context.SocialLoginStrategyContext;
@@ -127,6 +124,12 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String githubLogin(GitDTO data) {
         return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(data), LoginTypeEnum.GITHUB);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public String qqLogin(QqLoginDTO qqLogin) {
+        return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(qqLogin), LoginTypeEnum.QQ);
     }
 
     /**
