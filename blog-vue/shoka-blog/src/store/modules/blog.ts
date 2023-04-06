@@ -1,25 +1,20 @@
 import { BlogInfo, SiteConfig } from "@/api/blogInfo/types";
+import { BlogState } from "../types";
 
 const useBlogStore = defineStore("useBlogStore", {
-  state: (): BlogInfo => ({
-    articleCount: 0,
-    categoryCount: 0,
-    tagCount: 0,
-    viewCount: 0,
-    siteConfig: {} as SiteConfig,
+  state: (): BlogState => ({
+    blogInfo: {
+      siteConfig: {} as SiteConfig,
+    } as BlogInfo,
   }),
   actions: {
     setBlogInfo(blogInfo: BlogInfo) {
-      this.articleCount = blogInfo.articleCount;
-      this.categoryCount = blogInfo.categoryCount;
-      this.tagCount = blogInfo.tagCount;
-      this.viewCount = blogInfo.viewCount;
-      this.siteConfig = blogInfo.siteConfig;
+      this.blogInfo = blogInfo;
     },
   },
   getters: {},
   persist: {
-    key:"blog",
+    key: "blog",
     storage: sessionStorage,
   },
 });

@@ -62,5 +62,5 @@ export interface UserForm {
   /**
    * 验证码
    */
-  code:string;
+  code: string;
 }

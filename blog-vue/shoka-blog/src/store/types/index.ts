@@ -1,3 +1,5 @@
+import { BlogInfo } from "@/api/blogInfo/types";
+
 /**
  * 应用
  */
@@ -84,4 +86,14 @@ export interface UserState {
    * 说说点赞集合
    */
   talkLikeSet: number[];
+}
+
+/**
+ * 博客
+ */
+export interface BlogState {
+  /**
+   * 博客信息
+   */
+  blogInfo: BlogInfo;
 }
