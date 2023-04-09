@@ -9,49 +9,21 @@
       <blog-info></blog-info>
       <social-list></social-list>
       <ul class="side-menu">
-        <li class="item" :class="{ active: route.path === '/' }">
-          <router-link to="/"><svg-icon icon-class="home"></svg-icon> 首页 </router-link>
-        </li>
-        <li class="item dropdown" :class="{ expand: articleExpand(route.meta.title as string) }">
-          <a><svg-icon icon-class="article"></svg-icon> 文章</a>
-          <ul class="submenu">
-            <li class="item" :class="{ active: route.path === '/archive' }">
-              <router-link to="/archive">
-                <svg-icon icon-class="archives"></svg-icon> 归档
-              </router-link>
-            </li>
-            <li class="item" :class="{ active: route.path === '/category' }">
-              <router-link to="/category">
-                <svg-icon icon-class="category"></svg-icon> 分类
-              </router-link>
-            </li>
-            <li class="item" :class="{ active: route.path === '/tag' }">
-              <router-link to="/tag"><svg-icon icon-class="tag"></svg-icon> 标签</router-link>
-            </li>
-          </ul>
-        </li>
-        <li class="item dropdown" :class="{ expand: funExpand(route.meta.title as string) }">
-          <a><svg-icon icon-class="fun"></svg-icon> 娱乐</a>
-          <ul class="submenu">
-            <li class="item" :class="{ active: route.meta.title === '说说' }">
-              <router-link to="/talk"> <svg-icon icon-class="talk"></svg-icon> 说说 </router-link>
-            </li>
-            <li class="item" :class="{ active: route.path === '/album' }">
-              <router-link to="/album"> <svg-icon icon-class="album"></svg-icon> 相册 </router-link>
-            </li>
-          </ul>
-        </li>
-        <li class="item" :class="{ active: route.path === '/friend' }">
-          <router-link to="/friend"> <svg-icon icon-class="friend"></svg-icon> 友链 </router-link>
-        </li>
-        <li class="item" :class="{ active: route.path === '/message' }">
-          <router-link to="/message">
-            <svg-icon icon-class="message"></svg-icon> 留言板
-          </router-link>
-        </li>
-        <li class="item" :class="{ active: route.path === '/about' }">
-          <router-link to="/about"> <svg-icon icon-class="plane"></svg-icon> 关于 </router-link>
-        </li>
+        <template v-for="menu of menuList" :key="menu.name">
+          <li v-if="!menu.children" class="item" :class="{ active: route.path === menu.path }">
+            <router-link :to="menu.path"><svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }} </router-link>
+          </li>
+          <li v-else class="item dropdown" :class="{ expand: expand(menu.children) }">
+            <a><svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }} </a>
+            <ul class="submenu">
+              <li class="item" v-for="submenu of menu.children" :key="submenu.name"
+                :class="{ active: route.path === submenu.path }">
+                <router-link :to="submenu.path"> <svg-icon :icon-class="submenu.icon"></svg-icon> {{ submenu.name }}
+                </router-link>
+              </li>
+            </ul>
+          </li>
+        </template>
         <li class="item" v-if="!user.id">
           <a @click="app.loginFlag = true"> <svg-icon icon-class="user"></svg-icon> 登录 </a>
         </li>
@@ -77,10 +49,69 @@ const route = useRoute();
 const router = useRouter();
 const { app, blog, user } = useStore();
 const { width } = useWindowSize();
-const article = ["归档", "分类", "标签"];
-const fun = ["说说", "相册"];
-const articleExpand = computed(() => (value: string) => article.includes(value));
-const funExpand = computed(() => (value: string) => fun.includes(value));
+const menuList = [
+  {
+    name: "首页",
+    icon: "home",
+    path: "/"
+  },
+  {
+    name: "文章",
+    icon: "article",
+    children: [
+      {
+        name: "归档",
+        icon: "archives",
+        path: "/archive"
+      },
+      {
+        name: "分类",
+        icon: "category",
+        path: "/category"
+      },
+      {
+        name: "标签",
+        icon: "tag",
+        path: "/tag"
+      },
+    ]
+  },
+  {
+    name: "娱乐",
+    icon: "fun",
+    children: [
+      {
+        name: "说说",
+        icon: "talk",
+        path: "/talk"
+      },
+      {
+        name: "相册",
+        icon: "album",
+        path: "/album"
+      },
+    ]
+  },
+  {
+    name: "友链",
+    icon: "friend",
+    path: "/friend"
+  },
+  {
+    name: "留言板",
+    icon: "message",
+    path: "/message"
+  },
+  {
+    name: "关于",
+    icon: "plane",
+    path: "/about"
+  },
+];
+const expand = computed(() => (value: any) => {
+  let res: any[] = value.map((item: any) => item.name);
+  return res.includes(route.meta.title);
+});
 const drawerVisible = computed({
   get: () => app.isCollapse,
   set: (value) => (app.isCollapse = value),
@@ -113,6 +144,7 @@ const logout = () => {
     border-radius: 0.9375rem;
     margin-bottom: 0.625rem;
     transition: all 0.2s ease-in-out 0s;
+    cursor: pointer;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.1);
