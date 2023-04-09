@@ -5,61 +5,24 @@
         {{ blog.blogInfo.siteConfig.siteName }}
       </router-link>
     </div>
-    <div class="menu-item" :class="{ active: route.meta.title === '首页' }">
-      <router-link to="/" class="menu-btn">
-        <svg-icon icon-class="home"></svg-icon> 首页
-      </router-link>
-    </div>
-    <div class="menu-item dropdown">
-      <a class="menu-btn drop"> <svg-icon icon-class="article"></svg-icon> 文章 </a>
-      <ul class="submenu">
-        <li class="subitem" :class="{ active: route.meta.title === '归档' }">
-          <router-link class="link" to="/archive">
-            <svg-icon icon-class="archives"></svg-icon> 归档
-          </router-link>
-        </li>
-        <li class="subitem" :class="{ active: route.meta.title === '分类' }">
-          <router-link class="link" to="/category">
-            <svg-icon icon-class="category"></svg-icon> 分类
-          </router-link>
-        </li>
-        <li class="subitem" :class="{ active: route.meta.title === '标签' }">
-          <router-link class="link" to="/tag">
-            <svg-icon icon-class="tag"></svg-icon> 标签
-          </router-link>
-        </li>
-      </ul>
-    </div>
-    <div class="menu-item dropdown">
-      <a class="menu-btn drop"> <svg-icon icon-class="fun"></svg-icon> 娱乐 </a>
-      <ul class="submenu">
-        <li class="subitem" :class="{ active: route.meta.title === '说说' }">
-          <router-link class="link" to="/talk">
-            <svg-icon icon-class="talk"></svg-icon> 说说
-          </router-link>
-        </li>
-        <li class="subitem" :class="{ active: route.meta.title === '相册' }">
-          <router-link class="link" to="/album">
-            <svg-icon icon-class="album"></svg-icon> 相册
-          </router-link>
-        </li>
-      </ul>
-    </div>
-    <div class="menu-item" :class="{ active: route.meta.title === '友链' }">
-      <router-link to="/friend" class="menu-btn">
-        <svg-icon icon-class="friend"></svg-icon> 友链
-      </router-link>
-    </div>
-    <div class="menu-item" :class="{ active: route.meta.title === '留言' }">
-      <router-link to="/message" class="menu-btn">
-        <svg-icon icon-class="message"></svg-icon> 留言板
-      </router-link>
-    </div>
-    <div class="menu-item" :class="{ active: route.meta.title === '关于' }">
-      <router-link to="/about" class="menu-btn">
-        <svg-icon icon-class="plane"></svg-icon> 关于
-      </router-link>
-    </div>
+    <template v-for="menu of menuList" :key="menu.name">
+      <div v-if="!menu.children" class="menu-item" :class="{ active: route.meta.title === menu.name }">
+        <router-link :to="menu.path" class="menu-btn">
+          <svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }}
+        </router-link>
+      </div>
+      <div v-else class="menu-item dropdown">
+        <a class="menu-btn drop"> <svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }} </a>
+        <ul class="submenu">
+          <li class="subitem" v-for="submenu of menu.children" :key="submenu.name"
+            :class="{ active: route.meta.title === submenu.name }">
+            <router-link class="link" :to="submenu.path">
+              <svg-icon :icon-class="submenu.icon"></svg-icon> {{ submenu.name }}
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </template>
     <div class="menu-item">
       <a v-if="!user.id" @click="app.loginFlag = true" class="menu-btn">
         <svg-icon icon-class="user"></svg-icon> 登录
@@ -86,6 +49,65 @@ import useStore from "@/store";
 const { user, app, blog } = useStore();
 const router = useRouter();
 const route = useRoute();
+const menuList = [
+  {
+    name: "首页",
+    icon: "home",
+    path: "/"
+  },
+  {
+    name: "文章",
+    icon: "article",
+    children: [
+      {
+        name: "归档",
+        icon: "archives",
+        path: "/archive"
+      },
+      {
+        name: "分类",
+        icon: "category",
+        path: "/category"
+      },
+      {
+        name: "标签",
+        icon: "tag",
+        path: "/tag"
+      },
+    ]
+  },
+  {
+    name: "娱乐",
+    icon: "fun",
+    children: [
+      {
+        name: "说说",
+        icon: "talk",
+        path: "/talk"
+      },
+      {
+        name: "相册",
+        icon: "album",
+        path: "/album"
+      },
+    ]
+  },
+  {
+    name: "友链",
+    icon: "friend",
+    path: "/friend"
+  },
+  {
+    name: "留言板",
+    icon: "message",
+    path: "/message"
+  },
+  {
+    name: "关于",
+    icon: "plane",
+    path: "/about"
+  },
+];
 const logout = () => {
   if (route.path == "/user") {
     router.go(-1);
