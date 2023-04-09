@@ -31,6 +31,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Tag/ArticleList.vue"),
   },
   {
+    name: "friend",
     path: "/friend",
     component: () => import("@/views/Friend/index.vue"),
     meta: {
@@ -77,6 +78,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Album/Photo.vue"),
   },
   {
+    name: "talk",
     path: "/talk",
     component: () => import("@/views/Talk/TalkList.vue"),
     meta: {
@@ -84,6 +86,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: "talkInfo",
     path: "/talk/:id",
     component: () => import("@/views/Talk/Talk.vue"),
     meta: {
@@ -91,6 +94,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: "article",
     path: "/article/:id",
     component: () => import("@/views/Article/Article.vue"),
     meta: {

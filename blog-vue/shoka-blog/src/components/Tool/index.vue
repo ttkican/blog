@@ -3,7 +3,7 @@
     <div class="item" v-if="route.meta.title == '文章'" @click="handleSide">
       <svg-icon icon-class="heng" size="1.5rem"></svg-icon>
     </div>
-    <div class="item" v-if="commentShow(route.meta.title as string)" @click="handleToComment">
+    <div class="item" v-if="commentShow(route.name as string)" @click="handleToComment">
       <svg-icon icon-class="comments" size="1.2rem"></svg-icon>
     </div>
     <div class="item back-to-top" @click="handleBackToTop" style="margin-top:0.2rem">
@@ -23,7 +23,7 @@ const show = reactive({
 });
 const { y } = useScroll(window);
 const { app } = useStore();
-const commentList = ["文章", "友链", "说说"];
+const commentList = ["article", "friend", "talkInfo"];
 const commentShow = computed(() => (value: string) => commentList.includes(value));
 
 useEventListener(document, "scroll", () => {
