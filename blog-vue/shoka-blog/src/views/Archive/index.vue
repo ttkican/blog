@@ -51,6 +51,15 @@ const {
   queryParams,
   archivesList,
 } = toRefs(data);
+watch(
+  () => queryParams.value.current,
+  () => {
+    getArchivesList(queryParams.value).then(({ data }) => {
+      archivesList.value = data.data.recordList;
+      count.value = data.data.count;
+    });
+  }
+);
 onMounted(() => {
   getArchivesList(queryParams.value).then(({ data }) => {
     archivesList.value = data.data.recordList;

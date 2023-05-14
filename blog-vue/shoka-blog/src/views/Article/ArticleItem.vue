@@ -41,7 +41,7 @@
       <router-link class="article-btn" :to="`/article/${article.id}`">more...</router-link>
     </div>
   </div>
-  <Pagination v-if="count > 6" v-model:current="queryParams.current" :total="Math.ceil(count / 5)"></Pagination>
+  <Pagination v-if="count > 5" v-model:current="queryParams.current" :total="Math.ceil(count / 5)"></Pagination>
 </template>
 
 <script setup lang="ts">
