@@ -9,7 +9,7 @@
   </div>
   <!-- 弹幕列表 -->
   <div class="danmaku-container">
-    <vue-danmaku ref="danmaku" class="danmaku" use-slot v-model:danmus="messageList">
+    <vue-danmaku ref="danmaku" class="danmaku" use-slot v-model:danmus="messageList" :is-suspend="true">
       <template v-slot:dm="{ danmu }">
         <span class="danmaku-item">
           <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" />
@@ -132,8 +132,8 @@ const send = () => {
     display: flex;
     align-items: center;
     padding: 0 0.625rem 0 0.3125rem;
-    background: rgb(0, 0, 0, 0.7);
     border-radius: 6.25rem;
+    background-color: rgba(0, 0, 0, 0.3);
     color: #fff;
   }
 
