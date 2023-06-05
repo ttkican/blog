@@ -16,5 +16,44 @@
     <script type="module" src="/src/main.ts"></script>
     <canvas class="fireworks" style="position: fixed; top: 0px; left: 0px; pointer-events: none; z-index: 9999999;"></canvas>
     <script src="https://static.ttkwsd.top/config/fireworks.min.js"></script>
+    <!--看板娘 -->
+<script src="https://cdn.jsdelivr.net/gh/coder-msc/mycdn/website/js/live2d/lib/L2Dwidget.min.js"></script>
+<script>
+    let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+    if (!flag) {
+        L2Dwidget.init({
+            // "model": {
+            //     jsonPath: "https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/website/js/live2d/model/packages/live2d-widget-model-koharu/assets/koharu.model.json",
+            //     "scale": 1
+            // },
+            "display": {
+                "position": "right", //看板娘的表现位置
+                "width": 150,  //小萝莉的宽度
+                "height": 300, //小萝莉的高度
+                "hOffset": 20,//小萝莉的X偏移量
+                "vOffset": -20//小萝莉的Y偏移量
+
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 0.7,//小萝莉的透明度
+                "opacityOnHover": 0.2
+            },
+            dialog: {
+                // 开启对话框
+                enable: true,
+                script: {
+                    // 当触摸到角色身体
+                    'tap body': '哎呀！别碰我！',
+                    // 当触摸到角色头部
+                    'tap face': '人家已经不是小孩子了！'
+                }
+            }
+        });
+    }
+</script>
   </body>
 </html>
