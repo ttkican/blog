@@ -90,6 +90,11 @@ const menuList = [
         icon: "album",
         path: "/album"
       },
+      {
+        name: "图床",
+        icon: "upload",
+        path: "/picture"
+      },
     ]
   },
   {

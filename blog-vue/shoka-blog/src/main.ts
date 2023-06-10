@@ -30,6 +30,8 @@ import lazyPlugin from "vue3-lazy";
 import App from "./App.vue";
 import error from "./assets/images/404.gif";
 import loading from "./assets/images/loading.gif";
+import { VueMasonryPlugin } from "vue-masonry";
+
 const app = createApp(App);
 Object.keys(directive).forEach((key) => {
   app.directive(key, (directive as { [key: string]: Directive })[key]);
@@ -50,6 +52,7 @@ app.use(lazyPlugin, {
   loading,
   error,
 });
+app.use(VueMasonryPlugin);
 app.component("svg-icon", SvgIcon);
 app.mount("#app");
 titleChange();
