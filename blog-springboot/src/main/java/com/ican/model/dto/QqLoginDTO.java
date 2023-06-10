@@ -16,12 +16,10 @@ public class QqLoginDTO {
     /**
      * openId
      */
-    @NotBlank(message = "openId不能为空")
     private String openId;
 
     /**
-     * accessToken
+     * clientId
      */
-    @NotBlank(message = "accessToken不能为空")
-    private String accessToken;
+    private String clientId;
 }

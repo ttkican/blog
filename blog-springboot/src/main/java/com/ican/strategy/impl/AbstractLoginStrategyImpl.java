@@ -6,6 +6,7 @@ import com.ican.entity.User;
 import com.ican.entity.UserRole;
 import com.ican.mapper.UserMapper;
 import com.ican.mapper.UserRoleMapper;
+import com.ican.model.dto.CodeDTO;
 import com.ican.model.vo.SocialTokenVO;
 import com.ican.model.vo.SocialUserInfoVO;
 import com.ican.strategy.SocialLoginStrategy;
@@ -31,7 +32,7 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
     private UserRoleMapper userRoleMapper;
 
     @Override
-    public String login(String data) {
+    public String login(CodeDTO data) {
         User user;
         // 获取token
         SocialTokenVO socialToken = getSocialToken(data);
@@ -61,7 +62,7 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
      * @param data data
      * @return {@link SocialTokenVO} 第三方token
      */
-    public abstract SocialTokenVO getSocialToken(String data);
+    public abstract SocialTokenVO getSocialToken(CodeDTO data);
 
     /**
      * 获取第三方用户信息

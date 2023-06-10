@@ -10,15 +10,29 @@
 </template>
 
 <script setup lang="ts">
-import { giteeLogin, githubLogin } from "@/api/login";
+import { giteeLogin, githubLogin, qqLogin } from "@/api/login";
 import useStore from "@/store";
 import { setToken } from "@/utils/token";
-const { app, user, blog } = useStore();
+const { user } = useStore();
 const router = useRouter();
 const route = useRoute();
 onMounted(() => {
   if (route.path == "/oauth/login/qq") {
-
+    qqLogin({ code: route.query.code as string }).then(
+      async ({ data }) => {
+        if (data.flag) {
+          // 设置Token
+          setToken(data.data);
+          // 获取用户信息
+          await user.GetUserInfo();
+          if (user.email === "") {
+            window.$message?.warning("请绑定邮箱以便及时收到回复");
+          } else {
+            window.$message?.success("登录成功");
+          }
+        }
+      }
+    );
   } else if (route.path == "/oauth/login/gitee") {
     giteeLogin({ code: route.query.code as string }).then(
       async ({ data }) => {

@@ -4,14 +4,18 @@ import com.alibaba.fastjson2.JSON;
 import com.ican.config.properties.QqProperties;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
+import com.ican.model.dto.CodeDTO;
 import com.ican.model.dto.QqLoginDTO;
-import com.ican.model.vo.QqTokenVO;
 import com.ican.model.vo.QqUserInfoVO;
 import com.ican.model.vo.SocialTokenVO;
 import com.ican.model.vo.SocialUserInfoVO;
-import com.ican.utils.CommonUtils;
+import com.ican.model.vo.TokenVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -36,14 +40,15 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(String data) {
-        QqLoginDTO qqLoginVO = JSON.parseObject(data, QqLoginDTO.class);
-        // 校验QQ token信息
-        checkQqToken(qqLoginVO);
+    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
+        // 获取Qq的Token
+        TokenVO qqToken = getQqToken(codeDTO.getCode());
+        // 获取用户OpenId
+        String userOpenId = getUserOpenId(qqToken.getAccess_token());
         // 返回token信息
         return SocialTokenVO.builder()
-                .openId(qqLoginVO.getOpenId())
-                .accessToken(qqLoginVO.getAccessToken())
+                .openId(userOpenId)
+                .accessToken(qqToken.getAccess_token())
                 .loginType(LoginTypeEnum.QQ.getLoginType())
                 .build();
     }
@@ -59,30 +64,50 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
         QqUserInfoVO qqUserInfo = JSON.parseObject(restTemplate.getForObject(qqProperties.getUserInfoUrl(), String.class, formData), QqUserInfoVO.class);
         // 返回用户信息
         return SocialUserInfoVO.builder()
+                .id(socialToken.getOpenId())
                 .nickname(Objects.requireNonNull(qqUserInfo).getNickname())
                 .avatar(qqUserInfo.getFigureurl_qq_1())
                 .build();
     }
 
     /**
-     * 校验qq token信息
+     * 获取QQ的Token
      *
-     * @param qqLogin qq登录信息
+     * @param code 第三方code
+     * @return {@link TokenVO} QQ的Token
      */
-    private void checkQqToken(QqLoginDTO qqLogin) {
-        // 根据token获取qq openId信息
-        Map<String, String> qqData = new HashMap<>(1);
-        qqData.put(ACCESS_TOKEN, qqLogin.getAccessToken());
+    private TokenVO getQqToken(String code) {
+        // 根据code换取accessToken
+        MultiValueMap<String, String> qqData = new LinkedMultiValueMap<>();
+        // Gitee的Token请求参数
+        qqData.add(GRANT_TYPE, qqProperties.getGrantType());
+        qqData.add(CLIENT_ID, qqProperties.getAppId());
+        qqData.add(CLIENT_SECRET, qqProperties.getAppKey());
+        qqData.add(CODE, code);
+        qqData.add(REDIRECT_URI, qqProperties.getRedirectUrl());
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(qqData, null);
         try {
-            String result = restTemplate.getForObject(qqProperties.getCheckTokenUrl(), String.class, qqData);
-            QqTokenVO qqTokenVO = JSON.parseObject(CommonUtils.getBracketsContent(Objects.requireNonNull(result)), QqTokenVO.class);
-            // 判断openId是否一致
-            if (!qqLogin.getOpenId().equals(qqTokenVO.getOpenid())) {
-                throw new ServiceException("qq登录错误");
-            }
+            return restTemplate.exchange(qqProperties.getAccessTokenUrl(),
+                    HttpMethod.GET,
+                    requestEntity,
+                    TokenVO.class).getBody();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("qq登录错误");
+            throw new ServiceException("Gitee登录错误");
         }
+    }
+
+    /**
+     * 获取用户的OpenId
+     *
+     * @return 用户的OpenId
+     */
+    private String getUserOpenId(String accessToken) {
+        Map<String, String> dataMap = new HashMap<>(1);
+        // 请求参数
+        dataMap.put(ACCESS_TOKEN, accessToken);
+        dataMap.put(FMT, "json");
+        // 返回用户OpenId
+        QqLoginDTO qqLoginDTO = restTemplate.getForObject(qqProperties.getUserOpenIdUrl(), QqLoginDTO.class, dataMap);
+        return qqLoginDTO.getOpenId();
     }
 }
