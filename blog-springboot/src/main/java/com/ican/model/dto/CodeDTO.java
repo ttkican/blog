@@ -7,13 +7,13 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Git信息
+ * Code信息
  *
  * @author ican
  **/
 @Data
-@ApiModel(description = "Git信息")
-public class GitDTO {
+@ApiModel(description = "Code信息")
+public class CodeDTO {
 
     /**
      * code

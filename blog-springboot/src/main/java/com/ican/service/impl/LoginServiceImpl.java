@@ -3,7 +3,6 @@ package com.ican.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.ican.entity.SiteConfig;
@@ -12,7 +11,10 @@ import com.ican.entity.UserRole;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.mapper.UserMapper;
 import com.ican.mapper.UserRoleMapper;
-import com.ican.model.dto.*;
+import com.ican.model.dto.CodeDTO;
+import com.ican.model.dto.LoginDTO;
+import com.ican.model.dto.MailDTO;
+import com.ican.model.dto.RegisterDTO;
 import com.ican.service.LoginService;
 import com.ican.service.RedisService;
 import com.ican.strategy.context.SocialLoginStrategyContext;
@@ -116,20 +118,20 @@ public class LoginServiceImpl implements LoginService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String giteeLogin(GitDTO data) {
-        return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(data), LoginTypeEnum.GITEE);
+    public String giteeLogin(CodeDTO data) {
+        return socialLoginStrategyContext.executeLoginStrategy(data, LoginTypeEnum.GITEE);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String githubLogin(GitDTO data) {
-        return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(data), LoginTypeEnum.GITHUB);
+    public String githubLogin(CodeDTO data) {
+        return socialLoginStrategyContext.executeLoginStrategy(data, LoginTypeEnum.GITHUB);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String qqLogin(QqLoginDTO qqLogin) {
-        return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(qqLogin), LoginTypeEnum.QQ);
+    public String qqLogin(CodeDTO data) {
+        return socialLoginStrategyContext.executeLoginStrategy(data, LoginTypeEnum.QQ);
     }
 
     /**

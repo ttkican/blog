@@ -29,6 +29,9 @@ requests.interceptors.request.use(
 requests.interceptors.response.use(
   (response: AxiosResponse) => {
     switch (response.data.code) {
+      case -1:
+        window.$message?.error(response.data.msg);
+        break;
       case 400:
         window.$message?.error(response.data.msg);
         break;

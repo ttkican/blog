@@ -84,7 +84,6 @@ onMounted(() => {
   box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
   animation-duration: 0.5s;
   transition: all 0.2s ease-in-out 0s;
-  overflow: hidden;
   visibility: hidden;
 
   &:hover {
@@ -119,6 +118,10 @@ onMounted(() => {
       right: auto;
       border-radius: 0 1rem;
       background-image: linear-gradient(to right, var(--color-orange) 0, var(--color-pink) 100%);
+
+      &:hover {
+        transform: translateZ(2rem);
+      }
     }
 
     .article-category {
@@ -133,6 +136,7 @@ onMounted(() => {
   margin-right: 1.5rem;
   clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
   border-radius: 0.625rem 0 0 0.625rem;
+  overflow: hidden;
 
   .cover {
     width: 100%;
@@ -146,6 +150,7 @@ onMounted(() => {
   position: relative;
   width: 50%;
   padding: 1rem 1.5rem 3rem 0;
+  perspective: 62.5rem;
 
   .article-meta {
     display: flex;
@@ -202,6 +207,10 @@ onMounted(() => {
   border-radius: 1rem 0;
   color: var(--grey-0);
   background-image: linear-gradient(to right, var(--color-pink) 0, var(--color-orange) 100%);
+
+  &:hover {
+    transform: translateZ(2rem);
+  }
 }
 
 @media (max-width: 767px) {

@@ -19,7 +19,7 @@
 .notfound {
   width: 18.75rem;
   height: 22.625rem;
-  background: url(https://ican1999.github.io/images/404.png) no-repeat bottom;
+  background: url("https://ican1999.github.io/images/404.png") no-repeat bottom;
   text-align: center;
   margin: 6.25rem auto;
 }

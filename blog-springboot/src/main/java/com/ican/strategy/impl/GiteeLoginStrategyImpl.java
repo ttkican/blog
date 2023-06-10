@@ -1,9 +1,8 @@
 package com.ican.strategy.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.ican.config.properties.GiteeProperties;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.GitDTO;
+import com.ican.model.dto.CodeDTO;
 import com.ican.model.vo.GitUserInfoVO;
 import com.ican.model.vo.SocialTokenVO;
 import com.ican.model.vo.SocialUserInfoVO;
@@ -38,10 +37,9 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(String data) {
-        GitDTO gitDTO = JSON.parseObject(data, GitDTO.class);
+    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
         // 获取Gitee的Token
-        TokenVO giteeToken = getGiteeToken(gitDTO.getCode());
+        TokenVO giteeToken = getGiteeToken(codeDTO.getCode());
         // 返回Gitee的Token信息
         return SocialTokenVO.builder()
                 .accessToken(giteeToken.getAccess_token())

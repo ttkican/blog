@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="box-expand">
-      <Emoji @add-emoji="handleEmoji"></Emoji>
+      <Emoji @add-emoji="handleEmoji" @choose-type="handleType"></Emoji>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ import { addComment } from "@/api/comment";
 import { CommentForm } from "@/api/comment/types";
 import useStore from "@/store";
 import emojiList from "@/utils/emoji";
+import tvList from "@/utils/tv";
 const { user, blog, app } = useStore();
 const lineStyle = {
   lineHeight: "normal",
@@ -48,6 +49,7 @@ const data = reactive({
   sendActive: false,
   show: props.show,
   commentContent: "",
+  emojiType: 0,
   commentForm: {
     typeId: props.typeId,
     commentType: props.commentType,
@@ -57,7 +59,7 @@ const data = reactive({
     commentContent: "",
   } as CommentForm,
 });
-const { nickname, sendActive, show, commentContent, commentForm } = toRefs(data);
+const { nickname, sendActive, show, commentContent, emojiType, commentForm } = toRefs(data);
 const placeholderText = computed(() =>
   nickname.value ? `回复 @${nickname.value}：` : "发一条友善的评论"
 );
@@ -72,6 +74,9 @@ const handleEmoji = (key: string) => {
   commentContent.value += key;
   sendActive.value = true;
 };
+const handleType = (key: number) => {
+  emojiType.value = key;
+};
 const handleAdd = () => {
   if (!user.id) {
     app.setLoginFlag(true);
@@ -83,11 +88,27 @@ const handleAdd = () => {
   }
   // 解析表情
   commentForm.value.commentContent = commentContent.value.replace(/\[.+?\]/g, (str) => {
-    return (
-      "<img src= '" +
-      emojiList[str] +
-      "' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
-    );
+    if (emojiType.value === 0) {
+      if (emojiList[str] === undefined) {
+        return str;
+      }
+      return (
+        "<img src= '" +
+        emojiList[str] +
+        "' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
+      );
+    }
+    if (emojiType.value === 1) {
+      if (tvList[str] === undefined) {
+        return str;
+      }
+      return (
+        "<img src= '" +
+        tvList[str] +
+        "' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
+      );
+    }
+    return str;
   });
   addComment(commentForm.value).then(({ data }) => {
     if (data.flag) {

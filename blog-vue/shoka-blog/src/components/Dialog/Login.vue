@@ -14,7 +14,8 @@
     <div>
       <div class="social-login-title">社交账号登录</div>
       <div class="social-login-wrapper">
-        <svg-icon class="icon" icon-class="qq" size="2rem" color="#00aaee"></svg-icon>
+        <svg-icon class="icon" icon-class="qq" size="2rem" color="#00aaee" v-if="showLogin('qq')"
+          @click="qqLogin"></svg-icon>
         <svg-icon class="icon" icon-class="gitee" size="2rem" v-if="showLogin('gitee')" @click="giteeLogin"></svg-icon>
         <svg-icon class="icon" icon-class="github" size="2rem" v-if="showLogin('github')" @click="githubLogin"></svg-icon>
       </div>
@@ -50,6 +51,19 @@ const handleForget = () => {
   app.setLoginFlag(false);
   app.setForgetFlag(true);
 };
+const qqLogin = () => {
+  //保留当前路径
+  user.savePath(route.path);
+  app.setLoginFlag(false);
+  window.open(
+    "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=" +
+    config.QQ_APP_ID +
+    "&redirect_uri=" +
+    config.QQ_REDIRECT_URL +
+    "&scope=scope&display=display",
+    "_self"
+  );
+};
 const giteeLogin = () => {
   //保留当前路径
   user.savePath(route.path);
@@ -58,7 +72,7 @@ const giteeLogin = () => {
     "https://gitee.com/oauth/authorize?client_id=" +
     config.GITEE_APP_ID +
     "&response_type=code&redirect_uri=" +
-    config.GITEE_REDIRECT_URI,
+    config.GITEE_REDIRECT_URL,
     "_self"
   );
 };

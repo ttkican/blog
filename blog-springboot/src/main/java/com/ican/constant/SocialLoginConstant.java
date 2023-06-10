@@ -47,4 +47,9 @@ public class SocialLoginConstant {
      */
     public static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
 
+    /**
+     * QQ fmt
+     */
+    public static final String FMT = "fmt";
+
 }

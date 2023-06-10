@@ -6,8 +6,10 @@
   </div>
   <div class="bg">
     <div class="page-container">
-      <div class="photo-container" v-viewer>
-        <img class="photo" v-for="photo in photoInfo.photoVOList" :key="photo.id" :src="photo.photoUrl">
+      <div v-viewer v-masonry fit-width="true" transition-duration="0.3s" item-selector=".card">
+        <div v-masonry-tile class="card" v-for="photo in photoInfo.photoVOList" :key="photo.id">
+          <img class="img" :src="photo.photoUrl" alt="">
+        </div>
       </div>
     </div>
   </div>
@@ -30,22 +32,18 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.photo-container {
-  display: flex;
-  flex-wrap: wrap;
+.card {
+  width: 100%;
+  max-width: 280px;
+  margin: 0.25em;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
-.photo {
-  flex-grow: 1;
-  height: 12.5rem;
-  margin: 0.1875rem;
-  cursor: pointer;
-  object-fit: cover;
-}
-
-@media (max-width: 567px) {
-  .photo {
-    width: 100%;
-  }
+.card .img {
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 </style>

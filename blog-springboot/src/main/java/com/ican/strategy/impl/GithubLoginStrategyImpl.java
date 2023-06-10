@@ -1,9 +1,8 @@
 package com.ican.strategy.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.ican.config.properties.GithubProperties;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.GitDTO;
+import com.ican.model.dto.CodeDTO;
 import com.ican.model.vo.GitUserInfoVO;
 import com.ican.model.vo.SocialTokenVO;
 import com.ican.model.vo.SocialUserInfoVO;
@@ -40,10 +39,9 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(String data) {
-        GitDTO gitDTO = JSON.parseObject(data, GitDTO.class);
+    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
         // 获取Github的Token
-        TokenVO githubToken = getGithubToken(gitDTO.getCode());
+        TokenVO githubToken = getGithubToken(codeDTO.getCode());
         // 返回Github的Token信息
         return SocialTokenVO.builder()
                 .accessToken(githubToken.getAccess_token())

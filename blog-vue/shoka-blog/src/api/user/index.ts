@@ -51,3 +51,16 @@ export function updateUserInfo(data: UserInfo): AxiosPromise<Result<null>> {
     data,
   });
 }
+
+/**
+ * B站图片上传
+ * @param data 头像
+ */
+export function biliUpload(data: FormData): AxiosPromise<Result<string>> {
+  return request({
+    url: "/bili/upload",
+    method: "post",
+    headers: { "content-type": "multipart/form-data" },
+    data,
+  });
+}

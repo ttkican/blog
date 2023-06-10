@@ -88,3 +88,16 @@ export function githubLogin(data: GitInfo): AxiosPromise<Result<string>> {
     data,
   });
 }
+
+/**
+ * qq登录
+ * @param code 第三方code
+ * @returns Token
+ */
+export function qqLogin(data: GitInfo): AxiosPromise<Result<string>> {
+  return request({
+    url: "/oauth/qq",
+    method: "post",
+    data,
+  });
+}
