@@ -18,6 +18,7 @@
       <Email></Email>
       <Drawer></Drawer>
       <MusicPlayer></MusicPlayer>
+      <ChatRoom></ChatRoom>
     </div>
   </Provider>
 </template>

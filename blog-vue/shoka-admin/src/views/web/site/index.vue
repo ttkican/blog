@@ -200,7 +200,7 @@
                         <span>其他设置</span>
                     </span>
                 </template>
-                <el-form label-width="100px" :model="siteConfig" label-position="left">
+                <el-form label-width="120px" :model="siteConfig" label-position="left">
                     <el-form-item label="文章默认封面">
                         <el-upload class="avatar-uploader" :headers="authorization" action="/api/admin/site/upload"
                             :show-file-list="false" accept="image/*" :before-upload="beforeUpload"
@@ -232,6 +232,15 @@
                     </el-form-item>
                     <el-form-item label="网易云歌单Id" v-if="siteConfig.isMusic == 1">
                         <el-input v-model="siteConfig.musicId" style="width: 400px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="聊天室">
+                        <el-radio-group v-model="siteConfig.isChat">
+                            <el-radio :label="0">关闭</el-radio>
+                            <el-radio :label="1">开启</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="websocket链接" v-if="siteConfig.isChat == 1">
+                        <el-input v-model="siteConfig.websocketUrl" style="width: 400px;"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="handleUpdate">保 存</el-button>

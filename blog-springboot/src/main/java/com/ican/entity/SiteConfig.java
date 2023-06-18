@@ -153,6 +153,16 @@ public class SiteConfig {
     private String musicId;
 
     /**
+     * 是否开启聊天室 (0否 1是)
+     */
+    private Integer isChat;
+
+    /**
+     * websocket链接
+     */
+    private String websocketUrl;
+
+    /**
      * 创建时间
      */
     @JsonIgnore

@@ -209,6 +209,7 @@ onMounted(() => {
 
 .article-post {
   margin: 0 2rem;
+  padding-bottom: 1rem;
 }
 
 .article-title {

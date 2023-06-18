@@ -47,6 +47,7 @@
     --note-text: #8a51c0;
     --note-hover: #f14668;
     --comment-btn: #ed9abb;
+    --chat-bg: #f4f6fb;
 }
 
 /* 黑夜颜色 */
@@ -86,6 +87,7 @@
     --note-bg: rgba(48, 49, 50, 0.8);
     --note-text: rgba(109, 164, 219, 0.8);
     --note-hover: rgba(168, 49, 72, 0.8);
+    --chat-bg: var(--grey-1);
 
     img {
         filter: brightness(0.8);

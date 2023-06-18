@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     Author: typeof import('./../components/Layout/SideBar/Author.vue')['default']
     BlogInfo: typeof import('./../components/Layout/SideBar/BlogInfo.vue')['default']
     Catalog: typeof import('./../components/Catalog/index.vue')['default']
+    ChatRoom: typeof import('./../components/ChatRoom/index.vue')['default']
     CommentList: typeof import('./../components/Comment/CommentList.vue')['default']
     Drawer: typeof import('./../components/Layout/Drawer/index.vue')['default']
     Echarts: typeof import('./../components/Echarts/index.vue')['default']

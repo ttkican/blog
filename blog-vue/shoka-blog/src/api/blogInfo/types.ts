@@ -106,6 +106,14 @@ export interface SiteConfig {
    * 网易云歌单id
    */
   musicId: string;
+  /**
+   * 是否开启聊天室 (0否 1是)
+   */
+  isChat: number;
+  /**
+   * websocket链接
+   */
+  websocketUrl: string;
 }
 
 /**

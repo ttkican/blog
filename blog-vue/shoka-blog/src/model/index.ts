@@ -64,3 +64,38 @@ export interface UserForm {
    */
   code: string;
 }
+
+export interface Record {
+  /**
+   * 聊天记录id
+   */
+  id: number;
+  /**
+   * 用户id
+   */
+  userId: number;
+  /**
+   * 用户昵称
+   */
+  nickname: string;
+  /**
+   * 用户头像
+   */
+  avatar: string;
+  /**
+   * 聊天内容
+   */
+  content: string;
+  /**
+   * 用户登录ip
+   */
+  ipAddress: string;
+  /**
+   * ip来源
+   */
+  ipSource: string;
+  /**
+   * 创建时间
+   */
+  createTime: string;
+}

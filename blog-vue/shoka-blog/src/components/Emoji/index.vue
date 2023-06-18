@@ -1,6 +1,6 @@
 <template>
     <n-popover trigger="click" placement="bottom-start" style="max-height: 200px;" content-style="padding: 0 8px;"
-        :width="250" header-style="padding: 8px 15px 0 12px;font-size: 12px;" footer-style="padding: 0;">
+        :width="250" header-style="padding: 8px 15px 0 12px;font-size: 12px;" footer-style="padding: 0;" :to="false">
         <template #trigger>
             <span><svg-icon icon-class="emoji"></svg-icon></span>
         </template>

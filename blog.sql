@@ -41,7 +41,7 @@ INSERT INTO `t_album` VALUES (2, 'dfd', 'https://static.ttkwsd.top/articles/3d56
 -- ----------------------------
 -- Table structure for t_article
 -- ----------------------------
-DROP TABLE IF EXISTS `t_article`;
+DROP TABLE IF EXISTS `t_article`;c
 CREATE TABLE `t_article`  (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '文章id',
   `user_id` int NOT NULL COMMENT '作者id',
@@ -129,6 +129,22 @@ CREATE TABLE `t_category`  (
 -- Records of t_category
 -- ----------------------------
 INSERT INTO `t_category` VALUES (50, '测试分类', '2023-02-22 12:10:21', NULL);
+
+-- ----------------------------
+-- Table structure for t_chat_record
+-- ----------------------------
+DROP TABLE IF EXISTS `t_chat_record`;
+CREATE TABLE `t_chat_record`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '聊天记录id',
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户昵称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '头像',
+  `content` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '聊天内容',
+  `ip_address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'ip地址',
+  `ip_source` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'ip来源',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for t_comment
@@ -624,6 +640,8 @@ CREATE TABLE `t_site_config`  (
   `login_list` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '登录方式',
   `is_music` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否开启音乐播放器 (0否 1是)',
   `music_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '网易云歌单id',
+  `is_chat` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否开启聊天室 (0否 1是)',
+  `websocket_url` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'websocket链接',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -632,7 +650,7 @@ CREATE TABLE `t_site_config`  (
 -- ----------------------------
 -- Records of t_site_config
 -- ----------------------------
-INSERT INTO `t_site_config` VALUES (1, 'https://static.ttkwsd.top/config/7b6f25adc2b9627b8918176888bee3b5.png', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'Hello World', 'https://www.ttkwsd.top', '网站介绍', '后端基于SpringBoot开发，前端基于Vue3 Ts Navie UI开发，<a href=\"https://gitee.com/wu_shengdong/blog\" style=\"color: #49b1f5;\">网站源码</a>', '2022-08-25', '赣ICP备2022007910号', 'https://static.ttkwsd.top/config/05409c1ed50047535f28a40464f7b1ab.jpg', '阿冬', 'https://static.ttkwsd.top/config/d6a00d059a1e9729e763469deb4870df.jpg', '🍀个人简介\n\n想进大厂的小白\n\n感谢大佬们的开源精神💖', 'https://github.com/ICAN1999', 'https://gitee.com/wu_shengdong', 'https://space.bilibili.com/505715511', '1632167813', 0, 0, 1, 'https://static.ttkwsd.top/config/994a286571b002e93281899cb402bd15.png', 'https://static.ttkwsd.top/config/f0be9dc73e230d8821179b9303a9ff49.jpg', 1, 'gitee,bilibili,github,qq', ',gitee,github', 1, '7611185981', '2023-01-07 19:31:33', '2023-03-10 23:00:39');
+INSERT INTO `t_site_config` VALUES (1, 'https://static.ttkwsd.top/config/7b6f25adc2b9627b8918176888bee3b5.png', 'https://static.ttkwsd.top/config/0bca52afdb2b9998132355d716390c9f.png', 'Hello World', 'https://www.ttkwsd.top', '网站介绍', '后端基于SpringBoot开发，前端基于Vue3 Ts Navie UI开发，<a href=\"https://gitee.com/wu_shengdong/blog\" style=\"color: #49b1f5;\">网站源码</a>', '2022-08-25', '赣ICP备2022007910号', 'https://static.ttkwsd.top/config/05409c1ed50047535f28a40464f7b1ab.jpg', '阿冬', 'https://static.ttkwsd.top/config/d6a00d059a1e9729e763469deb4870df.jpg', '🍀个人简介\n\n想进大厂的小白\n\n感谢大佬们的开源精神💖', 'https://github.com/ICAN1999', 'https://gitee.com/wu_shengdong', 'https://space.bilibili.com/505715511', '1632167813', 0, 0, 1, 'https://static.ttkwsd.top/config/994a286571b002e93281899cb402bd15.png', 'https://static.ttkwsd.top/config/f0be9dc73e230d8821179b9303a9ff49.jpg', 1, 'gitee,bilibili,github,qq', ',gitee,github', 1, '7611185981', 1, 'ws://localhost:8080/websocket', '2023-01-07 19:31:33', '2023-03-10 23:00:39');
 
 -- ----------------------------
 -- Table structure for t_tag

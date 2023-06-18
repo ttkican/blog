@@ -60,7 +60,7 @@ const handleBackToTop = () => {
 .tool {
   position: fixed;
   right: -40px;
-  bottom: 1rem;
+  bottom: 85px;
   z-index: 9;
   color: var(--primary-color);
   box-shadow: 0 0 0.5rem rgb(0 0 0 / 10%);
