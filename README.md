@@ -54,7 +54,7 @@
 - 前后端分离，Docker Compose 一键部署
 - 采用 RABC 权限模型，使用 Sa-Token 进行权限管理
 - 支持动态权限修改、动态菜单和路由
-- 说说、友链、相册、留言弹幕墙、音乐播放器
+- 说说、友链、相册、留言弹幕墙、音乐播放器、聊天室
 - 支持代码高亮、图片预览、黑夜模式、点赞、取消点赞等功能
 - 发布评论、回复评论、表情包
 - 发送 HTML 邮件评论回复提醒，内容详细
@@ -70,7 +70,8 @@
 
 **前端：** Vue3 + Pinia + Vue Router + TypeScript + Axios + Element Plus + Naive UI + Echarts + Swiper
 
-**后端：** SpringBoot + Mysql + Redis + Quartz + Thymeleaf + Nginx + Docker + Sa-Token + Swagger2 + MyBatisPlus + ElasticSearch + RabbitMQ + Canal
+**后端：** SpringBoot + Mysql + Redis + Quartz + Thymeleaf + Nginx + Docker + Sa-Token + Swagger2 + MyBatisPlus +
+ElasticSearch + RabbitMQ + Canal
 
 **其他：** 接入 QQ、Gitee、Github 第三方登录
 
@@ -84,22 +85,22 @@
 
 ## 开发环境
 
-| 开发工具              | 说明               |
-| --------------------- | ------------------ |
-| IDEA                  | Java 开发工具 IDE  |
-| VSCode                | Vue 开发工具 IDE   |
-| Navicat               | MySQL 远程连接工具 |
-| Redis Desktop Manager | Redis 远程连接工具 |
-| Xshell                | Linux 远程连接工具 |
-| Xftp                  | Linux 文件上传工具 |
+|          开发工具           |          说明          |
+|:-----------------------:|:--------------------:|
+|          IDEA           |    Java 开发工具 IDE     |
+|         VSCode          |     Vue 开发工具 IDE     |
+|         Navicat         |     MySQL 远程连接工具     |
+|  Redis Desktop Manager  |     Redis 远程连接工具     |
+|         Xshell          |     Linux 远程连接工具     |
+|          Xftp           |     Linux 文件上传工具     |
 
-| 开发环境      | 版本   |
-| ------------- | ------ |
-| OpenJDK       | 11     |
-| MySQL         | 8.0.27 |
-| Redis         | 6.2.6  |
+|   开发环境    |  版本  |
+|:-------------:|:------:|
+|    OpenJDK    |   11   |
+|     MySQL     | 8.0.27 |
+|     Redis     | 6.2.6  |
 | Elasticsearch | 7.17.3 |
-| RabbitMQ      | 3.9.11 |
+|   RabbitMQ    | 3.9.11 |
 
 ## 项目截图
 
@@ -113,10 +114,10 @@
 - [ ] 第三方登录使用 JustAuth
 - [ ] 博客文章导入导出
 - [ ] 移动端文章目录
-- [ ] 图片瀑布流布局
+- [x] 图片瀑布流布局
 - [ ] B 站追番页
-- [ ] B 站图床
-- [ ] 聊天室
+- [x] B 站图床
+- [x] 聊天室
 
 ## 项目总结
 
