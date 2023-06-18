@@ -11,11 +11,7 @@ import com.ican.model.vo.SocialTokenVO;
 import com.ican.model.vo.SocialUserInfoVO;
 import com.ican.model.vo.TokenVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -78,21 +74,17 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
      */
     private TokenVO getQqToken(String code) {
         // 根据code换取accessToken
-        MultiValueMap<String, String> qqData = new LinkedMultiValueMap<>();
+        Map<String, String> qqData = new HashMap<>(5);
         // Gitee的Token请求参数
-        qqData.add(GRANT_TYPE, qqProperties.getGrantType());
-        qqData.add(CLIENT_ID, qqProperties.getAppId());
-        qqData.add(CLIENT_SECRET, qqProperties.getAppKey());
-        qqData.add(CODE, code);
-        qqData.add(REDIRECT_URI, qqProperties.getRedirectUrl());
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(qqData, null);
+        qqData.put(GRANT_TYPE, qqProperties.getGrantType());
+        qqData.put(CLIENT_ID, qqProperties.getAppId());
+        qqData.put(CLIENT_SECRET, qqProperties.getAppKey());
+        qqData.put(CODE, code);
+        qqData.put(REDIRECT_URI, qqProperties.getRedirectUrl());
         try {
-            return restTemplate.exchange(qqProperties.getAccessTokenUrl(),
-                    HttpMethod.GET,
-                    requestEntity,
-                    TokenVO.class).getBody();
+            return restTemplate.getForObject(qqProperties.getAccessTokenUrl(), TokenVO.class, qqData);
         } catch (Exception e) {
-            throw new ServiceException("Gitee登录错误");
+            throw new ServiceException("QQ登录错误");
         }
     }
 
@@ -105,9 +97,8 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
         Map<String, String> dataMap = new HashMap<>(1);
         // 请求参数
         dataMap.put(ACCESS_TOKEN, accessToken);
-        dataMap.put(FMT, "json");
         // 返回用户OpenId
         QqLoginDTO qqLoginDTO = restTemplate.getForObject(qqProperties.getUserOpenIdUrl(), QqLoginDTO.class, dataMap);
-        return qqLoginDTO.getOpenId();
+        return qqLoginDTO.getOpenid();
     }
 }

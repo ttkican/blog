@@ -123,6 +123,10 @@ const routes: RouteRecordRaw[] = [
     path: "/oauth/login/github",
     component: () => import("@/components/Oauth/index.vue"),
   },
+  {
+    path: "/oauth/login/qq",
+    component: () => import("@/components/Oauth/index.vue"),
+  },
   { path: "/:catchAll(.*)", redirect: "/404" },
 ];
 
