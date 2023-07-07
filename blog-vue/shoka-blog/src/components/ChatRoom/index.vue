@@ -233,8 +233,10 @@ const handleType = (key: number) => {
 };
 onUpdated(() => {
   const element = document.getElementById("chat-content");
-  element!.scrollTop = element!.scrollHeight;
-})
+  if (element) {
+    element.scrollTop = element.scrollHeight;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
