@@ -41,7 +41,7 @@ INSERT INTO `t_album` VALUES (2, 'dfd', 'https://static.ttkwsd.top/articles/3d56
 -- ----------------------------
 -- Table structure for t_article
 -- ----------------------------
-DROP TABLE IF EXISTS `t_article`;c
+DROP TABLE IF EXISTS `t_article`;
 CREATE TABLE `t_article`  (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '文章id',
   `user_id` int NOT NULL COMMENT '作者id',
