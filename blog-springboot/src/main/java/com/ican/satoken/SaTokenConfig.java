@@ -96,6 +96,8 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     if (e instanceof NotLoginException) {
                         return JSONUtil.toJsonStr(Result.fail(UNAUTHORIZED.getCode(), UNAUTHORIZED.getMsg()));
                     }
+                    // TODO 服务器后端在这里无法捕获异常，仅仅将异常信息传给了前端
+                    err.printStackTrace();
                     return SaResult.error(e.getMessage());
                 });
     }
