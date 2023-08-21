@@ -85,7 +85,7 @@
             </template>
         </el-dialog>
         <!-- 上传对话框 -->
-        <el-dialog title="上传照片" v-model="upload" width="800px" append-to-body>
+        <el-dialog title="上传照片" v-model="upload" width="850px" append-to-body>
             <div class="upload-container">
                 <el-upload v-show="uploadList.length > 0" :headers="authorization" class="avatar-uploader" multiple
                     action="/api/admin/photo/upload" :before-upload="beforeUpload" :on-success="handleSuccess"
@@ -355,7 +355,9 @@ onMounted(() => {
 }
 
 .upload-container {
-    height: 400px;
+    min-height: 400px;
+    max-height: 600px;
+    overflow: auto;
 
     .upload {
         display: flex;
