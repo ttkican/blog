@@ -38,6 +38,8 @@
 
 **接口文档：** https://www.ttkwsd.top/api/doc.html
 
+ **欢迎大家提交pr，一起改进项目** 
+
 ## 本地运行
 
 1. MySQL版本为`8.0.27`，npm版本为`9.4.0`，node版本为`v16.18.0`
