@@ -121,6 +121,13 @@ upload:
     secretKey: COS配置secretKey
     region: COS配置region
     bucketName: COS配置bucketName
+  # qiniu存储(七牛云)
+  qiniu:
+    url: https://Bucket域名/  # 访问域名(给存储桶绑定的二级域名)
+    bucketName: 空间名称bucketName # 空间名称bucketName
+    region: qiniu配置region # 存储区域 华南(huanan) 华北(huabei)...
+    accessKey: qiniu配置accessKey  #accessKey
+    secretKey: qiniu配置secretKey  #secretKey
 # mybatisPlus配置
 mybatis-plus:
   # mapper映射地址

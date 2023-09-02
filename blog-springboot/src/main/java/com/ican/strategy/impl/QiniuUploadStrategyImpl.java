@@ -1,10 +1,5 @@
 package com.ican.strategy.impl;
 
-import com.aliyun.oss.ClientException;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.OSSException;
-import com.ican.config.properties.OssProperties;
 import com.ican.config.properties.QiniuProperties;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;

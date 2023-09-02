@@ -25,7 +25,12 @@ public enum UploadModeEnum {
     /**
      * cos
      */
-    COS("cos", "cosUploadStrategyImpl");
+    COS("cos", "cosUploadStrategyImpl"),
+
+    /**
+     * qiniu
+     */
+    QINIU("qiniu", "qiniuUploadStrategyImpl");
 
     /**
      * 模式
