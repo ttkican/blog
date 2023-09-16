@@ -188,20 +188,20 @@ oauth:
     client-id: Gitee的client-id
     client-secret: Gitee的client-secret
     grant_type: authorization_code
-    redirect-url: Gitee回调地址
+    redirect-url: https://你的前台域名/oauth/login/gitee #Gitee回调地址
     access-token-url: https://gitee.com/oauth/token
     user-info-url: https://gitee.com/api/v5/user?access_token={access_token}
   github:
     client-id: Github的client-id
     client-secret: Github的client-secret
-    redirect-url: Github回调地址
+    redirect-url: https://你的前台域名/oauth/login/github #Github回调地址
     access-token-url: https://github.com/login/oauth/access_token
     user-info-url: https://api.github.com/user
   qq:
     app-id: QQ的APPID
     app-key: QQ的app_key
     grant_type: authorization_code
-    redirect-url: QQ回调地址
+    redirect-url: https://你的前台域名/oauth/login/qq #QQ回调地址
     access-token-url: https://graph.qq.com/oauth2.0/token
     user-openid-url: https://graph.qq.com/oauth2.0/me?access_token={access_token}
     user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}

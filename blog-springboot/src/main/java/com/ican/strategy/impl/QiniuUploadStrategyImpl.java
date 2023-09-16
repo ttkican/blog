@@ -43,7 +43,7 @@ public class QiniuUploadStrategyImpl extends AbstractUploadStrategyImpl {
     @Override
     public void upload(String path, String fileName, InputStream inputStream) throws IOException {
         try {
-            if (path.charAt(0) == '/') {
+            if (path.length() > 1 && path.charAt(0) == '/') {
                 path = path.substring(1);
             }
             // 上传图片文件
@@ -60,6 +60,10 @@ public class QiniuUploadStrategyImpl extends AbstractUploadStrategyImpl {
 
     @Override
     public String getFileAccessUrl(String filePath) {
+        // 1./  --> /    2./xxx/ --> xxx/
+        if (filePath.length() > 1 && filePath.charAt(0) == '/') {
+            filePath = filePath.substring(1);
+        }
         return qiniuProperties.getUrl() + filePath;
     }
 
