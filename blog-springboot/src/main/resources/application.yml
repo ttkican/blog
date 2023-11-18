@@ -163,7 +163,7 @@ sa-token:
   # token有效期，单位s 默认30天, -1代表永不过期
   timeout: 1800
   # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
-  activity-timeout: -1
+  active-timeout: -1
   # 关闭自动续签
   auto-renew: false
   # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
