@@ -91,7 +91,7 @@
         INNER JOIN t_user u ON c.from_uid = u.id
         <where>
             <if test="param.typeId != null">
-                type_id=#{condition.typeId}
+                type_id=#{param.typeId}
             </if>
             AND comment_type=#{param.commentType}
             AND c.is_check=1
