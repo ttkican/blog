@@ -1,29 +1,49 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.ExceptionLog;
-import com.ican.model.dto.ConditionDTO;
+import com.ican.mapper.ExceptionLogMapper;
 import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.LogQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
- * 异常日志业务接口
+ * 异常日志服务
  *
  * @author ican
  */
-public interface ExceptionLogService extends IService<ExceptionLog> {
+@Service
+public class ExceptionLogService extends ServiceImpl<ExceptionLogMapper, ExceptionLog> {
 
-    /**
-     * 查看异常日志列表
-     *
-     * @param condition 条件
-     * @return 日志列表
-     */
-    PageResult<ExceptionLog> listExceptionLog(ConditionDTO condition);
+    @Autowired
+    private ExceptionLogMapper exceptionLogMapper;
 
-    /**
-     * 保存异常日志
-     *
-     * @param exceptionLog 异常日志信息
-     */
-    void saveExceptionLog(ExceptionLog exceptionLog);
+    public PageResult<ExceptionLog> listExceptionLog(LogQuery logQuery) {
+        // 查询异常日志数量
+        Long count = exceptionLogMapper.selectCount(new LambdaQueryWrapper<ExceptionLog>()
+                .like(StringUtils.hasText(logQuery.getOptModule()), ExceptionLog::getModule, logQuery.getOptModule())
+                .or()
+                .like(StringUtils.hasText(logQuery.getKeyword()), ExceptionLog::getDescription, logQuery.getKeyword())
+        );
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询异常日志列表
+        List<ExceptionLog> operationLogVOList = exceptionLogMapper.selectExceptionLogList(logQuery);
+        return new PageResult<>(operationLogVOList, count);
+    }
+
+    public void saveExceptionLog(ExceptionLog exceptionLog) {
+        // 保存异常日志
+        exceptionLogMapper.insert(exceptionLog);
+    }
 }
+
+
+
+

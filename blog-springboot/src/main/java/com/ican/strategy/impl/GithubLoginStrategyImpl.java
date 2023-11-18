@@ -2,11 +2,11 @@ package com.ican.strategy.impl;
 
 import com.ican.config.properties.GithubProperties;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.CodeDTO;
-import com.ican.model.vo.GitUserInfoVO;
-import com.ican.model.vo.SocialTokenVO;
-import com.ican.model.vo.SocialUserInfoVO;
-import com.ican.model.vo.TokenVO;
+import com.ican.model.dto.GitUserInfoDTO;
+import com.ican.model.dto.SocialTokenDTO;
+import com.ican.model.dto.SocialUserInfoDTO;
+import com.ican.model.dto.TokenDTO;
+import com.ican.model.vo.request.CodeReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,41 +39,41 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
+    public SocialTokenDTO getSocialToken(CodeReq codeReq) {
         // 获取Github的Token
-        TokenVO githubToken = getGithubToken(codeDTO.getCode());
+        TokenDTO githubToken = getGithubToken(codeReq.getCode());
         // 返回Github的Token信息
-        return SocialTokenVO.builder()
+        return SocialTokenDTO.builder()
                 .accessToken(githubToken.getAccess_token())
                 .loginType(GITHUB.getLoginType())
                 .build();
     }
 
     @Override
-    public SocialUserInfoVO getSocialUserInfo(SocialTokenVO socialToken) {
+    public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         // 请求参数
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + socialToken.getAccessToken());
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(null, headers);
         // Gitee用户信息
-        GitUserInfoVO gitUserInfoVO = restTemplate.exchange(githubProperties.getUserInfoUrl(),
+        GitUserInfoDTO gitUserInfoDTO = restTemplate.exchange(githubProperties.getUserInfoUrl(),
                 HttpMethod.GET,
                 requestEntity,
-                GitUserInfoVO.class).getBody();
+                GitUserInfoDTO.class).getBody();
         // 返回用户信息
-        return SocialUserInfoVO.builder()
-                .avatar(Objects.requireNonNull(gitUserInfoVO).getAvatar_url())
-                .id(gitUserInfoVO.getId())
-                .nickname(gitUserInfoVO.getLogin()).build();
+        return SocialUserInfoDTO.builder()
+                .avatar(Objects.requireNonNull(gitUserInfoDTO).getAvatar_url())
+                .id(gitUserInfoDTO.getId())
+                .nickname(gitUserInfoDTO.getLogin()).build();
     }
 
     /**
      * 获取Github的Token
      *
      * @param code 第三方code
-     * @return {@link TokenVO} Github的Token
+     * @return {@link TokenDTO} Github的Token
      */
-    private TokenVO getGithubToken(String code) {
+    private TokenDTO getGithubToken(String code) {
         // 根据code换取accessToken
         MultiValueMap<String, String> githubData = new LinkedMultiValueMap<>();
         // Github的Token请求参数
@@ -88,7 +88,7 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
             return restTemplate.exchange(githubProperties.getAccessTokenUrl(),
                     HttpMethod.POST,
                     requestEntity,
-                    TokenVO.class).getBody();
+                    TokenDTO.class).getBody();
         } catch (Exception e) {
             throw new ServiceException("Github登录错误");
         }

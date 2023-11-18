@@ -4,32 +4,32 @@
     <select id="selectTaskLogCount" resultType="java.lang.Long">
         SELECT COUNT(*) from t_task_log
         <where>
-            <if test="condition.keyword != null">
-                AND task_name like concat('%', #{condition.keyword}, '%')
+            <if test="param.keyword != null and param.keyword != ''">
+                AND task_name like concat('%', #{param.keyword}, '%')
             </if>
-            <if test="condition.taskGroup != null">
-                AND task_group like concat('%', #{condition.taskGroup}, '%')
+            <if test="param.taskGroup != null and param.taskGroup != ''">
+                AND task_group like concat('%', #{param.taskGroup}, '%')
             </if>
             <if test="condition.status != null">
-                AND status = #{condition.status}
+                AND status = #{param.status}
             </if>
         </where>
     </select>
 
-    <select id="selectTaskLogVOList" resultType="com.ican.model.vo.TaskLogVO">
+    <select id="selectTaskLogRespList" resultType="com.ican.model.vo.response.TaskLogResp">
         SELECT * from t_task_log
         <where>
-            <if test="condition.keyword != null">
-                AND task_name like concat('%', #{condition.keyword}, '%')
+            <if test="param.keyword != null and param.keyword != ''">
+                AND task_name like concat('%', #{param.keyword}, '%')
             </if>
-            <if test="condition.taskGroup != null">
-                AND task_group like concat('%', #{condition.taskGroup}, '%')
+            <if test="param.taskGroup != null and param.taskGroup != ''">
+                AND task_group like concat('%', #{param.taskGroup}, '%')
             </if>
             <if test="condition.status != null">
-                AND status = #{condition.status}
+                AND status = #{param.status}
             </if>
         </where>
         ORDER BY create_time desc
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
     </select>
 </mapper>

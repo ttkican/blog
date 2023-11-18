@@ -1,8 +1,8 @@
 package com.ican.controller;
 
 import com.ican.annotation.VisitLogger;
-import com.ican.model.vo.BlogBackInfoVO;
-import com.ican.model.vo.BlogInfoVO;
+import com.ican.model.vo.response.BlogBackInfoResp;
+import com.ican.model.vo.response.BlogInfoResp;
 import com.ican.model.vo.Result;
 import com.ican.service.BlogInfoService;
 import io.swagger.annotations.Api;
@@ -39,22 +39,22 @@ public class BlogInfoController {
     /**
      * 查看博客信息
      *
-     * @return {@link Result<BlogInfoVO>} 博客信息
+     * @return {@link Result< BlogInfoResp >} 博客信息
      */
     @ApiOperation(value = "查看博客信息")
     @GetMapping("/")
-    public Result<BlogInfoVO> getBlogInfo() {
+    public Result<BlogInfoResp> getBlogInfo() {
         return Result.success(blogInfoService.getBlogInfo());
     }
 
     /**
      * 查看后台信息
      *
-     * @return {@link Result<BlogBackInfoVO>} 后台信息
+     * @return {@link Result< BlogBackInfoResp >} 后台信息
      */
     @ApiOperation(value = "查看后台信息")
     @GetMapping("/admin")
-    public Result<BlogBackInfoVO> getBlogBackInfo() {
+    public Result<BlogBackInfoResp> getBlogBackInfo() {
         return Result.success(blogInfoService.getBlogBackInfo());
     }
 

@@ -6,9 +6,14 @@ import com.ican.annotation.AccessLimit;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
 import com.ican.enums.LikeTypeEnum;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.TalkDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.Result;
+import com.ican.model.vo.query.PageQuery;
+import com.ican.model.vo.query.TalkQuery;
+import com.ican.model.vo.request.TalkReq;
+import com.ican.model.vo.response.TalkBackInfoResp;
+import com.ican.model.vo.response.TalkBackResp;
+import com.ican.model.vo.response.TalkResp;
 import com.ican.service.TalkService;
 import com.ican.strategy.context.LikeStrategyContext;
 import io.swagger.annotations.Api;
@@ -41,14 +46,14 @@ public class TalkController {
     /**
      * 查看后台说说列表
      *
-     * @param condition 条件
-     * @return {@link TalkBackVO} 后台说说
+     * @param talkQuery 说说查询条件
+     * @return {@link TalkBackResp} 后台说说
      */
     @ApiOperation(value = "查看后台说说列表")
     @SaCheckPermission("web:talk:list")
     @GetMapping("/admin/talk/list")
-    public Result<PageResult<TalkBackVO>> listTalkBackVO(ConditionDTO condition) {
-        return Result.success(talkService.listTalkBackVO(condition));
+    public Result<PageResult<TalkBackResp>> listTalkBackVO(TalkQuery talkQuery) {
+        return Result.success(talkService.listTalkBackVO(talkQuery));
     }
 
     /**
@@ -76,7 +81,7 @@ public class TalkController {
     @ApiOperation(value = "添加说说")
     @SaCheckPermission("web:talk:add")
     @PostMapping("/admin/talk/add")
-    public Result<?> addTalk(@Validated @RequestBody TalkDTO talk) {
+    public Result<?> addTalk(@Validated @RequestBody TalkReq talk) {
         talkService.addTalk(talk);
         return Result.success();
     }
@@ -106,7 +111,7 @@ public class TalkController {
     @ApiOperation(value = "修改说说")
     @SaCheckPermission("web:talk:update")
     @PutMapping("/admin/talk/update")
-    public Result<?> updateTalk(@Validated @RequestBody TalkDTO talk) {
+    public Result<?> updateTalk(@Validated @RequestBody TalkReq talk) {
         talkService.updateTalk(talk);
         return Result.success();
     }
@@ -115,12 +120,12 @@ public class TalkController {
      * 编辑说说
      *
      * @param talkId 说说id
-     * @return {@link TalkBackVO} 后台说说
+     * @return {@link TalkBackResp} 后台说说
      */
     @ApiOperation(value = "编辑说说")
     @SaCheckPermission("web:talk:edit")
     @GetMapping("/admin/talk/edit/{talkId}")
-    public Result<TalkBackInfoVO> editTalk(@PathVariable("talkId") Integer talkId) {
+    public Result<TalkBackInfoResp> editTalk(@PathVariable("talkId") Integer talkId) {
         return Result.success(talkService.editTalk(talkId));
     }
 
@@ -154,25 +159,25 @@ public class TalkController {
     /**
      * 查看说说列表
      *
-     * @return {@link Result<TalkVO>}
+     * @return {@link Result< TalkResp >}
      */
     @VisitLogger(value = "说说列表")
     @ApiOperation(value = "查看说说列表")
     @GetMapping("/talk/list")
-    public Result<PageResult<TalkVO>> listTalkVO() {
-        return Result.success(talkService.listTalkVO());
+    public Result<PageResult<TalkResp>> listTalkVO(@Validated PageQuery pageQuery) {
+        return Result.success(talkService.listTalkVO(pageQuery));
     }
 
     /**
      * 查看说说
      *
      * @param talkId 说说id
-     * @return {@link Result<TalkVO>}
+     * @return {@link Result< TalkResp >}
      */
     @VisitLogger(value = "说说")
     @ApiOperation(value = "查看说说")
     @GetMapping("/talk/{talkId}")
-    public Result<TalkVO> getTalkById(@PathVariable("talkId") Integer talkId) {
+    public Result<TalkResp> getTalkById(@PathVariable("talkId") Integer talkId) {
         return Result.success(talkService.getTalkById(talkId));
     }
 }

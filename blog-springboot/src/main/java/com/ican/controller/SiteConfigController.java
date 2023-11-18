@@ -25,7 +25,7 @@ import static com.ican.constant.OptTypeConstant.UPLOAD;
 public class SiteConfigController {
 
     @Autowired
-    private SiteConfigService webConfigService;
+    private SiteConfigService siteConfigService;
 
     /**
      * 获取网站配置
@@ -36,7 +36,7 @@ public class SiteConfigController {
     @SaCheckPermission("web:site:list")
     @GetMapping("/admin/site/list")
     public Result<SiteConfig> getSiteConfig() {
-        return Result.success(webConfigService.getSiteConfig());
+        return Result.success(siteConfigService.getSiteConfig());
     }
 
     /**
@@ -50,7 +50,7 @@ public class SiteConfigController {
     @SaCheckPermission("web:site:update")
     @PutMapping("/admin/site/update")
     public Result<?> updateSiteConfig(@RequestBody SiteConfig siteConfig) {
-        webConfigService.updateSiteConfig(siteConfig);
+        siteConfigService.updateSiteConfig(siteConfig);
         return Result.success();
     }
 
@@ -66,7 +66,7 @@ public class SiteConfigController {
     @SaCheckPermission("web:site:upload")
     @PostMapping("/admin/site/upload")
     public Result<String> uploadSiteImg(@RequestParam("file") MultipartFile file) {
-        return Result.success(webConfigService.uploadSiteImg(file));
+        return Result.success(siteConfigService.uploadSiteImg(file));
     }
 
 }

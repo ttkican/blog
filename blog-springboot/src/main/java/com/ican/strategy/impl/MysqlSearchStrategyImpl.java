@@ -1,7 +1,7 @@
 package com.ican.strategy.impl;
 
 import com.ican.mapper.ArticleMapper;
-import com.ican.model.vo.ArticleSearchVO;
+import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.strategy.SearchStrategy;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,12 @@ public class MysqlSearchStrategyImpl implements SearchStrategy {
     private ArticleMapper articleMapper;
 
     @Override
-    public List<ArticleSearchVO> searchArticle(String keyword) {
+    public List<ArticleSearchResp> searchArticle(String keyword) {
         if (StringUtils.isBlank(keyword)) {
             return new ArrayList<>();
         }
-        List<ArticleSearchVO> articleSearchVOList = articleMapper.searchArticle(keyword);
-        return articleSearchVOList.stream()
+        List<ArticleSearchResp> articleSearchRespList = articleMapper.searchArticle(keyword);
+        return articleSearchRespList.stream()
                 .map(article -> {
                     // 获取关键词第一次出现的位置
                     String articleContent = article.getArticleContent();
@@ -50,7 +50,7 @@ public class MysqlSearchStrategyImpl implements SearchStrategy {
                     }
                     // 文章标题高亮
                     String articleTitle = article.getArticleTitle().replaceAll(keyword, PRE_TAG + keyword + POST_TAG);
-                    return ArticleSearchVO.builder()
+                    return ArticleSearchResp.builder()
                             .id(article.getId())
                             .articleTitle(articleTitle)
                             .articleContent(articleContent)

@@ -2,12 +2,12 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Menu;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.MenuDTO;
-import com.ican.model.vo.MenuOption;
-import com.ican.model.vo.MenuTree;
-import com.ican.model.vo.MenuVO;
-import com.ican.model.vo.UserMenuVO;
+import com.ican.model.vo.response.MenuOptionResp;
+import com.ican.model.vo.query.MenuQuery;
+import com.ican.model.vo.request.MenuReq;
+import com.ican.model.vo.response.MenuResp;
+import com.ican.model.vo.response.MenuTreeResp;
+import com.ican.model.vo.response.UserMenuResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,10 +33,10 @@ public interface MenuMapper extends BaseMapper<Menu> {
     /**
      * 查询菜单列表
      *
-     * @param condition 查询条件
+     * @param menuQuery 菜单查询条件
      * @return 菜单列表
      */
-    List<MenuVO> selectMenuVOList(@Param("condition") ConditionDTO condition);
+    List<MenuResp> selectMenuVOList(@Param("param") MenuQuery menuQuery);
 
     /**
      * 根据用户id查询用户菜单列表
@@ -44,21 +44,21 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param userId 用户id
      * @return 用户菜单列表
      */
-    List<UserMenuVO> selectMenuByUserId(@Param("userId") Integer userId);
+    List<UserMenuResp> selectMenuByUserId(@Param("userId") Integer userId);
 
     /**
      * 查询菜单下拉树
      *
      * @return 菜单下拉树
      */
-    List<MenuTree> selectMenuTree();
+    List<MenuTreeResp> selectMenuTree();
 
     /**
      * 查询菜单选项树
      *
      * @return 菜单选项树
      */
-    List<MenuOption> selectMenuOptions();
+    List<MenuOptionResp> selectMenuOptions();
 
     /**
      * 根据id查询菜单信息
@@ -66,5 +66,5 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param menuId 菜单id
      * @return 菜单
      */
-    MenuDTO selectMenuById(@Param("menuId") Integer menuId);
+    MenuReq selectMenuById(@Param("menuId") Integer menuId);
 }

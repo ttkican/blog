@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.AlbumMapper">
 
-    <select id="selectAlbumBackVO" resultType="com.ican.model.vo.AlbumBackVO">
+    <select id="selectBackAlbumList" resultType="com.ican.model.vo.response.AlbumBackResp">
         SELECT a.id,
         a.album_name,
         a.album_cover,
@@ -12,28 +12,28 @@
         FROM t_album a
         LEFT JOIN t_photo p ON a.id = p.album_id
         <where>
-            <if test="keyword != null">
-                and album_name like concat('%',#{keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                and album_name like concat('%',#{param.keyword},'%')
             </if>
         </where>
         GROUP BY a.id
         ORDER BY a.id DESC
-        LIMIT #{limit}, #{size}
+        LIMIT #{param.current}, #{param.size}
     </select>
 
-    <select id="selectAlbumById" resultType="com.ican.model.dto.AlbumDTO">
+    <select id="selectAlbumById" resultType="com.ican.model.vo.request.AlbumReq">
         select id, album_name, album_desc, album_cover, status
         from t_album
         where id = #{albumId}
     </select>
 
-    <select id="selectAlbumInfoById" resultType="com.ican.model.vo.AlbumBackVO">
+    <select id="selectAlbumInfoById" resultType="com.ican.model.vo.response.AlbumBackResp">
         select id, album_name, album_desc, album_cover, status
         from t_album
         where id = #{albumId}
     </select>
 
-    <select id="selectAlbumVOList" resultType="com.ican.model.vo.AlbumVO">
+    <select id="selectAlbumVOList" resultType="com.ican.model.vo.response.AlbumResp">
         select id, album_name, album_desc, album_cover
         from t_album
     </select>

@@ -1,82 +1,150 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.entity.Album;
+import com.ican.entity.BlogFile;
 import com.ican.entity.Photo;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.PhotoDTO;
-import com.ican.model.dto.PhotoInfoDTO;
-import com.ican.model.vo.AlbumBackVO;
+import com.ican.mapper.AlbumMapper;
+import com.ican.mapper.BlogFileMapper;
+import com.ican.mapper.PhotoMapper;
 import com.ican.model.vo.PageResult;
-import com.ican.model.vo.PhotoBackVO;
+import com.ican.model.vo.query.PhotoQuery;
+import com.ican.model.vo.request.PhotoInfoReq;
+import com.ican.model.vo.request.PhotoReq;
+import com.ican.model.vo.response.AlbumBackResp;
+import com.ican.model.vo.response.PhotoBackResp;
+import com.ican.model.vo.response.PhotoResp;
+import com.ican.strategy.context.UploadStrategyContext;
+import com.ican.utils.BeanCopyUtils;
+import com.ican.utils.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.ican.constant.CommonConstant.FALSE;
+import static com.ican.enums.FilePathEnum.PHOTO;
 
 /**
- * 照片业务接口
+ * 照片业务接口实现类
  *
  * @author ican
  */
-public interface PhotoService extends IService<Photo> {
+@Service
+public class PhotoService extends ServiceImpl<PhotoMapper, Photo> {
 
-    /**
-     * 查看后台相册列表
-     *
-     * @param condition 条件
-     * @return 后台相册列表
-     */
-    PageResult<PhotoBackVO> listPhotoBackVO(ConditionDTO condition);
+    @Autowired
+    private PhotoMapper photoMapper;
 
-    /**
-     * 查看照片相册信息
-     *
-     * @param albumId 相册id
-     * @return 相册信息
-     */
-    AlbumBackVO getAlbumInfo(Integer albumId);
+    @Autowired
+    private AlbumMapper albumMapper;
 
-    /**
-     * 添加照片
-     *
-     * @param photo 照片
-     */
-    void addPhoto(PhotoDTO photo);
+    @Autowired
+    private UploadStrategyContext uploadStrategyContext;
 
-    /**
-     * 修改照片信息
-     *
-     * @param photoInfo 照片信息
-     */
-    void updatePhoto(PhotoInfoDTO photoInfo);
+    @Autowired
+    private BlogFileMapper blogFileMapper;
 
-    /**
-     * 删除照片
-     *
-     * @param photoIdList 照片id列表
-     */
-    void deletePhoto(List<Integer> photoIdList);
+    public PageResult<PhotoBackResp> listPhotoBackVO(PhotoQuery photoQuery) {
+        // 查询照片数量
+        Long count = photoMapper.selectCount(new LambdaQueryWrapper<Photo>()
+                .eq(Objects.nonNull(photoQuery.getAlbumId()), Photo::getAlbumId, photoQuery.getAlbumId()));
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询照片列表
+        List<PhotoBackResp> photoList = photoMapper.selectBackPhotoList(photoQuery);
+        return new PageResult<>(photoList, count);
+    }
 
-    /**
-     * 移动照片
-     *
-     * @param photo 照片
-     */
-    void movePhoto(PhotoDTO photo);
+    public AlbumBackResp getAlbumInfo(Integer albumId) {
+        AlbumBackResp albumBackResp = albumMapper.selectAlbumInfoById(albumId);
+        if (Objects.isNull(albumBackResp)) {
+            return null;
+        }
+        Long photoCount = photoMapper.selectCount(new LambdaQueryWrapper<Photo>()
+                .eq(Photo::getAlbumId, albumId));
+        albumBackResp.setPhotoCount(photoCount);
+        return albumBackResp;
+    }
 
-    /**
-     * 查看照片列表
-     *
-     * @param condition 条件
-     * @return 照片列表
-     */
-    Map<String, Object> listPhotoVO(ConditionDTO condition);
+    public void addPhoto(PhotoReq photo) {
+        // 批量保存照片
+        List<Photo> pictureList = photo.getPhotoUrlList().stream()
+                .map(url -> Photo.builder()
+                        .albumId(photo.getAlbumId())
+                        .photoName(IdWorker.getIdStr())
+                        .photoUrl(url)
+                        .build())
+                .collect(Collectors.toList());
+        this.saveBatch(pictureList);
+    }
 
-    /**
-     * 上传照片
-     *
-     * @param file 文件
-     * @return 照片地址
-     */
-    String uploadPhoto(MultipartFile file);
+    public void updatePhoto(PhotoInfoReq photoInfo) {
+        Photo photo = BeanCopyUtils.copyBean(photoInfo, Photo.class);
+        baseMapper.updateById(photo);
+    }
+
+    public void deletePhoto(List<Integer> photoIdList) {
+        baseMapper.deleteBatchIds(photoIdList);
+    }
+
+    public void movePhoto(PhotoReq photo) {
+        List<Photo> photoList = photo.getPhotoIdList().stream()
+                .map(photoId -> Photo.builder()
+                        .id(photoId)
+                        .albumId(photo.getAlbumId())
+                        .build())
+                .collect(Collectors.toList());
+        this.updateBatchById(photoList);
+    }
+
+    public Map<String, Object> listPhotoVO(Integer albumId) {
+        Map<String, Object> result = new HashMap<>(2);
+        String albumName = albumMapper.selectOne(new LambdaQueryWrapper<Album>()
+                        .select(Album::getAlbumName).eq(Album::getId, albumId))
+                .getAlbumName();
+        List<PhotoResp> photoVOList = photoMapper.selectPhotoVOList(albumId);
+        result.put("albumName", albumName);
+        result.put("photoVOList", photoVOList);
+        return result;
+    }
+
+    public String uploadPhoto(MultipartFile file) {
+        // 上传文件
+        String url = uploadStrategyContext.executeUploadStrategy(file, PHOTO.getPath());
+        try {
+            // 获取文件md5值
+            String md5 = FileUtils.getMd5(file.getInputStream());
+            // 获取文件扩展名
+            String extName = FileUtils.getExtension(file);
+            BlogFile existFile = blogFileMapper.selectOne(new LambdaQueryWrapper<BlogFile>()
+                    .select(BlogFile::getId)
+                    .eq(BlogFile::getFileName, md5)
+                    .eq(BlogFile::getFilePath, PHOTO.getFilePath()));
+            if (Objects.isNull(existFile)) {
+                // 保存文件信息
+                BlogFile newFile = BlogFile.builder()
+                        .fileUrl(url)
+                        .fileName(md5)
+                        .filePath(PHOTO.getFilePath())
+                        .extendName(extName)
+                        .fileSize((int) file.getSize())
+                        .isDir(FALSE)
+                        .build();
+                blogFileMapper.insert(newFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
 }

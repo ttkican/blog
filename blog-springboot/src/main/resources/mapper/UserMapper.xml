@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.UserMapper">
 
-    <resultMap id="UserBackMap" type="com.ican.model.vo.UserBackVO">
+    <resultMap id="UserBackMap" type="com.ican.model.vo.response.UserBackResp">
         <id column="id" property="id"/>
         <result column="nickname" property="nickname"/>
         <result column="avatar" property="avatar"/>
@@ -12,28 +12,28 @@
         <result column="is_disable" property="isDisable"/>
         <result column="login_time" property="loginTime"/>
         <result column="create_time" property="createTime"/>
-        <collection property="roleList" ofType="com.ican.model.vo.UserRoleVO">
+        <collection property="roleList" ofType="com.ican.model.vo.response.UserRoleResp">
             <id column="role_id" property="id"/>
             <id column="role_name" property="roleName"/>
         </collection>
     </resultMap>
 
-    <select id="countUser" resultType="java.lang.Long">
+    <select id="selectUserCount" resultType="java.lang.Long">
         SELECT
         count(id)
         FROM
         t_user
         <where>
-            <if test="condition.keyword != null">
-                nickname like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                nickname like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.loginType != null">
-                and login_type = #{condition.loginType}
+            <if test="param.loginType != null">
+                and login_type = #{param.loginType}
             </if>
         </where>
     </select>
 
-    <select id="listUserBackVO" resultMap="UserBackMap">
+    <select id="selectUserList" resultMap="UserBackMap">
         SELECT
         u.id,
         nickname,
@@ -49,14 +49,14 @@
         FROM
         ( SELECT id FROM t_user
         <where>
-            <if test="condition.keyword != null">
-                nickname like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                nickname like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.loginType != null">
-                and login_type = #{condition.loginType}
+            <if test="param.loginType != null">
+                and login_type = #{param.loginType}
             </if>
         </where>
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
         ) temp
         LEFT JOIN t_user u ON temp.id = u.id
         LEFT JOIN t_user_role ur ON temp.id = ur.user_id

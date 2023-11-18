@@ -20,15 +20,15 @@
         FROM
         ( SELECT id FROM t_visit_log
         <where>
-            <if test="keyword!=null">
-                page like concat('%',#{keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                page like concat('%',#{param.keyword},'%')
             </if>
         </where>
-        ORDER BY id DESC LIMIT #{limit},#{size} ) temp
+        ORDER BY id DESC LIMIT #{param.current},#{param.size} ) temp
         LEFT JOIN t_visit_log tvl ON temp.id = tvl.id
     </select>
 
-    <select id="selectUserViewList" resultType="com.ican.model.vo.UserViewVO">
+    <select id="selectUserViewList" resultType="com.ican.model.vo.response.UserViewResp">
         select count(distinct ip_address)           as uv,
                count(create_time)                   as pv,
                DATE_FORMAT(create_time, '%Y-%m-%d') as `date`

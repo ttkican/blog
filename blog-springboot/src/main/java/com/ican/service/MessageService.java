@@ -1,49 +1,92 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.Message;
-import com.ican.model.dto.CheckDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.MessageDTO;
-import com.ican.model.vo.MessageBackVO;
-import com.ican.model.vo.MessageVO;
+import com.ican.entity.SiteConfig;
+import com.ican.mapper.MessageMapper;
 import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.MessageQuery;
+import com.ican.model.vo.request.CheckReq;
+import com.ican.model.vo.request.MessageReq;
+import com.ican.model.vo.response.MessageBackResp;
+import com.ican.model.vo.response.MessageResp;
+import com.ican.utils.BeanCopyUtils;
+import com.ican.utils.HTMLUtils;
+import com.ican.utils.IpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.ican.constant.CommonConstant.FALSE;
+import static com.ican.constant.CommonConstant.TRUE;
 
 /**
- * 留言业务接口
+ * 留言业务接口实现类
  *
  * @author ican
  */
-public interface MessageService extends IService<Message> {
+@Service
+public class MessageService extends ServiceImpl<MessageMapper, Message> {
 
-    /**
-     * 查看留言列表
-     *
-     * @return 留言列表
-     */
-    List<MessageVO> listMessageVO();
+    @Autowired
+    private MessageMapper messageMapper;
 
-    /**
-     * 查看后台留言列表
-     *
-     * @param condition 条件
-     * @return 后台留言列表
-     */
-    PageResult<MessageBackVO> listMessageBackVO(ConditionDTO condition);
+    @Autowired
+    private HttpServletRequest request;
 
-    /**
-     * 添加留言
-     *
-     * @param message 留言
-     */
-    void addMessage(MessageDTO message);
+    @Autowired
+    private SiteConfigService siteConfigService;
 
-    /**
-     * 审核留言
-     *
-     * @param check 审核信息
-     */
-    void updateMessageCheck(CheckDTO check);
+    public List<MessageResp> listMessageVO() {
+        // 查询留言列表
+        return messageMapper.selectMessageVOList();
+    }
+
+    public PageResult<MessageBackResp> listMessageBackVO(MessageQuery messageQuery) {
+        // 查询留言数量
+        Long count = messageMapper.selectCount(new LambdaQueryWrapper<Message>()
+                .like(StringUtils.hasText(messageQuery.getKeyword()), Message::getNickname, messageQuery.getKeyword())
+                .eq(Objects.nonNull(messageQuery.getIsCheck()), Message::getIsCheck, messageQuery.getIsCheck()));
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询后台友链列表
+        List<MessageBackResp> messageBackRespList = messageMapper.selectBackMessageList(messageQuery);
+        return new PageResult<>(messageBackRespList, count);
+    }
+
+    public void addMessage(MessageReq message) {
+        SiteConfig siteConfig = siteConfigService.getSiteConfig();
+        Integer messageCheck = siteConfig.getMessageCheck();
+        String ipAddress = IpUtils.getIpAddress(request);
+        String ipSource = IpUtils.getIpSource(ipAddress);
+        Message newMessage = BeanCopyUtils.copyBean(message, Message.class);
+        newMessage.setMessageContent(HTMLUtils.filter(message.getMessageContent()));
+        newMessage.setIpAddress(ipAddress);
+        newMessage.setIsCheck(messageCheck.equals(FALSE) ? TRUE : FALSE);
+        newMessage.setIpSource(ipSource);
+        messageMapper.insert(newMessage);
+    }
+
+    public void updateMessageCheck(CheckReq check) {
+        // 修改留言审核状态
+        List<Message> messageList = check.getIdList()
+                .stream()
+                .map(id -> Message.builder()
+                        .id(id)
+                        .isCheck(check.getIsCheck())
+                        .build())
+                .collect(Collectors.toList());
+        this.updateBatchById(messageList);
+    }
 }
+
+
+
+

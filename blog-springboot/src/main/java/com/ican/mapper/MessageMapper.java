@@ -2,9 +2,9 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Message;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.MessageBackVO;
-import com.ican.model.vo.MessageVO;
+import com.ican.model.vo.query.MessageQuery;
+import com.ican.model.vo.response.MessageBackResp;
+import com.ican.model.vo.response.MessageResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -23,17 +23,15 @@ public interface MessageMapper extends BaseMapper<Message> {
      *
      * @return 留言列表
      */
-    List<MessageVO> selectMessageVOList();
+    List<MessageResp> selectMessageVOList();
 
     /**
      * 查询后台留言列表
      *
-     * @param limit     页码
-     * @param size      大小
-     * @param condition 条件
+     * @param messageQuery 留言查询条件
      * @return 后台留言列表
      */
-    List<MessageBackVO> selectMessageBackVOList(@Param("limit") Long limit, @Param("size") Long size, @Param("condition") ConditionDTO condition);
+    List<MessageBackResp> selectBackMessageList(@Param("param") MessageQuery messageQuery);
 }
 
 

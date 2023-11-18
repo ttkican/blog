@@ -2,11 +2,11 @@ package com.ican.strategy.impl;
 
 import com.ican.config.properties.GiteeProperties;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.CodeDTO;
-import com.ican.model.vo.GitUserInfoVO;
-import com.ican.model.vo.SocialTokenVO;
-import com.ican.model.vo.SocialUserInfoVO;
-import com.ican.model.vo.TokenVO;
+import com.ican.model.dto.GitUserInfoDTO;
+import com.ican.model.dto.SocialTokenDTO;
+import com.ican.model.dto.SocialUserInfoDTO;
+import com.ican.model.dto.TokenDTO;
+import com.ican.model.vo.request.CodeReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -37,37 +37,37 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
+    public SocialTokenDTO getSocialToken(CodeReq codeReq) {
         // 获取Gitee的Token
-        TokenVO giteeToken = getGiteeToken(codeDTO.getCode());
+        TokenDTO giteeToken = getGiteeToken(codeReq.getCode());
         // 返回Gitee的Token信息
-        return SocialTokenVO.builder()
+        return SocialTokenDTO.builder()
                 .accessToken(giteeToken.getAccess_token())
                 .loginType(GITEE.getLoginType())
                 .build();
     }
 
     @Override
-    public SocialUserInfoVO getSocialUserInfo(SocialTokenVO socialToken) {
+    public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         Map<String, String> dataMap = new HashMap<>(1);
         // 请求参数
         dataMap.put(ACCESS_TOKEN, socialToken.getAccessToken());
         // Gitee用户信息
-        GitUserInfoVO gitUserInfoVO = restTemplate.getForObject(giteeProperties.getUserInfoUrl(), GitUserInfoVO.class, dataMap);
+        GitUserInfoDTO gitUserInfoDTO = restTemplate.getForObject(giteeProperties.getUserInfoUrl(), GitUserInfoDTO.class, dataMap);
         // 返回用户信息
-        return SocialUserInfoVO.builder()
-                .avatar(Objects.requireNonNull(gitUserInfoVO).getAvatar_url())
-                .id(gitUserInfoVO.getId())
-                .nickname(gitUserInfoVO.getName()).build();
+        return SocialUserInfoDTO.builder()
+                .avatar(Objects.requireNonNull(gitUserInfoDTO).getAvatar_url())
+                .id(gitUserInfoDTO.getId())
+                .nickname(gitUserInfoDTO.getName()).build();
     }
 
     /**
      * 获取Gitee的Token
      *
      * @param code 第三方code
-     * @return {@link TokenVO} Gitee的Token
+     * @return {@link TokenDTO} Gitee的Token
      */
-    private TokenVO getGiteeToken(String code) {
+    private TokenDTO getGiteeToken(String code) {
         // 根据code换取accessToken
         MultiValueMap<String, String> giteeData = new LinkedMultiValueMap<>();
         // Gitee的Token请求参数
@@ -81,7 +81,7 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
             return restTemplate.exchange(giteeProperties.getAccessTokenUrl(),
                     HttpMethod.POST,
                     requestEntity,
-                    TokenVO.class).getBody();
+                    TokenDTO.class).getBody();
         } catch (Exception e) {
             throw new ServiceException("Gitee登录错误");
         }

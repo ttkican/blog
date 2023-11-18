@@ -1,6 +1,6 @@
 package com.ican.strategy;
 
-import com.ican.model.vo.ArticleSearchVO;
+import com.ican.model.vo.response.ArticleSearchResp;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public interface SearchStrategy {
      * 搜索文章
      *
      * @param keyword 关键字
-     * @return {@link List<ArticleSearchVO>} 文章列表
+     * @return {@link List< ArticleSearchResp >} 文章列表
      */
-    List<ArticleSearchVO> searchArticle(String keyword);
+    List<ArticleSearchResp> searchArticle(String keyword);
 }

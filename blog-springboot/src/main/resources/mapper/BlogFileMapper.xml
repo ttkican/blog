@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.BlogFileMapper">
 
-    <select id="selectFileVOList" resultType="com.ican.model.vo.FileVO">
+    <select id="selectFileVOList" resultType="com.ican.model.vo.response.FileResp">
         SELECT id,
         file_url,
         file_name,
@@ -13,10 +13,10 @@
         create_time
         FROM t_blog_file
         <where>
-            <if test="filePath != null">
-                file_path = #{filePath}
+            <if test="param.filePath != null and param.filePath != ''">
+                file_path = #{param.filePath}
             </if>
         </where>
-        LIMIT #{limit}, #{size}
+        LIMIT #{param.current}, #{param.size}
     </select>
 </mapper>

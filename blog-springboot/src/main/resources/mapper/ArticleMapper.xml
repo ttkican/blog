@@ -3,7 +3,7 @@
 
 <mapper namespace="com.ican.mapper.ArticleMapper">
 
-    <resultMap id="articleBackVO" type="com.ican.model.vo.ArticleBackVO">
+    <resultMap id="articleBackVO" type="com.ican.model.vo.response.ArticleBackResp">
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
@@ -14,30 +14,30 @@
         <result column="is_delete" property="isDelete"/>
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
-        <collection property="tagVOList" ofType="com.ican.model.vo.TagOptionVO">
+        <collection property="tagVOList" ofType="com.ican.model.vo.response.TagOptionResp">
             <id column="tag_id" property="id"/>
             <result column="tag_name" property="tagName"/>
         </collection>
     </resultMap>
 
-    <resultMap id="articleHomeVO" type="com.ican.model.vo.ArticleHomeVO">
+    <resultMap id="articleHomeVO" type="com.ican.model.vo.response.ArticleHomeResp">
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
         <result column="article_content" property="articleContent"/>
         <result column="is_top" property="isTop"/>
         <result column="create_time" property="createTime"/>
-        <association property="category" javaType="com.ican.model.vo.CategoryOptionVO">
+        <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
             <id column="category_id" property="id"/>
             <result column="category_name" property="categoryName"/>
         </association>
-        <collection property="tagVOList" ofType="com.ican.model.vo.TagOptionVO">
+        <collection property="tagVOList" ofType="com.ican.model.vo.response.TagOptionResp">
             <id column="tag_id" property="id"/>
             <result column="tag_name" property="tagName"/>
         </collection>
     </resultMap>
 
-    <resultMap id="articleVO" type="com.ican.model.vo.ArticleVO">
+    <resultMap id="articleVO" type="com.ican.model.vo.response.ArticleResp">
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
@@ -45,56 +45,56 @@
         <result column="article_type" property="articleType"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <association property="category" javaType="com.ican.model.vo.CategoryOptionVO">
+        <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
             <id column="category_id" property="id"/>
             <result column="category_name" property="categoryName"/>
         </association>
-        <collection property="tagVOList" ofType="com.ican.model.vo.TagOptionVO">
+        <collection property="tagVOList" ofType="com.ican.model.vo.response.TagOptionResp">
             <id column="tag_id" property="id"/>
             <result column="tag_name" property="tagName"/>
         </collection>
     </resultMap>
 
-    <resultMap id="articleConditionVO" type="com.ican.model.vo.ArticleConditionVO">
+    <resultMap id="articleConditionVO" type="com.ican.model.vo.response.ArticleConditionResp">
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
         <result column="create_time" property="createTime"/>
-        <association property="category" javaType="com.ican.model.vo.CategoryOptionVO">
+        <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
             <id column="category_id" property="id"/>
             <result column="category_name" property="categoryName"/>
         </association>
-        <collection property="tagVOList" ofType="com.ican.model.vo.TagOptionVO">
+        <collection property="tagVOList" ofType="com.ican.model.vo.response.TagOptionResp">
             <id column="tag_id" property="id"/>
             <result column="tag_name" property="tagName"/>
         </collection>
     </resultMap>
 
-    <select id="countArticleBackVO" resultType="java.lang.Long">
+    <select id="selectBackArticleCount" resultType="java.lang.Long">
         SELECT COUNT(DISTINCT a.id)
         FROM t_article a
         LEFT JOIN t_article_tag tat ON a.id = tat.article_id
         <where>
-            is_delete = #{condition.isDelete}
-            <if test="condition.keyword != null">
-                and article_title like concat('%',#{condition.keyword},'%')
+            is_delete = #{param.isDelete}
+            <if test="param.keyword != null and para.keyword != ''">
+                and article_title like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.status != null">
-                and `status` = #{condition.status}
+            <if test="param.status != null">
+                and `status` = #{param.status}
             </if>
-            <if test="condition.articleType != null">
-                and article_type = #{condition.articleType}
+            <if test="param.articleType != null">
+                and article_type = #{param.articleType}
             </if>
-            <if test="condition.categoryId != null">
-                and category_id = #{condition.categoryId}
+            <if test="param.categoryId != null">
+                and category_id = #{param.categoryId}
             </if>
-            <if test="condition.tagId != null">
-                and tat.tag_id = #{condition.tagId}
+            <if test="param.tagId != null">
+                and tat.tag_id = #{param.tagId}
             </if>
         </where>
     </select>
 
-    <select id="selectArticleBackVO" resultMap="articleBackVO">
+    <select id="selectBackArticleList" resultMap="articleBackVO">
         SELECT a.id,
         article_cover,
         article_title,
@@ -120,20 +120,20 @@
         create_time
         FROM t_article
         <where>
-            is_delete = #{condition.isDelete}
-            <if test="condition.keyword != null">
-                and article_title like concat('%',#{condition.keyword},'%')
+            is_delete = #{param.isDelete}
+            <if test="param.keyword != null and param.keyword != ''">
+                and article_title like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.status != null">
-                and status = #{condition.status}
+            <if test="param.status != null">
+                and status = #{param.status}
             </if>
-            <if test="condition.categoryId != null">
-                and category_id = #{condition.categoryId}
+            <if test="param.categoryId != null">
+                and category_id = #{param.categoryId}
             </if>
-            <if test="condition.articleType != null">
-                and article_type = #{condition.articleType}
+            <if test="param.articleType != null">
+                and article_type = #{param.articleType}
             </if>
-            <if test="condition.tagId != null">
+            <if test="param.tagId != null">
                 and id in
                 (
                 SELECT
@@ -141,20 +141,20 @@
                 FROM
                 t_article_tag
                 WHERE
-                tag_id = #{condition.tagId}
+                tag_id = #{param.tagId}
                 )
             </if>
         </where>
         ORDER BY is_top DESC,
         is_recommend DESC,
-        id DESC LIMIT #{limit}, #{size}
+        id DESC LIMIT #{param.current}, #{param.size}
         ) a
         LEFT JOIN t_category c ON a.category_id = c.id
         LEFT JOIN t_article_tag tat ON a.id = tat.article_id
         LEFT JOIN t_tag t ON t.id = tat.tag_id
     </select>
 
-    <select id="selectArticleInfoById" resultType="com.ican.model.vo.ArticleInfoVO">
+    <select id="selectArticleInfoById" resultType="com.ican.model.vo.response.ArticleInfoResp">
         select id,
                category_id,
                article_cover,
@@ -168,7 +168,7 @@
         where id = #{articleId}
     </select>
 
-    <select id="searchArticle" resultType="com.ican.model.vo.ArticleSearchVO">
+    <select id="searchArticle" resultType="com.ican.model.vo.response.ArticleSearchResp">
         SELECT id,
         article_title,
         article_content,
@@ -209,7 +209,7 @@
                  WHERE is_delete = 0
                    AND `status` = 1
                  ORDER BY is_top DESC,
-                          id DESC LIMIT #{limit}, #{size}
+                          id DESC LIMIT #{param.current}, #{param.size}
              ) a
                  INNER JOIN t_category c ON a.category_id = c.id
                  INNER JOIN t_article_tag tat ON a.id = tat.article_id
@@ -239,7 +239,7 @@
           AND a.id = #{articleId}
     </select>
 
-    <select id="selectLastArticle" resultType="com.ican.model.vo.ArticlePaginationVO">
+    <select id="selectLastArticle" resultType="com.ican.model.vo.response.ArticlePaginationResp">
         SELECT id, article_cover, article_title
         FROM t_article
         WHERE is_delete = 0
@@ -248,7 +248,7 @@
         ORDER BY id DESC LIMIT 1
     </select>
 
-    <select id="selectNextArticle" resultType="com.ican.model.vo.ArticlePaginationVO">
+    <select id="selectNextArticle" resultType="com.ican.model.vo.response.ArticlePaginationResp">
         SELECT id, article_cover, article_title
         FROM t_article
         WHERE is_delete = 0
@@ -257,16 +257,16 @@
         ORDER BY id ASC LIMIT 1
     </select>
 
-    <select id="selectArchiveList" resultType="com.ican.model.vo.ArchiveVO">
+    <select id="selectArchiveList" resultType="com.ican.model.vo.response.ArchiveResp">
         select id, article_title, article_cover, create_time
         from t_article
         where is_delete = 0
           and `status` = 1
         order by create_time
-            limit #{limit}, #{size}
+            LIMIT #{param.current}, #{param.size}
     </select>
 
-    <select id="selectArticleStatistics" resultType="com.ican.model.vo.ArticleStatisticsVO">
+    <select id="selectArticleStatistics" resultType="com.ican.model.vo.response.ArticleStatisticsResp">
         SELECT DATE_FORMAT(create_time, "%Y-%m-%d") AS date,
                COUNT(*)                             AS count
         FROM t_article
@@ -274,7 +274,7 @@
         ORDER BY date DESC
     </select>
 
-    <select id="selectArticleRecommend" resultType="com.ican.model.vo.ArticleRecommendVO">
+    <select id="selectArticleRecommend" resultType="com.ican.model.vo.response.ArticleRecommendResp">
         SELECT id,
                article_title,
                article_cover,
@@ -285,7 +285,7 @@
           AND is_recommend = 1 LIMIT 5
     </select>
 
-    <select id="listArticleByCondition" resultMap="articleConditionVO">
+    <select id="selectArticleListByCondition" resultMap="articleConditionVO">
         SELECT a.id,
         article_cover,
         article_title,
@@ -300,14 +300,14 @@
         INNER JOIN t_tag t ON tat.tag_id = t.id
         <where>
             is_delete = 0 and `status` = 1
-            <if test="condition.categoryId != null">
-                and category_id = #{condition.categoryId}
+            <if test="param.categoryId != null">
+                and category_id = #{param.categoryId}
             </if>
-            <if test="condition.tagId != null">
-                and tag_id = #{condition.tagId}
+            <if test="param.tagId != null">
+                and tag_id = #{param.tagId}
             </if>
         </where>
         ORDER BY a.id DESC
-        LIMIT #{limit}, #{size}
+        LIMIT #{param.current}, #{param.size}
     </select>
 </mapper>

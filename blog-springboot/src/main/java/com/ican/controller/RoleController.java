@@ -3,12 +3,12 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import com.ican.annotation.OptLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.RoleDTO;
-import com.ican.model.dto.RoleStatusDTO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
-import com.ican.model.vo.RoleVO;
+import com.ican.model.vo.query.RoleQuery;
+import com.ican.model.vo.request.RoleReq;
+import com.ican.model.vo.request.RoleStatusReq;
+import com.ican.model.vo.response.RoleResp;
 import com.ican.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,16 +34,16 @@ public class RoleController {
     private RoleService roleService;
 
     /**
-     * 查看角色列表
+     * 查看后台角色列表
      *
-     * @param condition 查询条件
-     * @return {@link RoleVO} 角色列表
+     * @param roleQuery 角色查询条件
+     * @return {@link RoleResp} 角色列表
      */
-    @ApiOperation(value = "查看角色列表")
+    @ApiOperation(value = "查看后台角色列表")
     @SaCheckPermission("system:role:list")
     @GetMapping("/admin/role/list")
-    public Result<PageResult<RoleVO>> listRoleVO(ConditionDTO condition) {
-        return Result.success(roleService.listRoleVO(condition));
+    public Result<PageResult<RoleResp>> listRoleVO(RoleQuery roleQuery) {
+        return Result.success(roleService.listRoleVO(roleQuery));
     }
 
     /**
@@ -56,7 +56,7 @@ public class RoleController {
     @ApiOperation(value = "添加角色")
     @SaCheckPermission("system:role:add")
     @PostMapping("/admin/role/add")
-    public Result<?> addRole(@Validated @RequestBody RoleDTO role) {
+    public Result<?> addRole(@Validated @RequestBody RoleReq role) {
         roleService.addRole(role);
         return Result.success();
     }
@@ -86,7 +86,7 @@ public class RoleController {
     @ApiOperation(value = "修改角色")
     @SaCheckPermission("system:role:update")
     @PutMapping("/admin/role/update")
-    public Result<?> updateRole(@Validated @RequestBody RoleDTO role) {
+    public Result<?> updateRole(@Validated @RequestBody RoleReq role) {
         roleService.updateRole(role);
         return Result.success();
     }
@@ -101,7 +101,7 @@ public class RoleController {
     @ApiOperation(value = "修改角色状态")
     @SaCheckPermission(value = {"system:role:update", "system:role:status"}, mode = SaMode.OR)
     @PutMapping("/admin/role/changeStatus")
-    public Result<?> updateRoleStatus(@Validated @RequestBody RoleStatusDTO roleStatus) {
+    public Result<?> updateRoleStatus(@Validated @RequestBody RoleStatusReq roleStatus) {
         roleService.updateRoleStatus(roleStatus);
         return Result.success();
     }

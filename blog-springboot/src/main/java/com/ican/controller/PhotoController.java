@@ -3,10 +3,14 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.PhotoDTO;
-import com.ican.model.dto.PhotoInfoDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.Result;
+import com.ican.model.vo.query.PhotoQuery;
+import com.ican.model.vo.request.PhotoInfoReq;
+import com.ican.model.vo.request.PhotoReq;
+import com.ican.model.vo.response.AlbumBackResp;
+import com.ican.model.vo.response.PhotoBackResp;
+import com.ican.model.vo.response.PhotoResp;
 import com.ican.service.PhotoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,26 +41,26 @@ public class PhotoController {
     /**
      * 查看后台照片列表
      *
-     * @param condition 条件
-     * @return {@link Result<PhotoBackVO>} 后台照片列表
+     * @param photoQuery 照片查询条件
+     * @return {@link Result<  PhotoBackResp  >} 后台照片列表
      */
     @ApiOperation(value = "查看后台照片列表")
     @SaCheckPermission("web:photo:list")
     @GetMapping("/admin/photo/list")
-    public Result<PageResult<PhotoBackVO>> listPhotoBackVO(ConditionDTO condition) {
-        return Result.success(photoService.listPhotoBackVO(condition));
+    public Result<PageResult<PhotoBackResp>> listPhotoBackVO(PhotoQuery photoQuery) {
+        return Result.success(photoService.listPhotoBackVO(photoQuery));
     }
 
     /**
      * 查看照片相册信息
      *
      * @param albumId 相册id
-     * @return {@link Result<AlbumBackVO>} 相册信息
+     * @return {@link Result< AlbumBackResp >} 相册信息
      */
     @ApiOperation(value = "查看照片相册信息")
     @SaCheckPermission("web:photo:list")
     @GetMapping("/admin/photo/album/{albumId}/info")
-    public Result<AlbumBackVO> getAlbumInfo(@PathVariable("albumId") Integer albumId) {
+    public Result<AlbumBackResp> getAlbumInfo(@PathVariable("albumId") Integer albumId) {
         return Result.success(photoService.getAlbumInfo(albumId));
     }
 
@@ -85,7 +89,7 @@ public class PhotoController {
     @ApiOperation(value = "添加照片")
     @SaCheckPermission("web:photo:add")
     @PostMapping("/admin/photo/add")
-    public Result<?> addPhoto(@Validated @RequestBody PhotoDTO photo) {
+    public Result<?> addPhoto(@Validated @RequestBody PhotoReq photo) {
         photoService.addPhoto(photo);
         return Result.success();
     }
@@ -100,7 +104,7 @@ public class PhotoController {
     @ApiOperation(value = "修改照片信息")
     @SaCheckPermission("web:photo:update")
     @PutMapping("/admin/photo/update")
-    public Result<?> updatePhoto(@Validated @RequestBody PhotoInfoDTO photoInfo) {
+    public Result<?> updatePhoto(@Validated @RequestBody PhotoInfoReq photoInfo) {
         photoService.updatePhoto(photoInfo);
         return Result.success();
     }
@@ -130,7 +134,7 @@ public class PhotoController {
     @ApiOperation(value = "移动照片")
     @SaCheckPermission("web:photo:move")
     @PutMapping("/admin/photo/move")
-    public Result<?> movePhoto(@Validated @RequestBody PhotoDTO photo) {
+    public Result<?> movePhoto(@Validated @RequestBody PhotoReq photo) {
         photoService.movePhoto(photo);
         return Result.success();
     }
@@ -138,13 +142,13 @@ public class PhotoController {
     /**
      * 查看照片列表
      *
-     * @return {@link Result<PhotoVO> 照片列表
+     * @return {@link Result<  PhotoResp  > 照片列表
      */
     @VisitLogger(value = "照片")
     @ApiOperation(value = "查看照片列表")
     @GetMapping("/photo/list")
-    public Result<Map<String, Object>> listPhotoVO(ConditionDTO condition) {
-        return Result.success(photoService.listPhotoVO(condition));
+    public Result<Map<String, Object>> listPhotoVO(@RequestParam Integer albumId) {
+        return Result.success(photoService.listPhotoVO(albumId));
     }
 
 }

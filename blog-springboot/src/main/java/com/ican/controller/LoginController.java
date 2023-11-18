@@ -3,10 +3,10 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.ican.annotation.AccessLimit;
-import com.ican.model.dto.CodeDTO;
-import com.ican.model.dto.LoginDTO;
-import com.ican.model.dto.RegisterDTO;
 import com.ican.model.vo.Result;
+import com.ican.model.vo.request.CodeReq;
+import com.ican.model.vo.request.LoginReq;
+import com.ican.model.vo.request.RegisterReq;
 import com.ican.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,7 @@ public class LoginController {
      */
     @ApiOperation(value = "用户登录")
     @PostMapping("/login")
-    public Result<String> login(@Validated @RequestBody LoginDTO login) {
+    public Result<String> login(@Validated @RequestBody LoginReq login) {
         return Result.success(loginService.login(login));
     }
 
@@ -73,7 +73,7 @@ public class LoginController {
      */
     @ApiOperation(value = "用户邮箱注册")
     @PostMapping("/register")
-    public Result<?> register(@Validated @RequestBody RegisterDTO register) {
+    public Result<?> register(@Validated @RequestBody RegisterReq register) {
         loginService.register(register);
         return Result.success();
     }
@@ -86,7 +86,7 @@ public class LoginController {
      */
     @ApiOperation(value = "Gitee登录")
     @PostMapping("/oauth/gitee")
-    public Result<String> giteeLogin(@RequestBody CodeDTO data) {
+    public Result<String> giteeLogin(@RequestBody CodeReq data) {
         return Result.success(loginService.giteeLogin(data));
     }
 
@@ -98,7 +98,7 @@ public class LoginController {
      */
     @ApiOperation(value = "Github登录")
     @PostMapping("/oauth/github")
-    public Result<String> githubLogin(@RequestBody CodeDTO data) {
+    public Result<String> githubLogin(@RequestBody CodeReq data) {
         return Result.success(loginService.githubLogin(data));
     }
 
@@ -110,7 +110,7 @@ public class LoginController {
      */
     @ApiOperation(value = "QQ登录")
     @PostMapping("/oauth/qq")
-    public Result<String> qqLogin(@Validated @RequestBody CodeDTO data) {
+    public Result<String> qqLogin(@Validated @RequestBody CodeReq data) {
         return Result.success(loginService.qqLogin(data));
     }
 }

@@ -92,7 +92,7 @@ public class IpUtils {
      */
     public static String getIpSource(String ip) {
         try {
-            String address = searcher.searchByStr(ip);
+            String address = searcher.search(ip);
             if (StringUtils.hasText(address)) {
                 address = address.replace("|0", "");
                 address = address.replace("0|", "");

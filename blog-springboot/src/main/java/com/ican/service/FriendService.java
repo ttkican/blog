@@ -1,48 +1,66 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.Friend;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.FriendDTO;
-import com.ican.model.vo.FriendBackVO;
-import com.ican.model.vo.FriendVO;
+import com.ican.mapper.FriendMapper;
 import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.FriendQuery;
+import com.ican.model.vo.request.FriendReq;
+import com.ican.model.vo.response.FriendBackResp;
+import com.ican.model.vo.response.FriendResp;
+import com.ican.service.FriendService;
+import com.ican.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 /**
- * 友链业务接口
+ * 友链服务
  *
  * @author ican
  */
-public interface FriendService extends IService<Friend> {
+@Service
+public class FriendService extends ServiceImpl<FriendMapper, Friend> {
 
-    /**
-     * 查看友链列表
-     *
-     * @return 友链列表
-     */
-    List<FriendVO> listFriendVO();
+    @Autowired
+    private FriendMapper friendMapper;
 
-    /**
-     * 查看后台友链列表
-     *
-     * @param condition 查询条件
-     * @return 后台友链列表
-     */
-    PageResult<FriendBackVO> listFriendBackVO(ConditionDTO condition);
+    public List<FriendResp> listFriendVO() {
+        // 查询友链列表
+        return friendMapper.selectFriendVOList();
+    }
 
-    /**
-     * 添加友链
-     *
-     * @param friend 友链
-     */
-    void addFriend(FriendDTO friend);
+    public PageResult<FriendBackResp> listFriendBackVO(FriendQuery friendQuery) {
+        // 查询友链数量
+        Long count = friendMapper.selectCount(new LambdaQueryWrapper<Friend>()
+                .like(StringUtils.hasText(friendQuery.getKeyword()), Friend::getName, friendQuery.getKeyword())
+        );
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询后台友链列表
+        List<FriendBackResp> friendBackVOList = friendMapper.selectFriendBackVOList(friendQuery);
+        return new PageResult<>(friendBackVOList, count);
+    }
 
-    /**
-     * 修改友链
-     *
-     * @param friend 友链
-     */
-    void updateFriend(FriendDTO friend);
+    public void addFriend(FriendReq friend) {
+        // 新友链
+        Friend newFriend = BeanCopyUtils.copyBean(friend, Friend.class);
+        // 添加友链
+        baseMapper.insert(newFriend);
+    }
+
+    public void updateFriend(FriendReq friend) {
+        // 新友链
+        Friend newFriend = BeanCopyUtils.copyBean(friend, Friend.class);
+        // 更新友链
+        baseMapper.updateById(newFriend);
+    }
 }
+
+
+
+

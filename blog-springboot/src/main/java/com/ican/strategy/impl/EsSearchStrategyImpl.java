@@ -4,7 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import com.ican.model.vo.ArticleSearchVO;
+import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.strategy.SearchStrategy;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +34,7 @@ public class EsSearchStrategyImpl implements SearchStrategy {
     private ElasticsearchClient elasticsearchClient;
 
     @Override
-    public List<ArticleSearchVO> searchArticle(String keyword) {
+    public List<ArticleSearchResp> searchArticle(String keyword) {
         if (StringUtils.isBlank(keyword)) {
             return new ArrayList<>();
         }
@@ -51,7 +51,7 @@ public class EsSearchStrategyImpl implements SearchStrategy {
                             .fields(ARTICLE_CONTENT, f -> f.preTags(PRE_TAG).postTags(POST_TAG))
                             .requireFieldMatch(false)
                     ));
-            SearchResponse<ArticleSearchVO> search = elasticsearchClient.search(searchRequest, ArticleSearchVO.class);
+            SearchResponse<ArticleSearchResp> search = elasticsearchClient.search(searchRequest, ArticleSearchResp.class);
             // 解析结果
             return handleResponse(search);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class EsSearchStrategyImpl implements SearchStrategy {
         return new ArrayList<>();
     }
 
-    private List<ArticleSearchVO> handleResponse(SearchResponse<ArticleSearchVO> response) {
+    private List<ArticleSearchResp> handleResponse(SearchResponse<ArticleSearchResp> response) {
         // 解析结果并返回
         return response.hits().hits().stream()
                 .map(hit -> {

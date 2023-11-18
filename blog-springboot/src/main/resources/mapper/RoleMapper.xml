@@ -9,22 +9,22 @@
           AND r.is_disable = 0
     </select>
 
-    <select id="selectCountRoleVO" resultType="java.lang.Long">
+    <select id="selectBackRoleCount" resultType="java.lang.Long">
         SELECT
         COUNT(id)
         FROM
         t_role
         <where>
-            <if test="condition.keyword != null">
-                role_name like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and para.keyword != ''">
+                role_name like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.isDisable != null">
-                and is_disable = #{condition.isDisable}
+            <if test="param.isDisable != null">
+                and is_disable = #{param.isDelete}
             </if>
         </where>
     </select>
 
-    <select id="selectRoleVOList" resultType="com.ican.model.vo.RoleVO">
+    <select id="selectBackRoleList" resultType="com.ican.model.vo.response.RoleResp">
         SELECT id,
         role_name,
         role_desc,
@@ -32,18 +32,18 @@
         create_time
         FROM t_role
         <where>
-            <if test="condition.keyword != null">
-                role_name like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and para.keyword != ''">
+                role_name like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.isDisable != null">
-                and is_disable = #{condition.isDisable}
+            <if test="param.isDisable != null">
+                and is_disable = #{param.isDelete}
             </if>
         </where>
         ORDER BY id
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
     </select>
 
-    <select id="selectUserRoleList" resultType="com.ican.model.vo.UserRoleVO">
+    <select id="selectUserRoleList" resultType="com.ican.model.vo.response.UserRoleResp">
         select id, role_name
         from t_role
     </select>

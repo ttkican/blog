@@ -2,7 +2,7 @@ package com.ican.consumer;
 
 import cn.hutool.json.JSONUtil;
 import com.ican.model.dto.CanalDTO;
-import com.ican.model.vo.ArticleSearchVO;
+import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.service.ElasticsearchService;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
@@ -41,7 +41,7 @@ public class ArticleConsumer {
         if (canalDTO.getIsDdl()) {
             return;
         }
-        ArticleSearchVO article = JSONUtil.toBean(JSONUtil.toJsonStr(canalDTO.getData().get(0)), ArticleSearchVO.class);
+        ArticleSearchResp article = JSONUtil.toBean(JSONUtil.toJsonStr(canalDTO.getData().get(0)), ArticleSearchResp.class);
         switch (canalDTO.getType()) {
             case INSERT:
                 elasticsearchService.addArticle(article);

@@ -3,12 +3,12 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
-import com.ican.model.dto.AlbumDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.AlbumBackVO;
-import com.ican.model.vo.AlbumVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
+import com.ican.model.vo.query.AlbumQuery;
+import com.ican.model.vo.request.AlbumReq;
+import com.ican.model.vo.response.AlbumBackResp;
+import com.ican.model.vo.response.AlbumResp;
 import com.ican.service.AlbumService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,14 +38,14 @@ public class AlbumController {
     /**
      * 查看后台相册列表
      *
-     * @param condition 条件
-     * @return {@link PageResult<AlbumBackVO>} 后台相册列表
+     * @param albumQuery 相册查询条件
+     * @return {@link PageResult< AlbumBackResp >} 后台相册列表
      */
     @ApiOperation(value = "查看后台相册列表")
     @SaCheckPermission("web:album:list")
     @GetMapping("/admin/album/list")
-    public Result<PageResult<AlbumBackVO>> listAlbumBackVO(ConditionDTO condition) {
-        return Result.success(albumService.listAlbumBackVO(condition));
+    public Result<PageResult<AlbumBackResp>> listAlbumBackVO(AlbumQuery albumQuery) {
+        return Result.success(albumService.listAlbumBackVO(albumQuery));
     }
 
     /**
@@ -73,7 +73,7 @@ public class AlbumController {
     @ApiOperation(value = "添加相册")
     @SaCheckPermission("web:album:add")
     @PostMapping("/admin/album/add")
-    public Result<?> addAlbum(@Validated @RequestBody AlbumDTO album) {
+    public Result<?> addAlbum(@Validated @RequestBody AlbumReq album) {
         albumService.addAlbum(album);
         return Result.success();
     }
@@ -103,7 +103,7 @@ public class AlbumController {
     @ApiOperation(value = "修改相册")
     @SaCheckPermission("web:album:update")
     @PutMapping("/admin/album/update")
-    public Result<?> updateAlbum(@Validated @RequestBody AlbumDTO album) {
+    public Result<?> updateAlbum(@Validated @RequestBody AlbumReq album) {
         albumService.updateAlbum(album);
         return Result.success();
     }
@@ -112,24 +112,24 @@ public class AlbumController {
      * 编辑相册
      *
      * @param albumId 相册id
-     * @return {@link Result<AlbumDTO>} 相册
+     * @return {@link Result< AlbumReq >} 相册
      */
     @ApiOperation(value = "编辑相册")
     @SaCheckPermission("web:album:edit")
     @GetMapping("/admin/album/edit/{albumId}")
-    public Result<AlbumDTO> editAlbum(@PathVariable("albumId") Integer albumId) {
+    public Result<AlbumReq> editAlbum(@PathVariable("albumId") Integer albumId) {
         return Result.success(albumService.editAlbum(albumId));
     }
 
     /**
      * 查看相册列表
      *
-     * @return {@link Result<AlbumVO> 相册列表
+     * @return {@link Result< AlbumResp > 相册列表
      */
     @VisitLogger(value = "相册")
     @ApiOperation(value = "查看相册列表")
     @GetMapping("/album/list")
-    public Result<List<AlbumVO>> listAlbumVO() {
+    public Result<List<AlbumResp>> listAlbumVO() {
         return Result.success(albumService.listAlbumVO());
     }
 

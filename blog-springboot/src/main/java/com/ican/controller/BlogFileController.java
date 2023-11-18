@@ -2,11 +2,11 @@ package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.FolderDTO;
-import com.ican.model.vo.FileVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
+import com.ican.model.vo.query.FileQuery;
+import com.ican.model.vo.request.FolderReq;
+import com.ican.model.vo.response.FileResp;
 import com.ican.service.BlogFileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,14 +36,14 @@ public class BlogFileController {
     /**
      * 查看文件列表
      *
-     * @param condition 查询条件
-     * @return {@link Result<FileVO>} 文件列表
+     * @param fileQuery 查询条件
+     * @return {@link Result< FileResp >} 文件列表
      */
     @ApiOperation(value = "查看文件列表")
     @SaCheckPermission("system:file:list")
     @GetMapping("/admin/file/list")
-    public Result<PageResult<FileVO>> listFileVOList(ConditionDTO condition) {
-        return Result.success(fileService.listFileVOList(condition));
+    public Result<PageResult<FileResp>> listFileVOList(FileQuery fileQuery) {
+        return Result.success(fileService.listFileVOList(fileQuery));
     }
 
     /**
@@ -72,7 +72,7 @@ public class BlogFileController {
     @ApiOperation(value = "创建目录")
     @SaCheckPermission("system:file:createFolder")
     @PostMapping("/admin/file/createFolder")
-    public Result<?> createFolder(@Validated @RequestBody FolderDTO folder) {
+    public Result<?> createFolder(@Validated @RequestBody FolderReq folder) {
         fileService.createFolder(folder);
         return Result.success();
     }

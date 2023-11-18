@@ -1,6 +1,5 @@
 package com.ican.satoken;
 
-import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.filter.SaServletFilter;
@@ -97,7 +96,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                         return JSONUtil.toJsonStr(Result.fail(UNAUTHORIZED.getCode(), UNAUTHORIZED.getMsg()));
                     }
                     // TODO 服务器后端在这里无法捕获异常，仅仅将异常信息传给了前端
-                    err.printStackTrace();
+                    e.printStackTrace();
                     return SaResult.error(e.getMessage());
                 });
     }

@@ -2,12 +2,12 @@ package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.MenuDTO;
-import com.ican.model.vo.MenuOption;
-import com.ican.model.vo.MenuTree;
-import com.ican.model.vo.MenuVO;
+import com.ican.model.vo.response.MenuOptionResp;
 import com.ican.model.vo.Result;
+import com.ican.model.vo.query.MenuQuery;
+import com.ican.model.vo.request.MenuReq;
+import com.ican.model.vo.response.MenuResp;
+import com.ican.model.vo.response.MenuTreeResp;
 import com.ican.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,13 +35,14 @@ public class MenuController {
     /**
      * 查看菜单列表
      *
-     * @return {@link MenuVO} 菜单列表
+     * @param menuQuery 菜单查询条件
+     * @return {@link MenuResp} 菜单列表
      */
     @ApiOperation(value = "查看菜单列表")
     @SaCheckPermission("system:menu:list")
     @GetMapping("/admin/menu/list")
-    public Result<List<MenuVO>> listMenuVO(ConditionDTO condition) {
-        return Result.success(menuService.listMenuVO(condition));
+    public Result<List<MenuResp>> listMenuVO(MenuQuery menuQuery) {
+        return Result.success(menuService.listMenuVO(menuQuery));
     }
 
     /**
@@ -53,7 +54,7 @@ public class MenuController {
     @ApiOperation(value = "添加菜单")
     @SaCheckPermission("system:menu:add")
     @PostMapping("/admin/menu/add")
-    public Result<?> addMenu(@Validated @RequestBody MenuDTO menu) {
+    public Result<?> addMenu(@Validated @RequestBody MenuReq menu) {
         menuService.addMenu(menu);
         return Result.success();
     }
@@ -82,7 +83,7 @@ public class MenuController {
     @ApiOperation(value = "修改菜单")
     @SaCheckPermission("system:menu:update")
     @PutMapping("/admin/menu/update")
-    public Result<?> updateMenu(@Validated @RequestBody MenuDTO menu) {
+    public Result<?> updateMenu(@Validated @RequestBody MenuReq menu) {
         menuService.updateMenu(menu);
         return Result.success();
     }
@@ -90,24 +91,24 @@ public class MenuController {
     /**
      * 获取菜单下拉树
      *
-     * @return {@link MenuTree} 菜单树
+     * @return {@link MenuTreeResp} 菜单树
      */
     @ApiOperation(value = "获取菜单下拉树")
     @SaCheckPermission("system:role:list")
     @GetMapping("/admin/menu/getMenuTree")
-    public Result<List<MenuTree>> listMenuTree() {
+    public Result<List<MenuTreeResp>> listMenuTree() {
         return Result.success(menuService.listMenuTree());
     }
 
     /**
      * 获取菜单选项树
      *
-     * @return {@link MenuOption} 菜单下拉树
+     * @return {@link MenuOptionResp} 菜单下拉树
      */
     @ApiOperation(value = "获取菜单选项树")
     @SaCheckPermission("system:menu:list")
     @GetMapping("/admin/menu/getMenuOptions")
-    public Result<List<MenuOption>> listMenuOption() {
+    public Result<List<MenuOptionResp>> listMenuOption() {
         return Result.success(menuService.listMenuOption());
     }
 
@@ -115,12 +116,12 @@ public class MenuController {
      * 编辑菜单
      *
      * @param menuId 菜单id
-     * @return {@link MenuDTO} 菜单
+     * @return {@link MenuReq} 菜单
      */
     @ApiOperation(value = "编辑菜单")
     @SaCheckPermission("system:menu:edit")
     @GetMapping("/admin/menu/edit/{menuId}")
-    public Result<MenuDTO> editMenu(@PathVariable("menuId") Integer menuId) {
+    public Result<MenuReq> editMenu(@PathVariable("menuId") Integer menuId) {
         return Result.success(menuService.editMenu(menuId));
     }
 

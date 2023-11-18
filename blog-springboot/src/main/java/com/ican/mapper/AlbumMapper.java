@@ -2,9 +2,10 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Album;
-import com.ican.model.dto.AlbumDTO;
-import com.ican.model.vo.AlbumBackVO;
-import com.ican.model.vo.AlbumVO;
+import com.ican.model.vo.query.AlbumQuery;
+import com.ican.model.vo.request.AlbumReq;
+import com.ican.model.vo.response.AlbumBackResp;
+import com.ican.model.vo.response.AlbumResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,12 +22,10 @@ public interface AlbumMapper extends BaseMapper<Album> {
     /**
      * 查询后台相册列表
      *
-     * @param limit   页码
-     * @param size    大小
-     * @param keyword 关键字
+     * @param albumQuery 相册查询条件
      * @return 后台相册列表
      */
-    List<AlbumBackVO> selectAlbumBackVO(@Param("limit") Long limit, @Param("size") Long size, @Param("keyword") String keyword);
+    List<AlbumBackResp> selectBackAlbumList(@Param("param") AlbumQuery albumQuery);
 
     /**
      * 根据id查询相册信息
@@ -34,7 +33,7 @@ public interface AlbumMapper extends BaseMapper<Album> {
      * @param albumId 相册id
      * @return 相册
      */
-    AlbumDTO selectAlbumById(@Param("albumId") Integer albumId);
+    AlbumReq selectAlbumById(@Param("albumId") Integer albumId);
 
     /**
      * 根据id查询照片相册信息
@@ -42,14 +41,14 @@ public interface AlbumMapper extends BaseMapper<Album> {
      * @param albumId 相册id
      * @return 照片相册信息
      */
-    AlbumBackVO selectAlbumInfoById(Integer albumId);
+    AlbumBackResp selectAlbumInfoById(Integer albumId);
 
     /**
      * 查看相册列表
      *
      * @return 相册列表
      */
-    List<AlbumVO> selectAlbumVOList();
+    List<AlbumResp> selectAlbumVOList();
 }
 
 

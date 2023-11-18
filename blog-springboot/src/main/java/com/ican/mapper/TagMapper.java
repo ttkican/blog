@@ -2,9 +2,10 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Tag;
-import com.ican.model.vo.TagBackVO;
-import com.ican.model.vo.TagOptionVO;
-import com.ican.model.vo.TagVO;
+import com.ican.model.vo.query.TagQuery;
+import com.ican.model.vo.response.TagBackResp;
+import com.ican.model.vo.response.TagOptionResp;
+import com.ican.model.vo.response.TagResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,12 +23,10 @@ public interface TagMapper extends BaseMapper<Tag> {
     /**
      * 查询后台标签列表
      *
-     * @param limit   页码
-     * @param size    大小
-     * @param keyword 关键字
+     * @param tagQuery 标签查询条件
      * @return 后台标签列表
      */
-    List<TagBackVO> selectTagBackVO(@Param("limit") Long limit, @Param("size") Long size, @Param("keyword") String keyword);
+    List<TagBackResp> selectBackTagList(@Param("param") TagQuery tagQuery);
 
     /**
      * 根据标签名查询标签
@@ -57,12 +56,12 @@ public interface TagMapper extends BaseMapper<Tag> {
      *
      * @return 文章标签列表
      */
-    List<TagVO> selectTagVOList();
+    List<TagResp> selectTagVOList();
 
     /**
      * 查询标签列表
      *
      * @return 标签列表
      */
-    List<TagOptionVO> selectTagOptionList();
+    List<TagOptionResp> selectTagOptionList();
 }

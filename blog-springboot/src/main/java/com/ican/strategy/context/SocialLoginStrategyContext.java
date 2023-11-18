@@ -1,7 +1,7 @@
 package com.ican.strategy.context;
 
 import com.ican.enums.LoginTypeEnum;
-import com.ican.model.dto.CodeDTO;
+import com.ican.model.vo.request.CodeReq;
 import com.ican.strategy.SocialLoginStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class SocialLoginStrategyContext {
      * @param loginTypeEnum 登录枚举
      * @return {@link String} Token
      */
-    public String executeLoginStrategy(CodeDTO data, LoginTypeEnum loginTypeEnum) {
+    public String executeLoginStrategy(CodeReq data, LoginTypeEnum loginTypeEnum) {
         return socialLoginStrategyMap.get(loginTypeEnum.getStrategy()).login(data);
     }
 }

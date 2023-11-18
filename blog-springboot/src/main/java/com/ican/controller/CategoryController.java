@@ -3,9 +3,15 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
-import com.ican.model.dto.CategoryDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.response.ArticleConditionList;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.Result;
+import com.ican.model.vo.query.ArticleConditionQuery;
+import com.ican.model.vo.query.CategoryQuery;
+import com.ican.model.vo.request.CategoryReq;
+import com.ican.model.vo.response.CategoryBackResp;
+import com.ican.model.vo.response.CategoryOptionResp;
+import com.ican.model.vo.response.CategoryResp;
 import com.ican.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,14 +39,14 @@ public class CategoryController {
     /**
      * 查看后台分类列表
      *
-     * @param condition 查询条件
-     * @return {@link CategoryBackVO} 后台分类
+     * @param categoryQuery 分类查询条件
+     * @return {@link CategoryBackResp} 后台分类
      */
     @ApiOperation(value = "查看后台分类列表")
     @SaCheckPermission("blog:category:list")
     @GetMapping("/admin/category/list")
-    public Result<PageResult<CategoryBackVO>> listCategoryBackVO(ConditionDTO condition) {
-        return Result.success(categoryService.listCategoryBackVO(condition));
+    public Result<PageResult<CategoryBackResp>> listCategoryBackVO(CategoryQuery categoryQuery) {
+        return Result.success(categoryService.listCategoryBackVO(categoryQuery));
     }
 
     /**
@@ -53,7 +59,7 @@ public class CategoryController {
     @ApiOperation(value = "添加分类")
     @SaCheckPermission("blog:category:add")
     @PostMapping("/admin/category/add")
-    public Result<?> addCategory(@Validated @RequestBody CategoryDTO category) {
+    public Result<?> addCategory(@Validated @RequestBody CategoryReq category) {
         categoryService.addCategory(category);
         return Result.success();
     }
@@ -83,7 +89,7 @@ public class CategoryController {
     @ApiOperation(value = "修改分类")
     @SaCheckPermission("blog:category:update")
     @PutMapping("/admin/category/update")
-    public Result<?> updateCategory(@Validated @RequestBody CategoryDTO category) {
+    public Result<?> updateCategory(@Validated @RequestBody CategoryReq category) {
         categoryService.updateCategory(category);
         return Result.success();
     }
@@ -91,37 +97,37 @@ public class CategoryController {
     /**
      * 查看分类选项
      *
-     * @return {@link Result<CategoryOptionVO>} 分类列表
+     * @return {@link Result<  CategoryOptionResp  >} 分类列表
      */
     @ApiOperation(value = "查看分类选项")
     @GetMapping("/admin/category/option")
-    public Result<List<CategoryOptionVO>> listCategoryOption() {
+    public Result<List<CategoryOptionResp>> listCategoryOption() {
         return Result.success(categoryService.listCategoryOption());
     }
 
     /**
      * 查看分类列表
      *
-     * @return {@link Result<CategoryDTO>} 分类列表
+     * @return {@link Result< CategoryReq >} 分类列表
      */
     @VisitLogger(value = "文章分类")
     @ApiOperation(value = "查看分类列表")
     @GetMapping("/category/list")
-    public Result<List<CategoryVO>> listCategoryVO() {
+    public Result<List<CategoryResp>> listCategoryVO() {
         return Result.success(categoryService.listCategoryVO());
     }
 
     /**
      * 查看分类下的文章
      *
-     * @param condition 查询条件
+     * @param articleConditionQuery 查询条件
      * @return 文章列表
      */
     @VisitLogger(value = "分类文章")
     @ApiOperation(value = "查看分类下的文章")
     @GetMapping("/category/article")
-    public Result<ArticleConditionList> listArticleCategory(ConditionDTO condition) {
-        return Result.success(categoryService.listArticleCategory(condition));
+    public Result<ArticleConditionList> listArticleCategory(@Validated ArticleConditionQuery articleConditionQuery) {
+        return Result.success(categoryService.listArticleCategory(articleConditionQuery));
     }
 
 }

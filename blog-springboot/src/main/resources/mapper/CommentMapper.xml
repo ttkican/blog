@@ -11,19 +11,19 @@
         t_comment c
         LEFT JOIN t_user u ON c.from_uid = u.id
         <where>
-            <if test="condition.commentType != null">
-                c.comment_type = #{condition.commentType}
+            <if test="param.commentType != null">
+                c.comment_type=#{param.commentType}
             </if>
-            <if test="condition.keyword != null">
-                and u.nickname like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                AND u.nickname LIKE concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.isCheck != null">
-                and c.is_check = #{condition.isCheck}
+            <if test="param.isCheck != null">
+                AND c.is_check = #{param.isCheck}
             </if>
         </where>
     </select>
 
-    <select id="listCommentBackVO" resultType="com.ican.model.vo.CommentBackVO">
+    <select id="selectBackCommentList" resultType="com.ican.model.vo.response.CommentBackResp">
         SELECT c.id,
         u.avatar,
         u.nickname AS from_nickname,
@@ -38,18 +38,18 @@
         LEFT JOIN t_user u ON c.from_uid = u.id
         LEFT JOIN t_user r ON c.to_uid = r.id
         <where>
-            <if test="condition.commentType != null">
-                c.comment_type=#{condition.commentType}
+            <if test="param.commentType != null">
+                c.comment_type=#{param.commentType}
             </if>
-            <if test="condition.keyword != null">
-                AND u.nickname LIKE concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                AND u.nickname LIKE concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.isCheck != null">
-                AND c.is_check = #{condition.isCheck}
+            <if test="param.isCheck != null">
+                AND c.is_check = #{param.isCheck}
             </if>
         </where>
         ORDER BY c.id DESC
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
     </select>
 
     <select id="selectCommentIdByParentId" resultType="java.lang.Integer">
@@ -58,7 +58,7 @@
         WHERE parent_id = #{parentId}
     </select>
 
-    <select id="selectCommentCountByTypeId" resultType="com.ican.model.vo.CommentCountVO">
+    <select id="selectCommentCountByTypeId" resultType="com.ican.model.vo.response.CommentCountResp">
         SELECT
         type_id as id,
         COUNT(*) AS comment_count
@@ -73,7 +73,7 @@
         GROUP BY type_id
     </select>
 
-    <select id="selectRecentComment" resultType="com.ican.model.vo.RecentCommentVO">
+    <select id="selectRecentComment" resultType="com.ican.model.vo.response.RecentCommentResp">
         SELECT c.id,
                u.nickname,
                avatar,
@@ -85,23 +85,23 @@
         ORDER BY c.create_time DESC LIMIT 5
     </select>
 
-    <select id="selectParentComment" resultType="com.ican.model.vo.CommentVO">
+    <select id="selectParentComment" resultType="com.ican.model.vo.response.CommentResp">
         SELECT c.id, c.from_uid, u.nickname AS fromNickname,u.web_site, u.avatar, c.comment_content, c.create_time
         FROM t_comment c
         INNER JOIN t_user u ON c.from_uid = u.id
         <where>
-            <if test="condition.typeId != null">
+            <if test="param.typeId != null">
                 type_id=#{condition.typeId}
             </if>
-            AND comment_type=#{condition.commentType}
+            AND comment_type=#{param.commentType}
             AND c.is_check=1
             AND parent_id IS NULL
         </where>
         ORDER BY c.id DESC
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
     </select>
 
-    <select id="selectReplyByParentIdList" resultType="com.ican.model.vo.ReplyVO">
+    <select id="selectReplyByParentIdList" resultType="com.ican.model.vo.response.ReplyResp">
         SELECT *
         FROM (
         SELECT c.from_uid,
@@ -126,7 +126,7 @@
         WHERE 4 > row_num
     </select>
 
-    <select id="selectReplyCountByParentId" resultType="com.ican.model.vo.ReplyCountVO">
+    <select id="selectReplyCountByParentId" resultType="com.ican.model.vo.response.ReplyCountResp">
         SELECT parent_id as comment_id,
         count(1) AS reply_count
         FROM t_comment
@@ -138,7 +138,7 @@
         GROUP BY parent_id
     </select>
 
-    <select id="selectReplyByParentId" resultType="com.ican.model.vo.ReplyVO">
+    <select id="selectReplyByParentId" resultType="com.ican.model.vo.response.ReplyResp">
         SELECT c.from_uid,
                u.nickname AS from_nickname,
                u.avatar,

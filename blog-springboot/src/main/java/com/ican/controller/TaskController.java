@@ -3,13 +3,13 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import com.ican.annotation.OptLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.StatusDTO;
-import com.ican.model.dto.TaskDTO;
-import com.ican.model.dto.TaskRunDTO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
-import com.ican.model.vo.TaskBackVO;
+import com.ican.model.vo.query.TaskQuery;
+import com.ican.model.vo.request.StatusReq;
+import com.ican.model.vo.request.TaskReq;
+import com.ican.model.vo.request.TaskRunReq;
+import com.ican.model.vo.response.TaskBackResp;
 import com.ican.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,14 +36,14 @@ public class TaskController {
     /**
      * 查看定时任务列表
      *
-     * @param condition 条件
-     * @return {@link TaskBackVO} 定时任务列表
+     * @param taskQuery 任务查询条件
+     * @return {@link TaskBackResp} 定时任务列表
      */
     @ApiOperation("查看定时任务列表")
     @SaCheckPermission("monitor:task:list")
     @GetMapping("/admin/task/list")
-    public Result<PageResult<TaskBackVO>> listTaskBackVO(ConditionDTO condition) {
-        return Result.success(taskService.listTaskBackVO(condition));
+    public Result<PageResult<TaskBackResp>> listTaskBackVO(TaskQuery taskQuery) {
+        return Result.success(taskService.listTaskBackVO(taskQuery));
     }
 
     /**
@@ -56,7 +56,7 @@ public class TaskController {
     @ApiOperation("添加定时任务")
     @SaCheckPermission("monitor:task:add")
     @PostMapping("/admin/task/add")
-    public Result<?> addTask(@Validated @RequestBody TaskDTO task) {
+    public Result<?> addTask(@Validated @RequestBody TaskReq task) {
         taskService.addTask(task);
         return Result.success();
     }
@@ -71,7 +71,7 @@ public class TaskController {
     @ApiOperation("修改定时任务")
     @SaCheckPermission(value = "monitor:task:update")
     @PutMapping("/admin/task/update")
-    public Result<?> updateTask(@Validated @RequestBody TaskDTO task) {
+    public Result<?> updateTask(@Validated @RequestBody TaskReq task) {
         taskService.updateTask(task);
         return Result.success();
     }
@@ -101,7 +101,7 @@ public class TaskController {
     @ApiOperation("修改定时任务状态")
     @SaCheckPermission(value = {"monitor:task:update", "monitor:task:status"}, mode = SaMode.OR)
     @PutMapping("/admin/task/changeStatus")
-    public Result<?> updateTaskStatus(@Validated @RequestBody StatusDTO taskStatus) {
+    public Result<?> updateTaskStatus(@Validated @RequestBody StatusReq taskStatus) {
         taskService.updateTaskStatus(taskStatus);
         return Result.success();
     }
@@ -116,7 +116,7 @@ public class TaskController {
     @ApiOperation("执行定时任务")
     @SaCheckPermission("monitor:task:run")
     @PutMapping("/admin/task/run")
-    public Result<?> runTask(@RequestBody TaskRunDTO taskRun) {
+    public Result<?> runTask(@RequestBody TaskRunReq taskRun) {
         taskService.runTask(taskRun);
         return Result.success();
     }

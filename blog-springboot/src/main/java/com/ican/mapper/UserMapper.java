@@ -2,8 +2,8 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.User;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.UserBackVO;
+import com.ican.model.vo.query.UserQuery;
+import com.ican.model.vo.response.UserBackResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,18 +21,16 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 查询用户后台数量
      *
-     * @param condition 条件
+     * @param userQuery 用户查询条件
      * @return 用户数量
      */
-    Long countUser(@Param("condition") ConditionDTO condition);
+    Long selectUserCount(@Param("param") UserQuery userQuery);
 
     /**
      * 查询后台用户列表
      *
-     * @param limit     页码
-     * @param size      大小
-     * @param condition 条件
+     * @param userQuery 用户查询条件
      * @return 用户后台列表
      */
-    List<UserBackVO> listUserBackVO(@Param("limit") Long limit, @Param("size") Long size, @Param("condition") ConditionDTO condition);
+    List<UserBackResp> selectUserList(@Param("param") UserQuery userQuery);
 }

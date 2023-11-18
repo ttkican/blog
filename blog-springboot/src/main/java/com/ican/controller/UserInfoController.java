@@ -2,11 +2,11 @@ package com.ican.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.ican.model.dto.EmailDTO;
-import com.ican.model.dto.UserDTO;
-import com.ican.model.dto.UserInfoDTO;
 import com.ican.model.vo.Result;
-import com.ican.model.vo.UserInfoVO;
+import com.ican.model.vo.request.EmailReq;
+import com.ican.model.vo.request.UserInfoReq;
+import com.ican.model.vo.request.UserReq;
+import com.ican.model.vo.response.UserInfoResp;
 import com.ican.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,12 +30,12 @@ public class UserInfoController {
     /**
      * 获取登录用户信息
      *
-     * @return {@link UserInfoVO} 用户信息
+     * @return {@link UserInfoResp} 用户信息
      */
     @SaCheckLogin
     @ApiOperation(value = "获取登录用户信息")
     @GetMapping("/user/getUserInfo")
-    public Result<UserInfoVO> getUserInfo() {
+    public Result<UserInfoResp> getUserInfo() {
         return Result.success(userService.getUserInfo());
     }
 
@@ -48,7 +48,7 @@ public class UserInfoController {
     @ApiOperation(value = "修改用户邮箱")
     @SaCheckPermission(value = "user:email:update")
     @PutMapping("/user/email")
-    public Result<?> updateUserEmail(@Validated @RequestBody EmailDTO email) {
+    public Result<?> updateUserEmail(@Validated @RequestBody EmailReq email) {
         userService.updateUserEmail(email);
         return Result.success();
     }
@@ -75,7 +75,7 @@ public class UserInfoController {
     @ApiOperation(value = "修改用户信息")
     @SaCheckPermission(value = "user:info:update")
     @PutMapping("/user/info")
-    public Result<?> updateUserInfo(@Validated @RequestBody UserInfoDTO userInfo) {
+    public Result<?> updateUserInfo(@Validated @RequestBody UserInfoReq userInfo) {
         userService.updateUserInfo(userInfo);
         return Result.success();
     }
@@ -88,7 +88,7 @@ public class UserInfoController {
      */
     @ApiOperation(value = "修改用户密码")
     @PutMapping("/user/password")
-    public Result<?> updatePassword(@Validated @RequestBody UserDTO user) {
+    public Result<?> updatePassword(@Validated @RequestBody UserReq user) {
         userService.updatePassword(user);
         return Result.success();
     }

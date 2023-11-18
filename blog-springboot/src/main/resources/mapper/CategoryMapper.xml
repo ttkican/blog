@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.CategoryMapper">
 
-    <select id="selectCategoryBackVO" resultType="com.ican.model.vo.CategoryBackVO">
+    <select id="selectBackCategoryList" resultType="com.ican.model.vo.response.CategoryBackResp">
         SELECT c.id, c.category_name,COUNT( a.id ) AS article_count,c.create_time
         FROM t_category c
         LEFT JOIN t_article a
         ON c.id = a.category_id
         <where>
-            <if test="keyword != null">
-                category_name like concat('%',#{keyword},'%')
+            <if test="param.keyword != null and param != ''">
+                category_name like concat('%',#{param.keyword},'%')
             </if>
         </where>
         GROUP BY c.id
         ORDER BY c.id DESC
-        LIMIT #{limit},#{size}
+        LIMIT #{param.current},#{param.size}
     </select>
 
-    <select id="selectCategoryVO" resultType="com.ican.model.vo.CategoryVO">
+    <select id="selectCategoryVO" resultType="com.ican.model.vo.response.CategoryResp">
         SELECT c.id,
                c.category_name,
                COUNT(a.id) AS article_count

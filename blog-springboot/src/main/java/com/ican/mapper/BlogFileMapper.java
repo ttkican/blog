@@ -2,7 +2,8 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.BlogFile;
-import com.ican.model.vo.FileVO;
+import com.ican.model.vo.query.FileQuery;
+import com.ican.model.vo.response.FileResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -19,12 +20,10 @@ public interface BlogFileMapper extends BaseMapper<BlogFile> {
     /**
      * 查询后台文件列表
      *
-     * @param limit    页码
-     * @param size     大小
-     * @param filePath 文件路径
+     * @param fileQuery 文件条件
      * @return 后台文件列表
      */
-    List<FileVO> selectFileVOList(@Param("limit") Long limit, @Param("size") Long size, @Param("filePath") String filePath);
+    List<FileResp> selectFileVOList(@Param("param") FileQuery fileQuery);
 }
 
 

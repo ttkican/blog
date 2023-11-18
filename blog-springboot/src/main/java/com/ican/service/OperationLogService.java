@@ -1,30 +1,47 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.OperationLog;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.OperationLogVO;
+import com.ican.mapper.OperationLogMapper;
 import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.LogQuery;
+import com.ican.model.vo.response.OperationLogResp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
- * 操作日志业务接口
+ * 操作日志业务接口实现类
  *
  * @author ican
  */
-public interface OperationLogService extends IService<OperationLog> {
+@Service
+public class OperationLogService extends ServiceImpl<OperationLogMapper, OperationLog> {
 
-    /**
-     * 查看操作日志列表
-     *
-     * @param condition 条件
-     * @return 日志列表
-     */
-    PageResult<OperationLogVO> listOperationLogVO(ConditionDTO condition);
+    @Autowired
+    private OperationLogMapper operationLogMapper;
 
-    /**
-     * 保存操作日志
-     *
-     * @param operationLog 操作日志信息
-     */
-    void saveOperationLog(OperationLog operationLog);
+    public PageResult<OperationLogResp> listOperationLogVO(LogQuery logQuery) {
+        // 查询操作日志数量
+        Long count = operationLogMapper.selectCount(new LambdaQueryWrapper<OperationLog>()
+                .like(StringUtils.hasText(logQuery.getOptModule()), OperationLog::getModule, logQuery.getOptModule())
+                .or()
+                .like(StringUtils.hasText(logQuery.getKeyword()), OperationLog::getDescription, logQuery.getKeyword())
+        );
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询操作日志列表
+        List<OperationLogResp> operationLogRespList = operationLogMapper.selectOperationLogVOList(logQuery);
+        return new PageResult<>(operationLogRespList, count);
+    }
+
+    public void saveOperationLog(OperationLog operationLog) {
+        // 保存操作日志
+        operationLogMapper.insert(operationLog);
+    }
+
 }

@@ -4,13 +4,13 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.AccessLimit;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
-import com.ican.model.dto.CheckDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.MessageDTO;
-import com.ican.model.vo.MessageBackVO;
-import com.ican.model.vo.MessageVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
+import com.ican.model.vo.query.MessageQuery;
+import com.ican.model.vo.request.CheckReq;
+import com.ican.model.vo.request.MessageReq;
+import com.ican.model.vo.response.MessageBackResp;
+import com.ican.model.vo.response.MessageResp;
 import com.ican.service.MessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,26 +38,26 @@ public class MessageController {
     /**
      * 查看留言列表
      *
-     * @return {@link MessageVO} 留言列表
+     * @return {@link MessageResp} 留言列表
      */
     @VisitLogger(value = "留言")
     @ApiOperation(value = "查看留言列表")
     @GetMapping("/message/list")
-    public Result<List<MessageVO>> listMessageVO() {
+    public Result<List<MessageResp>> listMessageVO() {
         return Result.success(messageService.listMessageVO());
     }
 
     /**
      * 查看后台留言列表
      *
-     * @param condition 条件
-     * @return {@link Result<MessageBackVO>} 留言列表
+     * @param messageQuery 留言查询条件
+     * @return {@link Result< MessageBackResp >} 留言列表
      */
     @ApiOperation(value = "查看后台留言列表")
     @SaCheckPermission("news:message:list")
     @GetMapping("/admin/message/list")
-    public Result<PageResult<MessageBackVO>> listMessageBackVO(ConditionDTO condition) {
-        return Result.success(messageService.listMessageBackVO(condition));
+    public Result<PageResult<MessageBackResp>> listMessageBackVO(MessageQuery messageQuery) {
+        return Result.success(messageService.listMessageBackVO(messageQuery));
     }
 
     /**
@@ -69,7 +69,7 @@ public class MessageController {
     @AccessLimit(seconds = 60, maxCount = 3)
     @ApiOperation(value = "添加留言")
     @PostMapping("/message/add")
-    public Result<?> addMessage(@Validated @RequestBody MessageDTO message) {
+    public Result<?> addMessage(@Validated @RequestBody MessageReq message) {
         messageService.addMessage(message);
         return Result.success();
     }
@@ -99,7 +99,7 @@ public class MessageController {
     @ApiOperation(value = "审核留言")
     @SaCheckPermission("news:message:pass")
     @PutMapping("/admin/message/pass")
-    public Result<?> updateMessageCheck(@Validated @RequestBody CheckDTO check) {
+    public Result<?> updateMessageCheck(@Validated @RequestBody CheckReq check) {
         messageService.updateMessageCheck(check);
         return Result.success();
     }

@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * websocket聊天室DTO
+ *
+ * @author ican
+ */
 @Data
 @Builder
 @NoArgsConstructor

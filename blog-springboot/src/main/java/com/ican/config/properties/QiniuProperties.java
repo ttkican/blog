@@ -1,7 +1,7 @@
 package com.ican.config.properties;
 
-import com.qiniu.common.Zone;
 import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import lombok.Data;
@@ -14,18 +14,30 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "upload.qiniu")
 public class QiniuProperties {
 
-    private String url;//url 或者 域名
+    /**
+     * url 或者 域名
+     */
+    private String url;
 
-    private String bucketName; //存储桶名字
+    /**
+     * 存储桶名字
+     */
+    private String bucketName;
 
-    private String region;//区域 如huanan hubei
+    /**
+     * //区域 如huanan hubei
+     */
+    private String region;
 
-    private String accessKey;//accessKey
+    /**
+     * accessKey
+     */
+    private String accessKey;
 
-    private String secretKey;//secretKey
-
-
-
+    /**
+     * secretKey
+     */
+    private String secretKey;
 
     /**
      * 配置空间的存储区域
@@ -34,13 +46,13 @@ public class QiniuProperties {
     public com.qiniu.storage.Configuration qiNiuConfig() {
         switch (region) {
             case "huadong":
-                return new com.qiniu.storage.Configuration(Zone.huadong());
+                return new com.qiniu.storage.Configuration(Region.huadong());
             case "huabei":
-                return new com.qiniu.storage.Configuration(Zone.huabei());
+                return new com.qiniu.storage.Configuration(Region.huabei());
             case "huanan":
-                return new com.qiniu.storage.Configuration(Zone.huanan());
+                return new com.qiniu.storage.Configuration(Region.huanan());
             case "beimei":
-                return new com.qiniu.storage.Configuration(Zone.beimei());
+                return new com.qiniu.storage.Configuration(Region.beimei());
             default:
                 throw new RuntimeException("存储区域配置错误");
         }
@@ -69,6 +81,5 @@ public class QiniuProperties {
     public BucketManager bucketManager() {
         return new BucketManager(auth(), qiNiuConfig());
     }
-
 
 }

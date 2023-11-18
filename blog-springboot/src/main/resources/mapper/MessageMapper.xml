@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.MessageMapper">
 
-    <select id="selectMessageVOList" resultType="com.ican.model.vo.MessageVO">
+    <select id="selectMessageVOList" resultType="com.ican.model.vo.response.MessageResp">
         SELECT id, nickname, avatar, message_content
         from t_message
         WHERE is_check = 1
     </select>
 
-    <select id="selectMessageBackVOList" resultType="com.ican.model.vo.MessageBackVO">
+    <select id="selectBackMessageList" resultType="com.ican.model.vo.response.MessageBackResp">
         SELECT
         tm.id,
         nickname,
@@ -21,14 +21,14 @@
         FROM
         (SELECT id FROM t_message
         <where>
-            <if test="condition.keyword!=null">
-                nickname like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                nickname like concat('%',#{param.keyword},'%')
             </if>
-            <if test="condition.isCheck!=null">
-                is_check = #{condition.isCheck}
+            <if test="param.isCheck != null">
+                is_check = #{param.isCheck}
             </if>
         </where>
-        ORDER BY id DESC LIMIT #{limit},#{size}) temp
+        ORDER BY id DESC LIMIT #{param.current},#{param.size}) temp
         LEFT JOIN t_message tm ON temp.id = tm.id
     </select>
 </mapper>

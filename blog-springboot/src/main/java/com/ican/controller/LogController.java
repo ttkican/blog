@@ -3,11 +3,12 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.entity.ExceptionLog;
 import com.ican.entity.VisitLog;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.OperationLogVO;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.Result;
-import com.ican.model.vo.TaskLogVO;
+import com.ican.model.vo.query.LogQuery;
+import com.ican.model.vo.query.TaskQuery;
+import com.ican.model.vo.response.OperationLogResp;
+import com.ican.model.vo.response.TaskLogResp;
 import com.ican.service.ExceptionLogService;
 import com.ican.service.OperationLogService;
 import com.ican.service.TaskLogService;
@@ -46,14 +47,14 @@ public class LogController {
     /**
      * 查看操作日志
      *
-     * @param condition 条件
-     * @return {@link OperationLogVO} 操作日志
+     * @param logQuery 条件
+     * @return {@link OperationLogResp} 操作日志
      */
     @ApiOperation(value = "查看操作日志")
     @SaCheckPermission("log:operation:list")
     @GetMapping("/admin/operation/list")
-    public Result<PageResult<OperationLogVO>> listOperationLogVO(ConditionDTO condition) {
-        return Result.success(operationLogService.listOperationLogVO(condition));
+    public Result<PageResult<OperationLogResp>> listOperationLogVO(LogQuery logQuery) {
+        return Result.success(operationLogService.listOperationLogVO(logQuery));
     }
 
     /**
@@ -73,14 +74,14 @@ public class LogController {
     /**
      * 查看异常日志
      *
-     * @param condition 条件
-     * @return {@link Result<OperationLogVO>} 异常日志列表
+     * @param logQuery 异常日志查询条件
+     * @return {@link Result< OperationLogResp >} 异常日志列表
      */
     @ApiOperation(value = "查看异常日志")
     @SaCheckPermission("log:exception:list")
     @GetMapping("/admin/exception/list")
-    public Result<PageResult<ExceptionLog>> listExceptionLog(ConditionDTO condition) {
-        return Result.success(exceptionLogService.listExceptionLog(condition));
+    public Result<PageResult<ExceptionLog>> listExceptionLog(LogQuery logQuery) {
+        return Result.success(exceptionLogService.listExceptionLog(logQuery));
     }
 
     /**
@@ -100,14 +101,14 @@ public class LogController {
     /**
      * 查看访问日志
      *
-     * @param condition 条件
-     * @return {@link Result<OperationLogVO>} 访问日志列表
+     * @param logQuery 访问日志查询条件
+     * @return {@link Result< OperationLogResp >} 访问日志列表
      */
     @ApiOperation(value = "查看访问日志")
     @SaCheckPermission("log:visit:list")
     @GetMapping("/admin/visit/list")
-    public Result<PageResult<VisitLog>> listVisitLog(ConditionDTO condition) {
-        return Result.success(visitLogService.listVisitLog(condition));
+    public Result<PageResult<VisitLog>> listVisitLog(LogQuery logQuery) {
+        return Result.success(visitLogService.listVisitLog(logQuery));
     }
 
     /**
@@ -127,14 +128,14 @@ public class LogController {
     /**
      * 查看定时任务日志
      *
-     * @param condition 条件
-     * @return {@link PageResult<TaskLogVO>} 后台定时任务日志
+     * @param taskQuery 条件
+     * @return {@link PageResult< TaskLogResp >} 后台定时任务日志
      */
     @ApiOperation("查看定时任务日志")
     @SaCheckPermission("log:task:list")
     @GetMapping("/admin/taskLog/list")
-    public Result<PageResult<TaskLogVO>> listTaskLog(ConditionDTO condition) {
-        return Result.success(taskLogService.listTaskLog(condition));
+    public Result<PageResult<TaskLogResp>> listTaskLog(TaskQuery taskQuery) {
+        return Result.success(taskLogService.listTaskLog(taskQuery));
     }
 
     /**

@@ -7,7 +7,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ican.entity.User;
 import com.ican.mapper.UserMapper;
-import com.ican.model.vo.OnlineVO;
+import com.ican.model.vo.response.OnlineUserResp;
 import com.ican.utils.IpUtils;
 import com.ican.utils.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class MySaTokenListener implements SaTokenListener {
         String ipSource = IpUtils.getIpSource(ipAddress);
         // 获取登录时间
         LocalDateTime loginTime = LocalDateTime.now(ZoneId.of(SHANGHAI.getZone()));
-        OnlineVO onlineVO = OnlineVO.builder()
+        OnlineUserResp onlineUserResp = OnlineUserResp.builder()
                 .id((Integer) loginId)
                 .token(tokenValue)
                 .avatar(user.getAvatar())
@@ -73,7 +73,7 @@ public class MySaTokenListener implements SaTokenListener {
         userMapper.updateById(newUser);
         // 用户在线信息存入tokenSession
         SaSession tokenSession = StpUtil.getTokenSessionByToken(tokenValue);
-        tokenSession.set(ONLINE_USER, onlineVO);
+        tokenSession.set(ONLINE_USER, onlineUserResp);
     }
 
     /**

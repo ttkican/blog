@@ -5,10 +5,15 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ican.annotation.AccessLimit;
 import com.ican.annotation.OptLogger;
 import com.ican.enums.LikeTypeEnum;
-import com.ican.model.dto.CheckDTO;
-import com.ican.model.dto.CommentDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.Result;
+import com.ican.model.vo.query.CommentQuery;
+import com.ican.model.vo.request.CheckReq;
+import com.ican.model.vo.request.CommentReq;
+import com.ican.model.vo.response.CommentBackResp;
+import com.ican.model.vo.response.CommentResp;
+import com.ican.model.vo.response.RecentCommentResp;
+import com.ican.model.vo.response.ReplyResp;
 import com.ican.service.CommentService;
 import com.ican.strategy.context.LikeStrategyContext;
 import io.swagger.annotations.Api;
@@ -40,14 +45,14 @@ public class CommentController {
     /**
      * 查看后台评论列表
      *
-     * @param condition 条件
-     * @return {@link Result<CommentBackVO>} 后台评论
+     * @param commentQuery 评论查询条件
+     * @return {@link Result< CommentBackResp >} 后台评论
      */
     @ApiOperation(value = "查看后台评论")
     @SaCheckPermission("news:comment:list")
     @GetMapping("/admin/comment/list")
-    public Result<PageResult<CommentBackVO>> listCommentBackVO(ConditionDTO condition) {
-        return Result.success(commentService.listCommentBackVO(condition));
+    public Result<PageResult<CommentBackResp>> listCommentBackVO(CommentQuery commentQuery) {
+        return Result.success(commentService.listCommentBackVO(commentQuery));
     }
 
     /**
@@ -60,7 +65,7 @@ public class CommentController {
     @ApiOperation(value = "添加评论")
     @SaCheckPermission("news:comment:add")
     @PostMapping("/comment/add")
-    public Result<?> addComment(@Validated @RequestBody CommentDTO comment) {
+    public Result<?> addComment(@Validated @RequestBody CommentReq comment) {
         commentService.addComment(comment);
         return Result.success();
     }
@@ -90,7 +95,7 @@ public class CommentController {
     @ApiOperation(value = "审核评论")
     @SaCheckPermission("news:comment:pass")
     @PutMapping("/admin/comment/pass")
-    public Result<?> updateCommentCheck(@Validated @RequestBody CheckDTO check) {
+    public Result<?> updateCommentCheck(@Validated @RequestBody CheckReq check) {
         commentService.updateCommentCheck(check);
         return Result.success();
     }
@@ -114,35 +119,35 @@ public class CommentController {
     /**
      * 查看最新评论
      *
-     * @return {@link List<RecentCommentVO>}
+     * @return {@link List<  RecentCommentResp  >}
      */
     @ApiOperation(value = "查看最新评论")
     @GetMapping("/recent/comment")
-    public Result<List<RecentCommentVO>> listRecentCommentVO() {
+    public Result<List<RecentCommentResp>> listRecentCommentVO() {
         return Result.success(commentService.listRecentCommentVO());
     }
 
     /**
      * 查看评论
      *
-     * @param condition 条件
-     * @return {@link Result<CommentVO>}
+     * @param commentQuery 条件
+     * @return {@link Result< CommentResp >}
      */
     @ApiOperation(value = "查看评论")
     @GetMapping("/comment/list")
-    public Result<PageResult<CommentVO>> listCommentVO(ConditionDTO condition) {
-        return Result.success(commentService.listCommentVO(condition));
+    public Result<PageResult<CommentResp>> listCommentVO(CommentQuery commentQuery) {
+        return Result.success(commentService.listCommentVO(commentQuery));
     }
 
     /**
      * 查看回复评论
      *
      * @param commentId 评论id
-     * @return {@link Result<ReplyVO>} 回复评论列表
+     * @return {@link Result<ReplyResp>} 回复评论列表
      */
     @ApiOperation(value = "查看回复评论")
     @GetMapping("/comment/{commentId}/reply")
-    public Result<List<ReplyVO>> listReply(@PathVariable("commentId") Integer commentId) {
+    public Result<List<ReplyResp>> listReply(@PathVariable("commentId") Integer commentId) {
         return Result.success(commentService.listReply(commentId));
     }
 

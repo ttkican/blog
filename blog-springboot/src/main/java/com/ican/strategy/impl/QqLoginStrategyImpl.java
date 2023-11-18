@@ -4,12 +4,12 @@ import com.alibaba.fastjson2.JSON;
 import com.ican.config.properties.QqProperties;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.CodeDTO;
 import com.ican.model.dto.QqLoginDTO;
-import com.ican.model.vo.QqUserInfoVO;
-import com.ican.model.vo.SocialTokenVO;
-import com.ican.model.vo.SocialUserInfoVO;
-import com.ican.model.vo.TokenVO;
+import com.ican.model.dto.SocialTokenDTO;
+import com.ican.model.dto.SocialUserInfoDTO;
+import com.ican.model.dto.TokenDTO;
+import com.ican.model.dto.QqUserInfoDTO;
+import com.ican.model.vo.request.CodeReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -36,13 +36,13 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenVO getSocialToken(CodeDTO codeDTO) {
+    public SocialTokenDTO getSocialToken(CodeReq codeReq) {
         // 获取Qq的Token
-        TokenVO qqToken = getQqToken(codeDTO.getCode());
+        TokenDTO qqToken = getQqToken(codeReq.getCode());
         // 获取用户OpenId
         String userOpenId = getUserOpenId(qqToken.getAccess_token());
         // 返回token信息
-        return SocialTokenVO.builder()
+        return SocialTokenDTO.builder()
                 .openId(userOpenId)
                 .accessToken(qqToken.getAccess_token())
                 .loginType(LoginTypeEnum.QQ.getLoginType())
@@ -50,16 +50,16 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
     }
 
     @Override
-    public SocialUserInfoVO getSocialUserInfo(SocialTokenVO socialToken) {
+    public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         // 定义请求参数
         Map<String, String> formData = new HashMap<>(3);
         formData.put(QQ_OPEN_ID, socialToken.getOpenId());
         formData.put(ACCESS_TOKEN, socialToken.getAccessToken());
         formData.put(OAUTH_CONSUMER_KEY, qqProperties.getAppId());
         // 获取QQ返回的用户信息
-        QqUserInfoVO qqUserInfo = JSON.parseObject(restTemplate.getForObject(qqProperties.getUserInfoUrl(), String.class, formData), QqUserInfoVO.class);
+        QqUserInfoDTO qqUserInfo = JSON.parseObject(restTemplate.getForObject(qqProperties.getUserInfoUrl(), String.class, formData), QqUserInfoDTO.class);
         // 返回用户信息
-        return SocialUserInfoVO.builder()
+        return SocialUserInfoDTO.builder()
                 .id(socialToken.getOpenId())
                 .nickname(Objects.requireNonNull(qqUserInfo).getNickname())
                 .avatar(qqUserInfo.getFigureurl_qq_1())
@@ -70,9 +70,9 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
      * 获取QQ的Token
      *
      * @param code 第三方code
-     * @return {@link TokenVO} QQ的Token
+     * @return {@link TokenDTO} QQ的Token
      */
-    private TokenVO getQqToken(String code) {
+    private TokenDTO getQqToken(String code) {
         // 根据code换取accessToken
         Map<String, String> qqData = new HashMap<>(5);
         // Gitee的Token请求参数
@@ -82,7 +82,7 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
         qqData.put(CODE, code);
         qqData.put(REDIRECT_URI, qqProperties.getRedirectUrl());
         try {
-            return restTemplate.getForObject(qqProperties.getAccessTokenUrl(), TokenVO.class, qqData);
+            return restTemplate.getForObject(qqProperties.getAccessTokenUrl(), TokenDTO.class, qqData);
         } catch (Exception e) {
             throw new ServiceException("QQ登录错误");
         }

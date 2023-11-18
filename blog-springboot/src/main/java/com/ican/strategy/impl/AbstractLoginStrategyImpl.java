@@ -6,9 +6,9 @@ import com.ican.entity.User;
 import com.ican.entity.UserRole;
 import com.ican.mapper.UserMapper;
 import com.ican.mapper.UserRoleMapper;
-import com.ican.model.dto.CodeDTO;
-import com.ican.model.vo.SocialTokenVO;
-import com.ican.model.vo.SocialUserInfoVO;
+import com.ican.model.dto.SocialTokenDTO;
+import com.ican.model.dto.SocialUserInfoDTO;
+import com.ican.model.vo.request.CodeReq;
 import com.ican.strategy.SocialLoginStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,20 +32,20 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
     private UserRoleMapper userRoleMapper;
 
     @Override
-    public String login(CodeDTO data) {
+    public String login(CodeReq data) {
         User user;
         // 获取token
-        SocialTokenVO socialToken = getSocialToken(data);
+        SocialTokenDTO socialToken = getSocialToken(data);
         // 获取用户信息
-        SocialUserInfoVO socialUserInfoVO = getSocialUserInfo(socialToken);
+        SocialUserInfoDTO socialUserInfoDTO = getSocialUserInfo(socialToken);
         // 判断是否已注册
         User existUser = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .select(User::getId)
-                .eq(User::getUsername, socialUserInfoVO.getId())
+                .eq(User::getUsername, socialUserInfoDTO.getId())
                 .eq(User::getLoginType, socialToken.getLoginType()));
         // 用户未登录过
         if (Objects.isNull(existUser)) {
-            user = saveLoginUser(socialToken, socialUserInfoVO);
+            user = saveLoginUser(socialToken, socialUserInfoDTO);
         } else {
             user = existUser;
         }
@@ -60,17 +60,17 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
      * 获取第三方Token
      *
      * @param data data
-     * @return {@link SocialTokenVO} 第三方token
+     * @return {@link SocialTokenDTO} 第三方token
      */
-    public abstract SocialTokenVO getSocialToken(CodeDTO data);
+    public abstract SocialTokenDTO getSocialToken(CodeReq data);
 
     /**
      * 获取第三方用户信息
      *
      * @param socialToken 第三方token
-     * @return {@link SocialUserInfoVO} 第三方用户信息
+     * @return {@link SocialUserInfoDTO} 第三方用户信息
      */
-    public abstract SocialUserInfoVO getSocialUserInfo(SocialTokenVO socialToken);
+    public abstract SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken);
 
     /**
      * 新增用户账号
@@ -78,12 +78,12 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
      * @param socialToken 第三方Token
      * @return {@link User} 登录用户身份权限
      */
-    private User saveLoginUser(SocialTokenVO socialToken, SocialUserInfoVO socialUserInfoVO) {
+    private User saveLoginUser(SocialTokenDTO socialToken, SocialUserInfoDTO socialUserInfoDTO) {
         // 新增用户信息
         User newUser = User.builder()
-                .avatar(socialUserInfoVO.getAvatar())
-                .nickname(socialUserInfoVO.getNickname())
-                .username(socialUserInfoVO.getId())
+                .avatar(socialUserInfoDTO.getAvatar())
+                .nickname(socialUserInfoDTO.getNickname())
+                .username(socialUserInfoDTO.getId())
                 .password(socialToken.getAccessToken())
                 .loginType(socialToken.getLoginType())
                 .build();

@@ -6,8 +6,14 @@ import com.ican.annotation.AccessLimit;
 import com.ican.annotation.OptLogger;
 import com.ican.annotation.VisitLogger;
 import com.ican.enums.LikeTypeEnum;
-import com.ican.model.dto.*;
 import com.ican.model.vo.*;
+import com.ican.model.vo.query.ArticleQuery;
+import com.ican.model.vo.query.PageQuery;
+import com.ican.model.vo.request.ArticleReq;
+import com.ican.model.vo.request.DeleteReq;
+import com.ican.model.vo.request.RecommendReq;
+import com.ican.model.vo.request.TopReq;
+import com.ican.model.vo.response.*;
 import com.ican.service.ArticleService;
 import com.ican.strategy.context.LikeStrategyContext;
 import io.swagger.annotations.Api;
@@ -40,14 +46,14 @@ public class ArticleController {
     /**
      * 查看后台文章列表
      *
-     * @param condition 条件
-     * @return {@link Result<ArticleBackVO>} 后台文章列表
+     * @param articleQuery 文章查询条件
+     * @return {@link Result< ArticleBackResp >} 后台文章列表
      */
     @ApiOperation(value = "查看后台文章列表")
     @SaCheckPermission("blog:article:list")
     @GetMapping("/admin/article/list")
-    public Result<PageResult<ArticleBackVO>> listArticleBackVO(ConditionDTO condition) {
-        return Result.success(articleService.listArticleBackVO(condition));
+    public Result<PageResult<ArticleBackResp>> listArticleBackVO(ArticleQuery articleQuery) {
+        return Result.success(articleService.listArticleBackVO(articleQuery));
     }
 
     /**
@@ -60,7 +66,7 @@ public class ArticleController {
     @ApiOperation(value = "添加文章")
     @SaCheckPermission("blog:article:add")
     @PostMapping("/admin/article/add")
-    public Result<?> addArticle(@Validated @RequestBody ArticleDTO article) {
+    public Result<?> addArticle(@Validated @RequestBody ArticleReq article) {
         articleService.addArticle(article);
         return Result.success();
     }
@@ -90,7 +96,7 @@ public class ArticleController {
     @ApiOperation(value = "回收或恢复文章")
     @SaCheckPermission("blog:article:recycle")
     @PutMapping("/admin/article/recycle")
-    public Result<?> updateArticleDelete(@Validated @RequestBody DeleteDTO delete) {
+    public Result<?> updateArticleDelete(@Validated @RequestBody DeleteReq delete) {
         articleService.updateArticleDelete(delete);
         return Result.success();
     }
@@ -105,7 +111,7 @@ public class ArticleController {
     @ApiOperation(value = "修改文章")
     @SaCheckPermission("blog:article:update")
     @PutMapping("/admin/article/update")
-    public Result<?> updateArticle(@Validated @RequestBody ArticleDTO article) {
+    public Result<?> updateArticle(@Validated @RequestBody ArticleReq article) {
         articleService.updateArticle(article);
         return Result.success();
     }
@@ -114,12 +120,12 @@ public class ArticleController {
      * 编辑文章
      *
      * @param articleId 文章id
-     * @return {@link Result<ArticleInfoVO>} 后台文章
+     * @return {@link Result< ArticleInfoResp >} 后台文章
      */
     @ApiOperation(value = "编辑文章")
     @SaCheckPermission("blog:article:edit")
     @GetMapping("/admin/article/edit/{articleId}")
-    public Result<ArticleInfoVO> editArticle(@PathVariable("articleId") Integer articleId) {
+    public Result<ArticleInfoResp> editArticle(@PathVariable("articleId") Integer articleId) {
         return Result.success(articleService.editArticle(articleId));
     }
 
@@ -148,7 +154,7 @@ public class ArticleController {
     @ApiOperation(value = "置顶文章")
     @SaCheckPermission("blog:article:top")
     @PutMapping("/admin/article/top")
-    public Result<?> updateArticleTop(@Validated @RequestBody TopDTO top) {
+    public Result<?> updateArticleTop(@Validated @RequestBody TopReq top) {
         articleService.updateArticleTop(top);
         return Result.success();
     }
@@ -163,7 +169,7 @@ public class ArticleController {
     @ApiOperation(value = "推荐文章")
     @SaCheckPermission("blog:article:recommend")
     @PutMapping("/admin/article/recommend")
-    public Result<?> updateArticleRecommend(@Validated @RequestBody RecommendDTO recommend) {
+    public Result<?> updateArticleRecommend(@Validated @RequestBody RecommendReq recommend) {
         articleService.updateArticleRecommend(recommend);
         return Result.success();
     }
@@ -188,60 +194,62 @@ public class ArticleController {
      * 搜索文章
      *
      * @param keyword 关键字
-     * @return {@link Result<ArticleSearchVO>} 文章列表
+     * @return {@link Result< ArticleSearchResp >} 文章列表
      */
     @ApiOperation(value = "搜索文章")
     @GetMapping("/article/search")
-    public Result<List<ArticleSearchVO>> listArticlesBySearch(String keyword) {
+    public Result<List<ArticleSearchResp>> listArticlesBySearch(String keyword) {
         return Result.success(articleService.listArticlesBySearch(keyword));
     }
 
     /**
      * 查看首页文章列表
      *
-     * @return {@link Result<ArticleHomeVO>}
+     * @param pageQuery 分页条件
+     * @return {@link Result< ArticleHomeResp >}
      */
     @VisitLogger(value = "首页")
     @ApiOperation(value = "查看首页文章列表")
     @GetMapping("/article/list")
-    public Result<PageResult<ArticleHomeVO>> listArticleHomeVO() {
-        return Result.success(articleService.listArticleHomeVO());
+    public Result<PageResult<ArticleHomeResp>> listArticleHomeVO(PageQuery pageQuery) {
+        return Result.success(articleService.listArticleHomeVO(pageQuery));
     }
 
     /**
      * 查看文章
      *
      * @param articleId 文章id
-     * @return {@link Result<ArticleVO>} 首页文章
+     * @return {@link Result<ArticleResp>} 首页文章
      */
     @VisitLogger(value = "文章")
     @ApiOperation(value = "查看文章")
     @GetMapping("/article/{articleId}")
-    public Result<ArticleVO> getArticleHomeById(@PathVariable("articleId") Integer articleId) {
+    public Result<ArticleResp> getArticleHomeById(@PathVariable("articleId") Integer articleId) {
         return Result.success(articleService.getArticleHomeById(articleId));
     }
 
     /**
      * 查看推荐文章
      *
-     * @return {@link Result<ArticleRecommendVO>} 推荐文章
+     * @return {@link Result< ArticleRecommendResp >} 推荐文章
      */
     @ApiOperation(value = "查看推荐文章")
     @GetMapping("/article/recommend")
-    public Result<List<ArticleRecommendVO>> listArticleRecommendVO() {
+    public Result<List<ArticleRecommendResp>> listArticleRecommendVO() {
         return Result.success(articleService.listArticleRecommendVO());
     }
 
     /**
      * 查看文章归档
      *
-     * @return {@link Result<ArchiveVO>} 文章归档列表
+     * @param pageQuery 分页条件
+     * @return {@link Result< ArchiveResp >} 文章归档列表
      */
     @VisitLogger(value = "归档")
     @ApiOperation(value = "查看文章归档")
     @GetMapping("/archives/list")
-    public Result<PageResult<ArchiveVO>> listArchiveVO() {
-        return Result.success(articleService.listArchiveVO());
+    public Result<PageResult<ArchiveResp>> listArchiveVO(PageQuery pageQuery) {
+        return Result.success(articleService.listArchiveVO(pageQuery));
     }
 
 }

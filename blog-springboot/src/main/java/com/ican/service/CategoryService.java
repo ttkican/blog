@@ -1,69 +1,116 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.entity.Article;
 import com.ican.entity.Category;
-import com.ican.model.dto.CategoryDTO;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.*;
+import com.ican.mapper.ArticleMapper;
+import com.ican.mapper.CategoryMapper;
+import com.ican.model.vo.response.ArticleConditionList;
+import com.ican.model.vo.response.ArticleConditionResp;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.ArticleConditionQuery;
+import com.ican.model.vo.query.CategoryQuery;
+import com.ican.model.vo.request.CategoryReq;
+import com.ican.model.vo.response.CategoryBackResp;
+import com.ican.model.vo.response.CategoryOptionResp;
+import com.ican.model.vo.response.CategoryResp;
+import com.ican.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
- * 分类业务接口
+ * 分类服务
  *
  * @author ican
- * @date 2022/12/02 17:33
+ * @date 2022/12/02 17:35
  **/
-public interface CategoryService extends IService<Category> {
+@Service
+public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
 
-    /**
-     * 查看后台分类列表
-     *
-     * @param condition 查询条件
-     * @return 后台分类列表
-     */
-    PageResult<CategoryBackVO> listCategoryBackVO(ConditionDTO condition);
+    @Autowired
+    private CategoryMapper categoryMapper;
 
-    /**
-     * 添加分类
-     *
-     * @param category 分类
-     */
-    void addCategory(CategoryDTO category);
+    @Autowired
+    private ArticleMapper articleMapper;
 
-    /**
-     * 删除分类
-     *
-     * @param categoryIdList 分类id集合
-     */
-    void deleteCategory(List<Integer> categoryIdList);
+    public PageResult<CategoryBackResp> listCategoryBackVO(CategoryQuery categoryQuery) {
+        // 查询分类数量
+        Long count = categoryMapper.selectCount(new LambdaQueryWrapper<Category>()
+                .like(StringUtils.hasText(categoryQuery.getKeyword()), Category::getCategoryName,
+                        categoryQuery.getKeyword()));
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 分页查询分类列表
+        List<CategoryBackResp> categoryList = categoryMapper.selectBackCategoryList(categoryQuery);
+        return new PageResult<>(categoryList, count);
+    }
 
-    /**
-     * 修改分类
-     *
-     * @param category 分类
-     */
-    void updateCategory(CategoryDTO category);
+    public void addCategory(CategoryReq category) {
+        // 分类是否存在
+        Category existCategory = categoryMapper.selectOne(new LambdaQueryWrapper<Category>()
+                .select(Category::getId)
+                .eq(Category::getCategoryName, category.getCategoryName()));
+        Assert.isNull(existCategory, category.getCategoryName() + "分类已存在");
+        // 添加新分类
+        Category newCategory = Category.builder()
+                .categoryName(category.getCategoryName())
+                .build();
+        baseMapper.insert(newCategory);
+    }
 
-    /**
-     * 查看分类选项
-     *
-     * @return 分类列表
-     */
-    List<CategoryOptionVO> listCategoryOption();
+    public void deleteCategory(List<Integer> categoryIdList) {
+        // 分类下是否有文章
+        Long count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
+                .in(Article::getCategoryId, categoryIdList));
+        Assert.isFalse(count > 0, "删除失败，分类下存在文章");
+        // 批量删除分类
+        categoryMapper.deleteBatchIds(categoryIdList);
+    }
 
-    /**
-     * 查看分类列表
-     *
-     * @return 分类列表
-     */
-    List<CategoryVO> listCategoryVO();
+    public void updateCategory(CategoryReq category) {
+        // 分类是否存在
+        Category existCategory = categoryMapper.selectOne(new LambdaQueryWrapper<Category>()
+                .select(Category::getId)
+                .eq(Category::getCategoryName, category.getCategoryName()));
+        Assert.isFalse(Objects.nonNull(existCategory) && !existCategory.getId().equals(category.getId()),
+                category.getCategoryName() + "分类已存在");
+        // 修改分类
+        Category newCategory = Category.builder()
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .build();
+        baseMapper.updateById(newCategory);
+    }
 
-    /**
-     * 查看分类下的文章
-     *
-     * @param condition 条件
-     * @return 文章列表
-     */
-    ArticleConditionList listArticleCategory(ConditionDTO condition);
+    public List<CategoryOptionResp> listCategoryOption() {
+        // 查询分类
+        List<Category> categoryList = categoryMapper.selectList(new LambdaQueryWrapper<Category>()
+                .orderByDesc(Category::getId));
+        return BeanCopyUtils.copyBeanList(categoryList, CategoryOptionResp.class);
+    }
+
+    public List<CategoryResp> listCategoryVO() {
+        return categoryMapper.selectCategoryVO();
+    }
+
+    public ArticleConditionList listArticleCategory(@Validated ArticleConditionQuery articleConditionQuery) {
+        List<ArticleConditionResp> articleConditionList = articleMapper.selectArticleListByCondition(articleConditionQuery);
+        String name = categoryMapper.selectOne(new LambdaQueryWrapper<Category>()
+                        .select(Category::getCategoryName)
+                        .eq(Category::getId, articleConditionQuery.getCategoryId()))
+                .getCategoryName();
+        return ArticleConditionList.builder()
+                .articleConditionVOList(articleConditionList)
+                .name(name)
+                .build();
+    }
+
 }

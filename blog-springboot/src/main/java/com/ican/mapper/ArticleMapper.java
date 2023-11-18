@@ -2,8 +2,10 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Article;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.query.ArticleConditionQuery;
+import com.ican.model.vo.query.ArticleQuery;
+import com.ican.model.vo.query.PageQuery;
+import com.ican.model.vo.response.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,20 +23,18 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 查询后台文章数量
      *
-     * @param condition 条件
+     * @param articleQuery 文章查询条件
      * @return 文章数量
      */
-    Long countArticleBackVO(@Param("condition") ConditionDTO condition);
+    Long selectBackArticleCount(@Param("param") ArticleQuery articleQuery);
 
     /**
      * 查询后台文章列表
      *
-     * @param limit     页码
-     * @param size      大小
-     * @param condition 条件
+     * @param articleQuery 文章查询条件
      * @return 后台文章列表
      */
-    List<ArticleBackVO> selectArticleBackVO(@Param("limit") Long limit, @Param("size") Long size, @Param("condition") ConditionDTO condition);
+    List<ArticleBackResp> selectBackArticleList(@Param("param") ArticleQuery articleQuery);
 
     /**
      * 根据id查询文章信息
@@ -42,7 +42,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articleId 文章id
      * @return 文章信息
      */
-    ArticleInfoVO selectArticleInfoById(@Param("articleId") Integer articleId);
+    ArticleInfoResp selectArticleInfoById(@Param("articleId") Integer articleId);
 
     /**
      * 文章搜索
@@ -50,16 +50,15 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param keyword 关键字
      * @return 文章列表
      */
-    List<ArticleSearchVO> searchArticle(@Param("keyword") String keyword);
+    List<ArticleSearchResp> searchArticle(@Param("keyword") String keyword);
 
     /**
      * 查询首页文章
      *
-     * @param limit 页码
-     * @param size  大小
+     * @param pageQuery 分页条件
      * @return 首页文章
      */
-    List<ArticleHomeVO> selectArticleHomeList(@Param("limit") Long limit, @Param("size") Long size);
+    List<ArticleHomeResp> selectArticleHomeList(@Param("param") PageQuery pageQuery);
 
     /**
      * 根据id查询首页文章
@@ -67,7 +66,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articleId 文章id
      * @return 首页文章
      */
-    ArticleVO selectArticleHomeById(Integer articleId);
+    ArticleResp selectArticleHomeById(Integer articleId);
 
     /**
      * 查询上一篇文章
@@ -75,7 +74,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articleId 文章id
      * @return 上一篇文章
      */
-    ArticlePaginationVO selectLastArticle(Integer articleId);
+    ArticlePaginationResp selectLastArticle(Integer articleId);
 
     /**
      * 查询下一篇文章
@@ -83,38 +82,35 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param articleId 文章id
      * @return 下一篇文章
      */
-    ArticlePaginationVO selectNextArticle(Integer articleId);
+    ArticlePaginationResp selectNextArticle(Integer articleId);
 
     /**
      * 查询文章归档
      *
-     * @param limit 页码
-     * @param size  大小
+     * @param pageQuery 分页
      * @return 文章归档
      */
-    List<ArchiveVO> selectArchiveList(@Param("limit") Long limit, @Param("size") Long size);
+    List<ArchiveResp> selectArchiveList(@Param("param") PageQuery pageQuery);
 
     /**
      * 查询文章统计
      *
      * @return 文章统计
      */
-    List<ArticleStatisticsVO> selectArticleStatistics();
+    List<ArticleStatisticsResp> selectArticleStatistics();
 
     /**
      * 查询推荐文章
      *
      * @return 推荐文章
      */
-    List<ArticleRecommendVO> selectArticleRecommend();
+    List<ArticleRecommendResp> selectArticleRecommend();
 
     /**
      * 根据条件查询文章
      *
-     * @param limit     页码
-     * @param size      大小
-     * @param condition 条件
+     * @param articleConditionQuery 查询条件
      * @return 文章列表
      */
-    List<ArticleConditionVO> listArticleByCondition(@Param("limit") Long limit, @Param("size") Long size, @Param("condition") ConditionDTO condition);
+    List<ArticleConditionResp> selectArticleListByCondition(@Param("param") ArticleConditionQuery articleConditionQuery);
 }

@@ -1,34 +1,57 @@
 package com.ican.service;
 
-import com.ican.entity.Article;
-import com.ican.model.vo.ArticleSearchVO;
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.IndexRequest;
+import com.ican.model.vo.response.ArticleSearchResp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+
+import static com.ican.constant.ElasticConstant.ARTICLE_INDEX;
 
 /**
- * es文章业务接口
+ * es文章服务
  *
  * @author ican
- */
-public interface ElasticsearchService {
+ **/
+@Service
+public class ElasticsearchService {
 
-    /**
-     * 添加文章
-     *
-     * @param article 文章
-     */
-    void addArticle(ArticleSearchVO article);
+    @Autowired
+    private ElasticsearchClient elasticsearchClient;
 
-    /**
-     * 更新文章
-     *
-     * @param article 文章
-     */
-    void updateArticle(ArticleSearchVO article);
+    public void addArticle(ArticleSearchResp article) {
+        try {
+            IndexRequest<ArticleSearchResp> indexRequest = IndexRequest.of(request -> request
+                    .index(ARTICLE_INDEX)
+                    .id(article.getId().toString())
+                    .document(article));
+            elasticsearchClient.index(indexRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    /**
-     * 删除文章
-     *
-     * @param id 文章id
-     */
-    void deleteArticle(Integer id);
+    public void updateArticle(ArticleSearchResp article) {
+        try {
+            elasticsearchClient.update(request -> request
+                    .index(ARTICLE_INDEX)
+                    .id(article.getId().toString())
+                    .doc(article), ArticleSearchResp.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void deleteArticle(Integer id) {
+        try {
+            elasticsearchClient.delete(
+                    deleteRequest -> deleteRequest
+                            .index(ARTICLE_INDEX)
+                            .id(id.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -3,11 +3,14 @@ package com.ican.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.ican.annotation.OptLogger;
-import com.ican.model.dto.ConditionDTO;
-import com.ican.model.dto.DisableDTO;
-import com.ican.model.dto.PasswordDTO;
-import com.ican.model.dto.UserRoleDTO;
-import com.ican.model.vo.*;
+import com.ican.model.vo.PageResult;
+import com.ican.model.vo.Result;
+import com.ican.model.vo.query.OnlineUserQuery;
+import com.ican.model.vo.query.UserQuery;
+import com.ican.model.vo.request.DisableReq;
+import com.ican.model.vo.request.PasswordReq;
+import com.ican.model.vo.request.UserRoleReq;
+import com.ican.model.vo.response.*;
 import com.ican.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,47 +39,47 @@ public class UserController {
     /**
      * 获取后台登录用户信息
      *
-     * @return {@link UserBackInfoVO} 登录用户信息
+     * @return {@link UserBackInfoResp} 登录用户信息
      */
     @ApiOperation(value = "获取后台登录用户信息")
     @GetMapping("/admin/user/getUserInfo")
-    public Result<UserBackInfoVO> getUserBackInfo() {
+    public Result<UserBackInfoResp> getUserBackInfo() {
         return Result.success(userService.getUserBackInfo());
     }
 
     /**
      * 获取登录用户菜单
      *
-     * @return {@link RouterVO} 登录用户菜单
+     * @return {@link RouterResp} 登录用户菜单
      */
     @ApiOperation(value = "获取登录用户菜单")
     @GetMapping("/admin/user/getUserMenu")
-    public Result<List<RouterVO>> getUserMenu() {
+    public Result<List<RouterResp>> getUserMenu() {
         return Result.success(userService.getUserMenu());
     }
 
     /**
      * 查看后台用户列表
      *
-     * @param condition 条件
-     * @return {@link UserBackVO} 用户后台列表
+     * @param userQuery 用户查询条件
+     * @return {@link UserBackResp} 用户后台列表
      */
     @ApiOperation(value = "查看后台用户列表")
     @SaCheckPermission("system:user:list")
     @GetMapping("/admin/user/list")
-    public Result<PageResult<UserBackVO>> listUserBackVO(ConditionDTO condition) {
-        return Result.success(userService.listUserBackVO(condition));
+    public Result<PageResult<UserBackResp>> listUserBackVO(UserQuery userQuery) {
+        return Result.success(userService.listUserBackVO(userQuery));
     }
 
     /**
      * 查看用户角色选项
      *
-     * @return {@link UserRoleVO} 用户角色选项
+     * @return {@link UserRoleResp} 用户角色选项
      */
     @ApiOperation(value = "查看用户角色选项")
     @SaCheckPermission("system:user:list")
     @GetMapping("/admin/user/role")
-    public Result<List<UserRoleVO>> listUserRoleDTO() {
+    public Result<List<UserRoleResp>> listUserRoleDTO() {
         return Result.success(userService.listUserRoleDTO());
     }
 
@@ -90,7 +93,7 @@ public class UserController {
     @ApiOperation(value = "修改用户")
     @SaCheckPermission("system:user:update")
     @PutMapping("/admin/user/update")
-    public Result<?> updateUser(@Validated @RequestBody UserRoleDTO user) {
+    public Result<?> updateUser(@Validated @RequestBody UserRoleReq user) {
         userService.updateUser(user);
         return Result.success();
     }
@@ -105,7 +108,7 @@ public class UserController {
     @ApiOperation(value = "修改用户状态")
     @SaCheckPermission("system:user:status")
     @PutMapping("/admin/user/changeStatus")
-    public Result<?> updateUserStatus(@Validated @RequestBody DisableDTO disable) {
+    public Result<?> updateUserStatus(@Validated @RequestBody DisableReq disable) {
         userService.updateUserStatus(disable);
         return Result.success();
     }
@@ -113,14 +116,14 @@ public class UserController {
     /**
      * 查看在线用户
      *
-     * @param condition 条件
-     * @return {@link OnlineVO} 在线用户列表
+     * @param onlineUserQuery 查询条件
+     * @return {@link OnlineUserResp} 在线用户列表
      */
     @ApiOperation(value = "查看在线用户")
     @SaCheckPermission("monitor:online:list")
     @GetMapping("/admin/online/list")
-    public Result<PageResult<OnlineVO>> listOnlineUser(ConditionDTO condition) {
-        return Result.success(userService.listOnlineUser(condition));
+    public Result<PageResult<OnlineUserResp>> listOnlineUser(OnlineUserQuery onlineUserQuery) {
+        return Result.success(userService.listOnlineUser(onlineUserQuery));
     }
 
     /**
@@ -147,7 +150,7 @@ public class UserController {
     @SaCheckRole("1")
     @ApiOperation(value = "修改管理员密码")
     @PutMapping("/admin/password")
-    public Result<?> updateAdminPassword(@Validated @RequestBody PasswordDTO password) {
+    public Result<?> updateAdminPassword(@Validated @RequestBody PasswordReq password) {
         userService.updateAdminPassword(password);
         return Result.success();
     }

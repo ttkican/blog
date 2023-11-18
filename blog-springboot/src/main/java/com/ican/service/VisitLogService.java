@@ -1,29 +1,47 @@
 package com.ican.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.VisitLog;
-import com.ican.model.dto.ConditionDTO;
+import com.ican.mapper.VisitLogMapper;
 import com.ican.model.vo.PageResult;
+import com.ican.model.vo.query.LogQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
- * 访问业务接口
+ * 访问服务
  *
  * @author ican
  */
-public interface VisitLogService extends IService<VisitLog> {
+@Service
+public class VisitLogService extends ServiceImpl<VisitLogMapper, VisitLog> {
 
-    /**
-     * 保存访问日志
-     *
-     * @param visitLog 访问日志信息
-     */
-    void saveVisitLog(VisitLog visitLog);
+    @Autowired
+    private VisitLogMapper visitLogMapper;
 
-    /**
-     * 查看访问日志列表
-     *
-     * @param condition 条件
-     * @return 日志列表
-     */
-    PageResult<VisitLog> listVisitLog(ConditionDTO condition);
+    public void saveVisitLog(VisitLog visitLog) {
+        // 保存访问日志
+        visitLogMapper.insert(visitLog);
+    }
+
+    public PageResult<VisitLog> listVisitLog(LogQuery logQuery) {
+        // 查询访问日志数量
+        Long count = visitLogMapper.selectCount(new LambdaQueryWrapper<VisitLog>()
+                .like(StringUtils.hasText(logQuery.getKeyword()), VisitLog::getPage, logQuery.getKeyword())
+        );
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询访问日志列表
+        List<VisitLog> visitLogVOList = visitLogMapper.selectVisitLogList(logQuery);
+        return new PageResult<>(visitLogVOList, count);
+    }
 }
+
+
+
+

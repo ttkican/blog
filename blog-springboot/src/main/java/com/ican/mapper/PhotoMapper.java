@@ -2,8 +2,9 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Photo;
-import com.ican.model.vo.PhotoBackVO;
-import com.ican.model.vo.PhotoVO;
+import com.ican.model.vo.query.PhotoQuery;
+import com.ican.model.vo.response.PhotoBackResp;
+import com.ican.model.vo.response.PhotoResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,12 +21,10 @@ public interface PhotoMapper extends BaseMapper<Photo> {
     /**
      * 查询后台照片列表
      *
-     * @param limit   页码
-     * @param size    大小
-     * @param albumId 相册id
+     * @param photoQuery 照片查询条件
      * @return 后台照片列表
      */
-    List<PhotoBackVO> selectPhotoBackVOList(@Param("limit") Long limit, @Param("size") Long size, @Param("albumId") Integer albumId);
+    List<PhotoBackResp> selectBackPhotoList(@Param("param") PhotoQuery photoQuery);
 
     /**
      * 查询照片列表
@@ -33,5 +32,5 @@ public interface PhotoMapper extends BaseMapper<Photo> {
      * @param albumId 相册id
      * @return 后台照片列表
      */
-    List<PhotoVO> selectPhotoVOList(@Param("albumId") Integer albumId);
+    List<PhotoResp> selectPhotoVOList(@Param("albumId") Integer albumId);
 }

@@ -1,6 +1,6 @@
 package com.ican.strategy.context;
 
-import com.ican.model.vo.ArticleSearchVO;
+import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.strategy.SearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class SearchStrategyContext {
      * @param keyword 关键字
      * @return {@link List <ArticleSearchVO>} 搜索文章
      */
-    public List<ArticleSearchVO> executeSearchStrategy(String keyword) {
+    public List<ArticleSearchResp> executeSearchStrategy(String keyword) {
         return searchStrategyMap.get(getStrategy(searchMode)).searchArticle(keyword);
     }
 

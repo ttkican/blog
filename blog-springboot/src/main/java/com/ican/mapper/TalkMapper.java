@@ -2,9 +2,11 @@ package com.ican.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ican.entity.Talk;
-import com.ican.model.vo.TalkBackInfoVO;
-import com.ican.model.vo.TalkBackVO;
-import com.ican.model.vo.TalkVO;
+import com.ican.model.vo.query.PageQuery;
+import com.ican.model.vo.query.TalkQuery;
+import com.ican.model.vo.response.TalkBackInfoResp;
+import com.ican.model.vo.response.TalkBackResp;
+import com.ican.model.vo.response.TalkResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,12 +23,10 @@ public interface TalkMapper extends BaseMapper<Talk> {
     /**
      * 查询后台说说列表
      *
-     * @param limit  页码
-     * @param size   大小
-     * @param status 状态
+     * @param talkQuery 说说查询条件
      * @return 后台说说列表
      */
-    List<TalkBackVO> selectTalkBackVO(@Param("limit") Long limit, @Param("size") Long size, @Param("status") Integer status);
+    List<TalkBackResp> selectBackTalkList(@Param("param") TalkQuery talkQuery);
 
     /**
      * 根据id查询后台说说
@@ -34,7 +34,7 @@ public interface TalkMapper extends BaseMapper<Talk> {
      * @param talkId 说说id
      * @return 后台说说
      */
-    TalkBackInfoVO selectTalkBackById(Integer talkId);
+    TalkBackInfoResp selectTalkBackById(@Param("talkId") Integer talkId);
 
     /**
      * 根据id查询说说
@@ -42,16 +42,15 @@ public interface TalkMapper extends BaseMapper<Talk> {
      * @param talkId 说说id
      * @return 说说
      */
-    TalkVO selectTalkById(Integer talkId);
+    TalkResp selectTalkById(@Param("talkId") Integer talkId);
 
     /**
      * 查询说说列表
      *
-     * @param limit 页码
-     * @param size  大小
+     * @param pageQuery 分页查询条件
      * @return 说说列表
      */
-    List<TalkVO> selectTalkList(@Param("limit") Long limit, @Param("size") Long size);
+    List<TalkResp> selectTalkList(@Param("param") PageQuery pageQuery);
 }
 
 

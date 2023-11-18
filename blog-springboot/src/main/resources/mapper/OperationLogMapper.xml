@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ican.mapper.OperationLogMapper">
 
-    <select id="selectOperationLogVOList" resultType="com.ican.model.vo.OperationLogVO">
+    <select id="selectOperationLogVOList" resultType="com.ican.model.vo.response.OperationLogResp">
         SELECT
         tol.id,
         `module`,
@@ -21,14 +21,14 @@
         FROM
         ( SELECT id FROM t_operation_log
         <where>
-            <if test="condition.optModule!=null">
-                `module` like concat('%',#{condition.optModule},'%')
+            <if test="param.optModule != null and param.optModule != ''">
+                `module` like concat('%',#{param.optModule},'%')
             </if>
-            <if test="condition.keyword!=null">
-                OR description like concat('%',#{condition.keyword},'%')
+            <if test="param.keyword != null and param.keyword != ''">
+                OR description like concat('%',#{param.keyword},'%')
             </if>
         </where>
-        ORDER BY id DESC LIMIT #{limit},#{size} ) temp
+        ORDER BY id DESC LIMIT #{param.current},#{param.size} ) temp
         INNER JOIN t_operation_log tol ON temp.id = tol.id
     </select>
 

@@ -1,5 +1,6 @@
 import { getUserMenu } from "@/api/menu";
-import ParentView from "@/components/ParentView/index.vue";
+// import ParentView from "@/components/ParentView/index.vue";
+// import Layout from "@/layouts/index.vue";
 import { constantRoutes } from "@/router";
 import { defineStore } from "pinia";
 import { RouteRecordRaw } from "vue-router";
@@ -7,13 +8,14 @@ import { PermissionState } from "../interface";
 
 const modules = import.meta.glob("../../views/**/**.vue");
 
+export const ParentView = () => import("../../components/ParentView/index.vue");
 export const Layout = () => import("../../layouts/index.vue");
 
-export const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
+const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
   const res: RouteRecordRaw[] = [];
   routes.forEach((route) => {
     const tmp = { ...route } as any;
-    if (tmp.component == "Layout") {
+    if (tmp.component === "Layout") {
       tmp.component = Layout;
     } else if (tmp.component === "ParentView") {
       tmp.component = ParentView;
