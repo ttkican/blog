@@ -1,21 +1,20 @@
 package com.ican.strategy.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.ican.config.properties.QqProperties;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
-import com.ican.model.dto.QqLoginDTO;
-import com.ican.model.dto.SocialTokenDTO;
-import com.ican.model.dto.SocialUserInfoDTO;
-import com.ican.model.dto.TokenDTO;
-import com.ican.model.dto.QqUserInfoDTO;
+import com.ican.model.dto.*;
 import com.ican.model.vo.request.CodeReq;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URI;
 import java.util.Objects;
 
 import static com.ican.constant.SocialLoginConstant.*;
@@ -26,6 +25,7 @@ import static com.ican.constant.SocialLoginConstant.*;
  * @author ican
  * @date 2023/04/06 18:43
  **/
+@Slf4j
 @Service("qqLoginStrategyImpl")
 public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
 
@@ -40,10 +40,10 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
         // 获取Qq的Token
         TokenDTO qqToken = getQqToken(codeReq.getCode());
         // 获取用户OpenId
-        String userOpenId = getUserOpenId(qqToken.getAccess_token());
+        QqTokenDTO userOpenId = getUserOpenId(qqToken.getAccess_token());
         // 返回token信息
         return SocialTokenDTO.builder()
-                .openId(userOpenId)
+                .openId(userOpenId.getOpenid())
                 .accessToken(qqToken.getAccess_token())
                 .loginType(LoginTypeEnum.QQ.getLoginType())
                 .build();
@@ -52,12 +52,14 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
     @Override
     public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         // 定义请求参数
-        Map<String, String> formData = new HashMap<>(3);
-        formData.put(QQ_OPEN_ID, socialToken.getOpenId());
-        formData.put(ACCESS_TOKEN, socialToken.getAccessToken());
-        formData.put(OAUTH_CONSUMER_KEY, qqProperties.getAppId());
+        MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(3);
+        queryMap.set(QQ_OPEN_ID, socialToken.getOpenId());
+        queryMap.set(ACCESS_TOKEN, socialToken.getAccessToken());
+        queryMap.set(OAUTH_CONSUMER_KEY, qqProperties.getAppId());
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getUserInfoUrl());
+        URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
         // 获取QQ返回的用户信息
-        QqUserInfoDTO qqUserInfo = JSON.parseObject(restTemplate.getForObject(qqProperties.getUserInfoUrl(), String.class, formData), QqUserInfoDTO.class);
+        QqUserInfoDTO qqUserInfo = restTemplate.getForObject(uri, QqUserInfoDTO.class);
         // 返回用户信息
         return SocialUserInfoDTO.builder()
                 .id(socialToken.getOpenId())
@@ -73,17 +75,21 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
      * @return {@link TokenDTO} QQ的Token
      */
     private TokenDTO getQqToken(String code) {
-        // 根据code换取accessToken
-        Map<String, String> qqData = new HashMap<>(5);
-        // Gitee的Token请求参数
-        qqData.put(GRANT_TYPE, qqProperties.getGrantType());
-        qqData.put(CLIENT_ID, qqProperties.getAppId());
-        qqData.put(CLIENT_SECRET, qqProperties.getAppKey());
-        qqData.put(CODE, code);
-        qqData.put(REDIRECT_URI, qqProperties.getRedirectUrl());
         try {
-            return restTemplate.getForObject(qqProperties.getAccessTokenUrl(), TokenDTO.class, qqData);
+            // 根据code换取accessToken
+            MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(6);
+            // Gitee的Token请求参数
+            queryMap.set(GRANT_TYPE, qqProperties.getGrantType());
+            queryMap.set(CLIENT_ID, qqProperties.getAppId());
+            queryMap.set(CLIENT_SECRET, qqProperties.getAppKey());
+            queryMap.set(CODE, code);
+            queryMap.set(REDIRECT_URI, qqProperties.getRedirectUrl());
+            queryMap.set(FMT, "json");
+            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getAccessTokenUrl());
+            URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
+            return restTemplate.getForObject(uri, TokenDTO.class);
         } catch (Exception e) {
+            log.error("getQqToken is error, {}", e.getMessage());
             throw new ServiceException("QQ登录错误");
         }
     }
@@ -93,12 +99,19 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
      *
      * @return 用户的OpenId
      */
-    private String getUserOpenId(String accessToken) {
-        Map<String, String> dataMap = new HashMap<>(1);
-        // 请求参数
-        dataMap.put(ACCESS_TOKEN, accessToken);
-        // 返回用户OpenId
-        QqLoginDTO qqLoginDTO = restTemplate.getForObject(qqProperties.getUserOpenIdUrl(), QqLoginDTO.class, dataMap);
-        return qqLoginDTO.getOpenid();
+    private QqTokenDTO getUserOpenId(String accessToken) {
+        try {
+            // 返回用户OpenId
+            MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(2);
+            // 请求参数
+            queryMap.set(ACCESS_TOKEN, accessToken);
+            queryMap.set(FMT, "json");
+            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getUserOpenIdUrl());
+            URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
+            return restTemplate.getForObject(uri, QqTokenDTO.class);
+        } catch (RestClientException e) {
+            log.info("getUserOpenId is error, {}", e.getMessage());
+            throw new ServiceException("QQ登录错误");
+        }
     }
 }

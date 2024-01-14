@@ -203,7 +203,7 @@ oauth:
     grant_type: authorization_code
     redirect-url: https://你的前台域名/oauth/login/qq #QQ回调地址
     access-token-url: https://graph.qq.com/oauth2.0/token
-    user-openid-url: https://graph.qq.com/oauth2.0/me?access_token={access_token}
-    user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}
+    user-openid-url: https://graph.qq.com/oauth2.0/me
+    user-info-url: https://graph.qq.com/user/get_user_info
 # B站图片上传链接
 bili-url: https://api.bilibili.com/x/dynamic/feed/draw/upload_bfs
