@@ -24,7 +24,7 @@
         </template>
       </el-table-column>
       <!-- 昵称 -->
-      <el-table-column prop="nickname" label="昵称" align="center" width="140"></el-table-column>
+      <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
       <!-- 登录方式 -->
       <el-table-column prop="loginType" label="登录方式" align="center" width="100">
         <template #default="scope">
@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
       <!-- 用户角色 -->
-      <el-table-column prop="roleList" label="用户角色" align="center">
+      <el-table-column prop="roleList" label="用户角色" align="center" width="150">
         <template #default="scope">
           <el-tag v-for="item in scope.row.roleList" :key="item.id" style="margin-right:4px;margin-top:4px">
             {{ item.roleName }}
@@ -50,33 +50,33 @@
         </template>
       </el-table-column>
       <!-- 登录ip -->
-      <el-table-column prop="ipAddress" label="登录ip" align="center" width="140"></el-table-column>
+      <el-table-column prop="ipAddress" label="登录ip" align="center"></el-table-column>
       <!-- 登录地址 -->
-      <el-table-column prop="ipSource" label="登录地址" align="center" width="140"></el-table-column>
+      <el-table-column prop="ipSource" label="登录地址" align="center"></el-table-column>
       <!-- 创建时间 -->
-      <el-table-column prop="createTime" label="创建时间" align="center" width="130">
+      <el-table-column prop="createTime" label="创建时间" align="center" width="220">
         <template #default="scope">
           <div class="create-time">
             <el-icon>
               <clock />
             </el-icon>
-            <span style="margin-left: 10px">{{ formatDate(scope.row.createTime) }}</span>
+            <span style="margin-left: 10px">{{ formatDateTime(scope.row.createTime) }}</span>
           </div>
         </template>
       </el-table-column>
       <!-- 登录时间 -->
-      <el-table-column prop="loginTime" label="登录时间" align="center" width="130">
+      <el-table-column prop="loginTime" label="登录时间" align="center" width="220">
         <template #default="scope">
           <div class="create-time">
             <el-icon>
               <clock />
             </el-icon>
-            <span style="margin-left: 10px">{{ formatDate(scope.row.loginTime) }}</span>
+            <span style="margin-left: 10px">{{ formatDateTime(scope.row.loginTime) }}</span>
           </div>
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column label="操作" align="center" width="100">
+      <el-table-column label="操作" align="center" width="130">
         <template #default="scope">
           <el-button type="primary" icon="Edit" link @click="openModel(scope.row)">
             编辑
@@ -114,7 +114,7 @@
 <script setup lang="ts">
 import { getUserList, getUserRoleList, updateUser, updateUserStatus } from '@/api/user';
 import { User, UserForm, UserQuery, UserRole } from '@/api/user/types';
-import { formatDate } from "@/utils/date";
+import { formatDateTime } from "@/utils/date";
 import { messageConfirm, notifySuccess } from '@/utils/modal';
 import { FormInstance, FormRules } from 'element-plus';
 import { onMounted, reactive, ref, toRefs } from 'vue';
