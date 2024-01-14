@@ -16,7 +16,7 @@ public final class ServiceException extends RuntimeException {
     /**
      * 返回失败状态码
      */
-    private Integer code = FAIL.getCode();
+    private final Integer code = FAIL.getCode();
 
     /**
      * 返回信息

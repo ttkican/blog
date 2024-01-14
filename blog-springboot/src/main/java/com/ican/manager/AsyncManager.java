@@ -1,7 +1,7 @@
 package com.ican.manager;
 
 
-import com.ican.utils.SpringUtils;
+import cn.hutool.extra.spring.SpringUtil;
 import com.ican.utils.ThreadUtils;
 
 import java.util.TimerTask;
@@ -33,7 +33,7 @@ public class AsyncManager {
     /**
      * 异步操作任务调度线程池
      */
-    private final ScheduledExecutorService executor = SpringUtils.getBean("scheduledExecutorService");
+    private final ScheduledExecutorService executor = SpringUtil.getBean("scheduledExecutorService");
 
     /**
      * 执行任务

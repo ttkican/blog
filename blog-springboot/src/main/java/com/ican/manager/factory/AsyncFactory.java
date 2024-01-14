@@ -1,13 +1,13 @@
 package com.ican.manager.factory;
 
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.ican.entity.ExceptionLog;
 import com.ican.entity.OperationLog;
 import com.ican.entity.VisitLog;
 import com.ican.service.ExceptionLogService;
 import com.ican.service.OperationLogService;
 import com.ican.service.VisitLogService;
-import com.ican.utils.SpringUtils;
 
 import java.util.TimerTask;
 
@@ -28,7 +28,7 @@ public class AsyncFactory {
         return new TimerTask() {
             @Override
             public void run() {
-                SpringUtils.getBean(OperationLogService.class).saveOperationLog(operationLog);
+                SpringUtil.getBean(OperationLogService.class).saveOperationLog(operationLog);
             }
         };
     }
@@ -43,7 +43,7 @@ public class AsyncFactory {
         return new TimerTask() {
             @Override
             public void run() {
-                SpringUtils.getBean(ExceptionLogService.class).saveExceptionLog(exceptionLog);
+                SpringUtil.getBean(ExceptionLogService.class).saveExceptionLog(exceptionLog);
             }
         };
     }
@@ -58,7 +58,7 @@ public class AsyncFactory {
         return new TimerTask() {
             @Override
             public void run() {
-                SpringUtils.getBean(VisitLogService.class).saveVisitLog(visitLog);
+                SpringUtil.getBean(VisitLogService.class).saveVisitLog(visitLog);
             }
         };
     }

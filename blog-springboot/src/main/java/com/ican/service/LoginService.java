@@ -3,6 +3,7 @@ package com.ican.service;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.captcha.generator.RandomGenerator;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.Validator;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.ican.entity.SiteConfig;
@@ -30,7 +31,6 @@ import static com.ican.constant.MqConstant.EMAIL_SIMPLE_KEY;
 import static com.ican.constant.RedisConstant.*;
 import static com.ican.enums.LoginTypeEnum.EMAIL;
 import static com.ican.enums.RoleEnum.USER;
-import static com.ican.utils.CommonUtils.checkEmail;
 
 /**
  * 登录服务
@@ -70,7 +70,7 @@ public class LoginService {
     }
 
     public void sendCode(String username) {
-        Assert.isTrue(checkEmail(username), "请输入正确的邮箱！");
+        Assert.isTrue(Validator.isEmail(username), "请输入正确的邮箱！");
         RandomGenerator randomGenerator = new RandomGenerator("0123456789", 6);
         String code = randomGenerator.generate();
         MailDTO mailDTO = MailDTO.builder()

@@ -7,6 +7,7 @@ import com.ican.service.RedisService;
 import com.ican.utils.IpUtils;
 import com.ican.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     private RedisService redisService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         boolean result = true;
         // Handler 是否为 HandlerMethod 实例
         if (handler instanceof HandlerMethod) {

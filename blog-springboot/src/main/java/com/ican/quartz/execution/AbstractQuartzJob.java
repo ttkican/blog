@@ -1,10 +1,10 @@
 package com.ican.quartz.execution;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.ican.constant.ScheduleConstant;
 import com.ican.entity.Task;
 import com.ican.entity.TaskLog;
 import com.ican.mapper.TaskLogMapper;
-import com.ican.utils.SpringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -79,7 +79,7 @@ public abstract class AbstractQuartzJob implements Job {
             taskLog.setStatus(TRUE);
         }
         // 写入数据库当中
-        SpringUtils.getBean(TaskLogMapper.class).insert(taskLog);
+        SpringUtil.getBean(TaskLogMapper.class).insert(taskLog);
     }
 
     /**

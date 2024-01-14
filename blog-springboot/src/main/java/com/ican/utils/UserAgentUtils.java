@@ -12,7 +12,6 @@ import java.util.Map;
  *
  * @author ican
  */
-
 public class UserAgentUtils {
 
     private static final UserAgentAnalyzer USER_AGENT_ANALYZER;

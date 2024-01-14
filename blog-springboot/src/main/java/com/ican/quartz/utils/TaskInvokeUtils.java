@@ -1,7 +1,7 @@
 package com.ican.quartz.utils;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.ican.entity.Task;
-import com.ican.utils.SpringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +27,7 @@ public class TaskInvokeUtils {
         String methodName = getMethodName(invokeTarget);
         List<Object[]> methodParams = getMethodParams(invokeTarget);
         if (!isValidClassName(beanName)) {
-            Object bean = SpringUtils.getBean(beanName);
+            Object bean = SpringUtil.getBean(beanName);
             invokeMethod(bean, methodName, methodParams);
         } else {
             Object bean = Class.forName(beanName).getDeclaredConstructor().newInstance();
