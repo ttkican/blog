@@ -1,5 +1,7 @@
 package com.ican.model.vo.response;
 
+import com.ican.annotation.Desensitization;
+import com.ican.enums.DesensitizationTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -38,12 +40,14 @@ public class UserBackResp {
     /**
      * 登录ip
      */
+    @Desensitization(type = DesensitizationTypeEnum.IP4)
     @ApiModelProperty(value = "登录ip")
     private String ipAddress;
 
     /**
      * 登录地址
      */
+    @Desensitization(type = DesensitizationTypeEnum.ADDRESS)
     @ApiModelProperty(value = "登录地址")
     private String ipSource;
 

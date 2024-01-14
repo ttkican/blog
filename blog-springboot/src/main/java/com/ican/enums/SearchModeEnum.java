@@ -16,6 +16,7 @@ public enum SearchModeEnum {
      * mysql
      */
     MYSQL("mysql", "mySqlSearchStrategyImpl"),
+
     /**
      * elasticsearch
      */
