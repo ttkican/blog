@@ -101,7 +101,7 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
         return categoryMapper.selectCategoryVO();
     }
 
-    public ArticleConditionList listArticleCategory(@Validated ArticleConditionQuery articleConditionQuery) {
+    public ArticleConditionList listArticleCategory(ArticleConditionQuery articleConditionQuery) {
         List<ArticleConditionResp> articleConditionList = articleMapper.selectArticleListByCondition(articleConditionQuery);
         String name = categoryMapper.selectOne(new LambdaQueryWrapper<Category>()
                         .select(Category::getCategoryName)

@@ -126,7 +126,7 @@ public class TagController {
     @VisitLogger(value = "标签文章")
     @ApiOperation(value = "查看标签下的文章")
     @GetMapping("/tag/article")
-    public Result<ArticleConditionList> listArticleTag(@Validated ArticleConditionQuery articleConditionQuery) {
+    public Result<ArticleConditionList> listArticleTag(ArticleConditionQuery articleConditionQuery) {
         return Result.success(tagService.listArticleTag(articleConditionQuery));
     }
 }

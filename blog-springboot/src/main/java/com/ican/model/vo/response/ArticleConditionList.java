@@ -1,6 +1,5 @@
 package com.ican.model.vo.response;
 
-import com.ican.model.vo.response.ArticleConditionResp;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
