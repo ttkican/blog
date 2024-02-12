@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ican.mapper.CarouselMapper">
+
+    <select id="selectBackCarouselList" resultType="com.ican.model.vo.response.CarouselBackResp">
+        select id, img_url, `status`, remark, create_time, update_time
+        from t_carousel
+        <where>
+            <if test="param.status != null">
+                status = #{param.status}
+            </if>
+        </where>
+        limit #{param.current}, #{param.size}
+    </select>
+
+    <select id="selectCarouselList" resultType="com.ican.model.vo.response.CarouselResp">
+        select id, img_url
+        from t_carousel
+        where `status` = 1
+    </select>
+
+</mapper>

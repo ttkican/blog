@@ -1,6 +1,8 @@
 package com.ican.strategy.impl;
 
 import com.ican.config.properties.GithubProperties;
+import com.ican.constant.SocialLoginConstant;
+import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
 import com.ican.model.dto.GitUserInfoDTO;
 import com.ican.model.dto.SocialTokenDTO;
@@ -20,9 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.ican.constant.SocialLoginConstant.*;
-import static com.ican.enums.LoginTypeEnum.GITHUB;
 
 /**
  * Github登录策略
@@ -45,7 +44,7 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
         // 返回Github的Token信息
         return SocialTokenDTO.builder()
                 .accessToken(githubToken.getAccess_token())
-                .loginType(GITHUB.getLoginType())
+                .loginType(LoginTypeEnum.GITHUB.getLoginType())
                 .build();
     }
 
@@ -77,10 +76,10 @@ public class GithubLoginStrategyImpl extends AbstractLoginStrategyImpl {
         // 根据code换取accessToken
         MultiValueMap<String, String> githubData = new LinkedMultiValueMap<>();
         // Github的Token请求参数
-        githubData.add(CLIENT_ID, githubProperties.getClientId());
-        githubData.add(CLIENT_SECRET, githubProperties.getClientSecret());
-        githubData.add(REDIRECT_URI, githubProperties.getRedirectUrl());
-        githubData.add(CODE, code);
+        githubData.add(SocialLoginConstant.CLIENT_ID, githubProperties.getClientId());
+        githubData.add(SocialLoginConstant.CLIENT_SECRET, githubProperties.getClientSecret());
+        githubData.add(SocialLoginConstant.REDIRECT_URI, githubProperties.getRedirectUrl());
+        githubData.add(SocialLoginConstant.CODE, code);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(githubData, headers);

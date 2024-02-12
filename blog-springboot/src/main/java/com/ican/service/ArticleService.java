@@ -6,7 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
+import com.ican.constant.RedisConstant;
 import com.ican.entity.*;
+import com.ican.enums.ArticleStatusEnum;
+import com.ican.enums.FilePathEnum;
 import com.ican.mapper.*;
 import com.ican.model.vo.*;
 import com.ican.model.vo.query.ArticleQuery;
@@ -19,23 +23,17 @@ import com.ican.model.vo.response.*;
 import com.ican.strategy.context.SearchStrategyContext;
 import com.ican.strategy.context.UploadStrategyContext;
 import com.ican.utils.BeanCopyUtils;
-import com.ican.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.ican.constant.CommonConstant.FALSE;
-import static com.ican.constant.RedisConstant.*;
-import static com.ican.enums.ArticleStatusEnum.PUBLIC;
-import static com.ican.enums.FilePathEnum.ARTICLE;
 
 /**
  * 文章服务
@@ -71,7 +69,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     private UploadStrategyContext uploadStrategyContext;
 
     @Autowired
-    private BlogFileMapper blogFileMapper;
+    private BlogFileService blogFileService;
 
     public PageResult<ArticleBackResp> listArticleBackVO(ArticleQuery articleQuery) {
         // 查询文章数量
@@ -82,9 +80,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         // 查询文章后台信息
         List<ArticleBackResp> articleBackRespList = articleMapper.selectBackArticleList(articleQuery);
         // 浏览量
-        Map<Object, Double> viewCountMap = redisService.getZsetAllScore(ARTICLE_VIEW_COUNT);
+        Map<Object, Double> viewCountMap = redisService.getZsetAllScore(RedisConstant.ARTICLE_VIEW_COUNT);
         // 点赞量
-        Map<String, Integer> likeCountMap = redisService.getHashAll(ARTICLE_LIKE_COUNT);
+        Map<String, Integer> likeCountMap = redisService.getHashAll(RedisConstant.ARTICLE_LIKE_COUNT);
         // 封装文章后台信息
         articleBackRespList.forEach(item -> {
             Double viewCount = Optional.ofNullable(viewCountMap.get(item.getId())).orElse((double) 0);
@@ -102,7 +100,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         // 添加文章
         Article newArticle = BeanCopyUtils.copyBean(article, Article.class);
         if (StringUtils.isBlank(newArticle.getArticleCover())) {
-            SiteConfig siteConfig = redisService.getObject(SITE_SETTING);
+            SiteConfig siteConfig = redisService.getObject(RedisConstant.SITE_SETTING);
             newArticle.setArticleCover(siteConfig.getArticleCover());
         }
         newArticle.setCategoryId(categoryId);
@@ -128,8 +126,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
                 .map(id -> Article.builder()
                         .id(id)
                         .isDelete(delete.getIsDelete())
-                        .isTop(FALSE)
-                        .isRecommend(FALSE)
+                        .isTop(CommonConstant.FALSE)
+                        .isRecommend(CommonConstant.FALSE)
                         .build())
                 .collect(Collectors.toList());
         this.updateBatchById(articleList);
@@ -188,8 +186,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     public PageResult<ArticleHomeResp> listArticleHomeVO(PageQuery pageQuery) {
         // 查询文章数量
         Long count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
-                .eq(Article::getIsDelete, FALSE)
-                .eq(Article::getStatus, PUBLIC.getStatus()));
+                .eq(Article::getIsDelete, CommonConstant.FALSE)
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()));
         if (count == 0) {
             return new PageResult<>();
         }
@@ -205,7 +203,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
             return null;
         }
         // 浏览量+1
-        redisService.incrZet(ARTICLE_VIEW_COUNT, articleId, 1D);
+        redisService.incrZet(RedisConstant.ARTICLE_VIEW_COUNT, articleId, 1D);
         // 查询上一篇文章
         ArticlePaginationResp lastArticle = articleMapper.selectLastArticle(articleId);
         // 查询下一篇文章
@@ -213,11 +211,11 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         article.setLastArticle(lastArticle);
         article.setNextArticle(nextArticle);
         // 查询浏览量
-        Double viewCount = Optional.ofNullable(redisService.getZsetScore(ARTICLE_VIEW_COUNT, articleId))
+        Double viewCount = Optional.ofNullable(redisService.getZsetScore(RedisConstant.ARTICLE_VIEW_COUNT, articleId))
                 .orElse((double) 0);
         article.setViewCount(viewCount.intValue());
         // 查询点赞量
-        Integer likeCount = redisService.getHash(ARTICLE_LIKE_COUNT, articleId.toString());
+        Integer likeCount = redisService.getHash(RedisConstant.ARTICLE_LIKE_COUNT, articleId.toString());
         article.setLikeCount(Optional.ofNullable(likeCount).orElse(0));
         return article;
     }
@@ -225,8 +223,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     public PageResult<ArchiveResp> listArchiveVO(PageQuery pageQuery) {
         // 查询文章数量
         Long count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
-                .eq(Article::getIsDelete, FALSE)
-                .eq(Article::getStatus, PUBLIC.getStatus()));
+                .eq(Article::getIsDelete, CommonConstant.FALSE)
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()));
         if (count == 0) {
             return new PageResult<>();
         }
@@ -240,31 +238,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
     public String saveArticleImages(MultipartFile file) {
         // 上传文件
-        String url = uploadStrategyContext.executeUploadStrategy(file, ARTICLE.getPath());
-        try {
-            // 获取文件md5值
-            String md5 = FileUtils.getMd5(file.getInputStream());
-            // 获取文件扩展名
-            String extName = FileUtils.getExtension(file);
-            BlogFile existFile = blogFileMapper.selectOne(new LambdaQueryWrapper<BlogFile>()
-                    .select(BlogFile::getId)
-                    .eq(BlogFile::getFileName, md5)
-                    .eq(BlogFile::getFilePath, ARTICLE.getFilePath()));
-            if (Objects.isNull(existFile)) {
-                // 保存文件信息
-                BlogFile newFile = BlogFile.builder()
-                        .fileUrl(url)
-                        .fileName(md5)
-                        .filePath(ARTICLE.getFilePath())
-                        .extendName(extName)
-                        .fileSize((int) file.getSize())
-                        .isDir(FALSE)
-                        .build();
-                blogFileMapper.insert(newFile);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String url = uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.ARTICLE.getPath());
+        blogFileService.saveBlogFile(file, url, FilePathEnum.ARTICLE.getFilePath());
         return url;
     }
 

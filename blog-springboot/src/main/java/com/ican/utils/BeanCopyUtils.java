@@ -1,5 +1,6 @@
 package com.ican.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
  *
  * @author ican
  */
+@Slf4j
 public class BeanCopyUtils {
 
     public static <T> T copyBean(Object source, Class<T> target) {
@@ -22,7 +24,7 @@ public class BeanCopyUtils {
                 BeanUtils.copyProperties(source, result);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("copyBean is error, {}", e.getMessage());
         }
         // 返回结果
         return result;
@@ -30,7 +32,7 @@ public class BeanCopyUtils {
 
     public static <T, S> List<T> copyBeanList(List<S> source, Class<T> target) {
         List<T> list = new ArrayList<>();
-        if (null != source && source.size() > 0) {
+        if (null != source && !source.isEmpty()) {
             for (Object obj : source) {
                 list.add(copyBean(obj, target));
             }

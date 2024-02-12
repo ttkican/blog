@@ -1,6 +1,8 @@
 package com.ican.strategy.impl;
 
 import com.ican.config.properties.GiteeProperties;
+import com.ican.constant.SocialLoginConstant;
+import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
 import com.ican.model.dto.GitUserInfoDTO;
 import com.ican.model.dto.SocialTokenDTO;
@@ -18,9 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.ican.constant.SocialLoginConstant.*;
-import static com.ican.enums.LoginTypeEnum.GITEE;
 
 /**
  * Gitee登录策略
@@ -43,7 +42,7 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
         // 返回Gitee的Token信息
         return SocialTokenDTO.builder()
                 .accessToken(giteeToken.getAccess_token())
-                .loginType(GITEE.getLoginType())
+                .loginType(LoginTypeEnum.GITEE.getLoginType())
                 .build();
     }
 
@@ -51,7 +50,7 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
     public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         Map<String, String> dataMap = new HashMap<>(1);
         // 请求参数
-        dataMap.put(ACCESS_TOKEN, socialToken.getAccessToken());
+        dataMap.put(SocialLoginConstant.ACCESS_TOKEN, socialToken.getAccessToken());
         // Gitee用户信息
         GitUserInfoDTO gitUserInfoDTO = restTemplate.getForObject(giteeProperties.getUserInfoUrl(), GitUserInfoDTO.class, dataMap);
         // 返回用户信息
@@ -71,11 +70,11 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
         // 根据code换取accessToken
         MultiValueMap<String, String> giteeData = new LinkedMultiValueMap<>();
         // Gitee的Token请求参数
-        giteeData.add(CLIENT_ID, giteeProperties.getClientId());
-        giteeData.add(CLIENT_SECRET, giteeProperties.getClientSecret());
-        giteeData.add(GRANT_TYPE, giteeProperties.getGrantType());
-        giteeData.add(REDIRECT_URI, giteeProperties.getRedirectUrl());
-        giteeData.add(CODE, code);
+        giteeData.add(SocialLoginConstant.CLIENT_ID, giteeProperties.getClientId());
+        giteeData.add(SocialLoginConstant.CLIENT_SECRET, giteeProperties.getClientSecret());
+        giteeData.add(SocialLoginConstant.GRANT_TYPE, giteeProperties.getGrantType());
+        giteeData.add(SocialLoginConstant.REDIRECT_URI, giteeProperties.getRedirectUrl());
+        giteeData.add(SocialLoginConstant.CODE, code);
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(giteeData, null);
         try {
             return restTemplate.exchange(giteeProperties.getAccessTokenUrl(),

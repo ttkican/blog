@@ -35,7 +35,13 @@ public enum FilePathEnum {
     /**
      * 照片路径
      */
-    PHOTO("photo/", "/photo", "相册路径");
+    PHOTO("photo/", "/photo", "相册路径"),
+
+    /**
+     * 轮播图路径
+     */
+    CAROUSEL("carousel/", "/carousel", "轮播图路径"),
+    ;
 
     /**
      * 路径

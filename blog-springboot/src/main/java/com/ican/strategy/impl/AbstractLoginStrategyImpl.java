@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ican.entity.User;
 import com.ican.entity.UserRole;
+import com.ican.enums.RoleEnum;
 import com.ican.mapper.UserMapper;
 import com.ican.mapper.UserRoleMapper;
 import com.ican.model.dto.SocialTokenDTO;
@@ -14,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-
-import static com.ican.enums.RoleEnum.USER;
 
 /**
  * 抽象登录模板
@@ -91,7 +90,7 @@ public abstract class AbstractLoginStrategyImpl implements SocialLoginStrategy {
         // 新增用户角色
         UserRole userRole = UserRole.builder()
                 .userId(newUser.getId())
-                .roleId(USER.getRoleId())
+                .roleId(RoleEnum.USER.getRoleId())
                 .build();
         userRoleMapper.insert(userRole);
         return newUser;

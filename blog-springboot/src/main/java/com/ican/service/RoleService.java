@@ -5,6 +5,7 @@ import cn.dev33.satoken.session.SaSessionCustomUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
 import com.ican.entity.Role;
 import com.ican.entity.UserRole;
 import com.ican.mapper.RoleMapper;
@@ -21,9 +22,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.ican.constant.CommonConstant.ADMIN;
-import static com.ican.constant.CommonConstant.TRUE;
 
 /**
  * 角色服务
@@ -68,7 +66,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
     public void deleteRole(List<String> roleIdList) {
-        Assert.isFalse(roleIdList.contains(ADMIN), "不允许删除管理员角色");
+        Assert.isFalse(roleIdList.contains(CommonConstant.ADMIN), "不允许删除管理员角色");
         // 角色是否已分配
         Long count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, roleIdList));
         Assert.isFalse(count > 0, "角色已分配");
@@ -84,7 +82,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
     public void updateRole(RoleReq role) {
-        Assert.isFalse(role.getId().equals(ADMIN) && role.getIsDisable().equals(TRUE), "不允许禁用管理员角色");
+        Assert.isFalse(role.getId().equals(CommonConstant.ADMIN) && role.getIsDisable().equals(CommonConstant.TRUE), "不允许禁用管理员角色");
         // 角色名是否存在
         Role existRole = roleMapper.selectOne(new LambdaQueryWrapper<Role>().select(Role::getId).eq(Role::getRoleName, role.getRoleName()));
         Assert.isFalse(Objects.nonNull(existRole) && !existRole.getId().equals(role.getId()),
@@ -107,7 +105,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
     public void updateRoleStatus(RoleStatusReq roleStatus) {
-        Assert.isFalse(roleStatus.getId().equals(ADMIN), "不允许禁用管理员角色");
+        Assert.isFalse(roleStatus.getId().equals(CommonConstant.ADMIN), "不允许禁用管理员角色");
         // 更新角色状态
         Role newRole = Role.builder()
                 .id(roleStatus.getId())

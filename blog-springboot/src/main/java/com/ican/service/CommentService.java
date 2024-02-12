@@ -6,7 +6,11 @@ import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
+import com.ican.constant.MqConstant;
+import com.ican.constant.RedisConstant;
 import com.ican.entity.*;
+import com.ican.enums.CommentTypeEnum;
 import com.ican.mapper.ArticleMapper;
 import com.ican.mapper.CommentMapper;
 import com.ican.mapper.TalkMapper;
@@ -28,11 +32,6 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.CommonConstant.*;
-import static com.ican.constant.MqConstant.*;
-import static com.ican.constant.RedisConstant.COMMENT_LIKE_COUNT;
-import static com.ican.enums.CommentTypeEnum.*;
 
 /**
  * 评论服务
@@ -92,7 +91,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 .parentId(comment.getParentId())
                 .replyId(comment.getReplyId())
                 .commentContent(comment.getCommentContent())
-                .isCheck(commentCheck.equals(FALSE) ? TRUE : FALSE)
+                .isCheck(commentCheck.equals(CommonConstant.FALSE) ? CommonConstant.TRUE : CommonConstant.FALSE)
                 .build();
         // 保存评论
         commentMapper.insert(newComment);
@@ -102,7 +101,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                         .eq(User::getId, StpUtil.getLoginIdAsInt()))
                 .getNickname();
         // 通知用户
-        if (siteConfig.getEmailNotice().equals(TRUE)) {
+        if (siteConfig.getEmailNotice().equals(CommonConstant.TRUE)) {
             CompletableFuture.runAsync(() -> notice(newComment, fromNickname));
         }
     }
@@ -122,7 +121,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         Long count = commentMapper.selectCount(new LambdaQueryWrapper<Comment>()
                 .eq(Objects.nonNull(commentQuery.getTypeId()), Comment::getTypeId, commentQuery.getTypeId())
                 .eq(Comment::getCommentType, commentQuery.getCommentType())
-                .eq(Comment::getIsCheck, TRUE)
+                .eq(Comment::getIsCheck, CommonConstant.TRUE)
                 .isNull(Comment::getParentId));
         if (count == 0) {
             return new PageResult<>();
@@ -133,7 +132,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
             return new PageResult<>();
         }
         // 评论点赞
-        Map<String, Integer> likeCountMap = redisService.getHashAll(COMMENT_LIKE_COUNT);
+        Map<String, Integer> likeCountMap = redisService.getHashAll(RedisConstant.COMMENT_LIKE_COUNT);
         // 父评论id集合
         List<Integer> parentCommentIdList = commentRespList.stream().map(CommentResp::getId).collect(Collectors.toList());
         // 分组查询每组父评论下的子评论前三条
@@ -159,17 +158,17 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         // 分页查询子评论
         List<ReplyResp> replyRespList = commentMapper.selectReplyByParentId(PageUtils.getLimit(), PageUtils.getSize(), commentId);
         // 子评论点赞Map
-        Map<String, Integer> likeCountMap = redisService.getHashAll(COMMENT_LIKE_COUNT);
+        Map<String, Integer> likeCountMap = redisService.getHashAll(RedisConstant.COMMENT_LIKE_COUNT);
         replyRespList.forEach(item -> item.setLikeCount(likeCountMap.get(item.getId().toString())));
         return replyRespList;
     }
 
     private void verifyComment(CommentReq comment) {
-        if (comment.getCommentType().equals(ARTICLE.getType())) {
+        if (comment.getCommentType().equals(CommentTypeEnum.ARTICLE.getType())) {
             Article article = articleMapper.selectOne(new LambdaQueryWrapper<Article>().select(Article::getId).eq(Article::getId, comment.getTypeId()));
             Assert.notNull(article, "文章不存在");
         }
-        if (comment.getCommentType().equals(TALK.getType())) {
+        if (comment.getCommentType().equals(CommentTypeEnum.TALK.getType())) {
             Talk talk = talkMapper.selectOne(new LambdaQueryWrapper<Talk>().select(Talk::getId).eq(Talk::getId, comment.getTypeId()));
             Assert.notNull(talk, "说说不存在");
         }
@@ -211,17 +210,17 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         // 邮件标题
         String title = "友链";
         // 回复用户id
-        Integer toUid = BLOGGER_ID;
+        Integer toUid = CommonConstant.BLOGGER_ID;
         // 父评论
         if (Objects.isNull(comment.getParentId())) {
-            if (comment.getCommentType().equals(ARTICLE.getType())) {
+            if (comment.getCommentType().equals(CommentTypeEnum.ARTICLE.getType())) {
                 Article article = articleMapper.selectOne(new LambdaQueryWrapper<Article>()
                         .select(Article::getArticleTitle, Article::getUserId)
                         .eq(Article::getId, comment.getTypeId()));
                 title = article.getArticleTitle();
                 toUid = article.getUserId();
             }
-            if (comment.getCommentType().equals(TALK.getType())) {
+            if (comment.getCommentType().equals(CommentTypeEnum.TALK.getType())) {
                 title = "说说";
                 toUid = talkMapper.selectOne(new LambdaQueryWrapper<Talk>()
                                 .select(Talk::getUserId)
@@ -235,13 +234,13 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
         } else {
             // 子评论
             toUid = comment.getToUid();
-            if (comment.getCommentType().equals(ARTICLE.getType())) {
+            if (comment.getCommentType().equals(CommentTypeEnum.ARTICLE.getType())) {
                 title = articleMapper.selectOne(new LambdaQueryWrapper<Article>()
                                 .select(Article::getArticleTitle)
                                 .eq(Article::getId, comment.getTypeId()))
                         .getArticleTitle();
             }
-            if (comment.getCommentType().equals(TALK.getType())) {
+            if (comment.getCommentType().equals(CommentTypeEnum.TALK.getType())) {
                 title = "说说";
             }
         }
@@ -265,18 +264,18 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
      */
     private void sendEmail(Comment comment, User toUser, String title, String fromNickname) {
         MailDTO mailDTO = new MailDTO();
-        if (comment.getIsCheck().equals(TRUE)) {
+        if (comment.getIsCheck().equals(CommonConstant.TRUE)) {
             Map<String, Object> contentMap = new HashMap<>(7);
             // 评论链接
             String typeId = Optional.ofNullable(comment.getTypeId())
                     .map(Object::toString)
                     .orElse("");
-            String url = websiteUrl + getCommentPath(comment.getCommentType()) + typeId;
+            String url = websiteUrl + CommentTypeEnum.getCommentPath(comment.getCommentType()) + typeId;
             // 父评论则提醒作者
             if (Objects.isNull(comment.getParentId())) {
                 mailDTO.setToEmail(toUser.getEmail());
-                mailDTO.setSubject(COMMENT_REMIND);
-                mailDTO.setTemplate(AUTHOR_TEMPLATE);
+                mailDTO.setSubject(CommonConstant.COMMENT_REMIND);
+                mailDTO.setTemplate(CommonConstant.AUTHOR_TEMPLATE);
                 String createTime = DateUtil.formatLocalDateTime(comment.getCreateTime());
                 contentMap.put("time", createTime);
                 contentMap.put("url", url);
@@ -290,8 +289,8 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                         .select(Comment::getCommentContent, Comment::getCreateTime)
                         .eq(Comment::getId, comment.getReplyId()));
                 mailDTO.setToEmail(toUser.getEmail());
-                mailDTO.setSubject(COMMENT_REMIND);
-                mailDTO.setTemplate(USER_TEMPLATE);
+                mailDTO.setSubject(CommonConstant.COMMENT_REMIND);
+                mailDTO.setTemplate(CommonConstant.USER_TEMPLATE);
                 contentMap.put("url", url);
                 contentMap.put("title", title);
                 String createTime = DateUtil.formatLocalDateTime(comment.getCreateTime());
@@ -307,17 +306,17 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 mailDTO.setContentMap(contentMap);
             }
             // 发送HTML邮件
-            rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, EMAIL_HTML_KEY, mailDTO);
+            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_HTML_KEY, mailDTO);
         } else {
             // 审核提醒
             String adminEmail = userMapper.selectOne(new LambdaQueryWrapper<User>()
                     .select(User::getEmail)
-                    .eq(User::getId, BLOGGER_ID)).getEmail();
+                    .eq(User::getId, CommonConstant.BLOGGER_ID)).getEmail();
             mailDTO.setToEmail(adminEmail);
-            mailDTO.setSubject(CHECK_REMIND);
+            mailDTO.setSubject(CommonConstant.CHECK_REMIND);
             mailDTO.setContent("您收到一条新的回复，请前往后台管理页面审核");
             // 发送普通邮件
-            rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, EMAIL_SIMPLE_KEY, mailDTO);
+            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);
         }
     }
 }

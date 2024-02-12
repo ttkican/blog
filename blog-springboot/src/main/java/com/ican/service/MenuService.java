@@ -3,6 +3,7 @@ package com.ican.service;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
 import com.ican.entity.Menu;
 import com.ican.entity.RoleMenu;
 import com.ican.mapper.MenuMapper;
@@ -21,8 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.CommonConstant.PARENT_ID;
 
 /**
  * 菜单业务接口实现类
@@ -93,12 +92,12 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> {
 
     public List<MenuTreeResp> listMenuTree() {
         List<MenuTreeResp> menuTreeRespList = menuMapper.selectMenuTree();
-        return recurMenuTreeList(PARENT_ID, menuTreeRespList);
+        return recurMenuTreeList(CommonConstant.PARENT_ID, menuTreeRespList);
     }
 
     public List<MenuOptionResp> listMenuOption() {
         List<MenuOptionResp> menuOptionList = menuMapper.selectMenuOptions();
-        return recurMenuOptionList(PARENT_ID, menuOptionList);
+        return recurMenuOptionList(CommonConstant.PARENT_ID, menuOptionList);
     }
 
     public MenuReq editMenu(Integer menuId) {

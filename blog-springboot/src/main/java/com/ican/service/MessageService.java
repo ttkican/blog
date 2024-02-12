@@ -2,6 +2,7 @@ package com.ican.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
 import com.ican.entity.Message;
 import com.ican.entity.SiteConfig;
 import com.ican.mapper.MessageMapper;
@@ -22,9 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.CommonConstant.FALSE;
-import static com.ican.constant.CommonConstant.TRUE;
 
 /**
  * 留言业务接口实现类
@@ -69,7 +67,7 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
         Message newMessage = BeanCopyUtils.copyBean(message, Message.class);
         newMessage.setMessageContent(HTMLUtils.filter(message.getMessageContent()));
         newMessage.setIpAddress(ipAddress);
-        newMessage.setIsCheck(messageCheck.equals(FALSE) ? TRUE : FALSE);
+        newMessage.setIsCheck(messageCheck.equals(CommonConstant.FALSE) ? CommonConstant.TRUE : CommonConstant.FALSE);
         newMessage.setIpSource(ipSource);
         messageMapper.insert(newMessage);
     }

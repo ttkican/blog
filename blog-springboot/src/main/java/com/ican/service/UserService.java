@@ -7,6 +7,8 @@ import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ican.constant.CommonConstant;
+import com.ican.constant.RedisConstant;
 import com.ican.entity.User;
 import com.ican.entity.UserRole;
 import com.ican.enums.FilePathEnum;
@@ -30,9 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.CommonConstant.*;
-import static com.ican.constant.RedisConstant.*;
 
 /**
  * 用户业务服务
@@ -87,9 +86,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .select(User::getNickname, User::getAvatar, User::getUsername, User::getWebSite,
                         User::getIntro, User::getEmail, User::getLoginType)
                 .eq(User::getId, userId));
-        Set<Object> articleLikeSet = redisService.getSet(USER_ARTICLE_LIKE + userId);
-        Set<Object> commentLikeSet = redisService.getSet(USER_COMMENT_LIKE + userId);
-        Set<Object> talkLikeSet = redisService.getSet(USER_TALK_LIKE + userId);
+        Set<Object> articleLikeSet = redisService.getSet(RedisConstant.USER_ARTICLE_LIKE + userId);
+        Set<Object> commentLikeSet = redisService.getSet(RedisConstant.USER_COMMENT_LIKE + userId);
+        Set<Object> talkLikeSet = redisService.getSet(RedisConstant.USER_TALK_LIKE + userId);
         return UserInfoResp
                 .builder()
                 .id(userId)
@@ -110,7 +109,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         // 查询用户菜单
         List<UserMenuResp> userMenuRespList = menuMapper.selectMenuByUserId(StpUtil.getLoginIdAsInt());
         // 递归生成路由,parentId为0
-        return recurRoutes(PARENT_ID, userMenuRespList);
+        return recurRoutes(CommonConstant.PARENT_ID, userMenuRespList);
     }
 
     public PageResult<UserBackResp> listUserBackVO(UserQuery userQuery) {
@@ -152,7 +151,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .isDisable(disable.getIsDisable())
                 .build();
         userMapper.updateById(newUser);
-        if (disable.getIsDisable().equals(TRUE)) {
+        if (disable.getIsDisable().equals(CommonConstant.TRUE)) {
             // 先踢下线
             StpUtil.logout(disable.getId());
             // 再封禁账号
@@ -170,7 +169,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .map(token -> {
                     // 获取tokenSession
                     SaSession sessionBySessionId = StpUtil.getSessionBySessionId(token);
-                    return (OnlineUserResp) sessionBySessionId.get(ONLINE_USER);
+                    return (OnlineUserResp) sessionBySessionId.get(CommonConstant.ONLINE_USER);
                 })
                 .filter(onlineUserResp -> StringUtils.isEmpty(onlineUserQuery.getKeyword()) || onlineUserResp.getNickname().contains(onlineUserQuery.getKeyword()))
                 .sorted(Comparator.comparing(OnlineUserResp::getLoginTime).reversed())
@@ -253,7 +252,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @param code     验证码
      */
     public void verifyCode(String username, String code) {
-        String sysCode = redisService.getObject(CODE_KEY + username);
+        String sysCode = redisService.getObject(RedisConstant.CODE_KEY + username);
         Assert.notBlank(sysCode, "验证码未发送或已过期！");
         Assert.isTrue(sysCode.equals(code), "验证码错误，请重新输入！");
     }
@@ -277,9 +276,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     routeVO.setMeta(MetaResp.builder()
                             .title(menu.getMenuName())
                             .icon(menu.getIcon())
-                            .hidden(menu.getIsHidden().equals(TRUE))
+                            .hidden(menu.getIsHidden().equals(CommonConstant.TRUE))
                             .build());
-                    if (menu.getMenuType().equals(TYPE_DIR)) {
+                    if (menu.getMenuType().equals(CommonConstant.TYPE_DIR)) {
                         List<RouterResp> children = recurRoutes(menu.getId(), menuList);
                         if (CollectionUtil.isNotEmpty(children)) {
                             routeVO.setAlwaysShow(true);
@@ -296,7 +295,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                         children.setMeta(MetaResp.builder()
                                 .title(menu.getMenuName())
                                 .icon(menu.getIcon())
-                                .hidden(menu.getIsHidden().equals(TRUE))
+                                .hidden(menu.getIsHidden().equals(CommonConstant.TRUE))
                                 .build());
                         childrenList.add(children);
                         routeVO.setChildren(childrenList);
@@ -315,7 +314,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public String getRouterPath(UserMenuResp menu) {
         String routerPath = menu.getPath();
         // 一级目录
-        if (menu.getParentId().equals(PARENT_ID) && TYPE_DIR.equals(menu.getMenuType())) {
+        if (menu.getParentId().equals(CommonConstant.PARENT_ID) && CommonConstant.TYPE_DIR.equals(menu.getMenuType())) {
             routerPath = "/" + menu.getPath();
         }
         // 一级菜单
@@ -332,11 +331,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @return 组件信息
      */
     public String getComponent(UserMenuResp menu) {
-        String component = LAYOUT;
+        String component = CommonConstant.LAYOUT;
         if (StringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu)) {
             component = menu.getComponent();
         } else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu)) {
-            component = PARENT_VIEW;
+            component = CommonConstant.PARENT_VIEW;
         }
         return component;
     }
@@ -348,7 +347,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @return 结果
      */
     public boolean isMenuFrame(UserMenuResp menu) {
-        return menu.getParentId().equals(PARENT_ID) && TYPE_MENU.equals(menu.getMenuType());
+        return menu.getParentId().equals(CommonConstant.PARENT_ID) && CommonConstant.TYPE_MENU.equals(menu.getMenuType());
     }
 
     /**
@@ -358,7 +357,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @return 结果
      */
     public boolean isParentView(UserMenuResp menu) {
-        return !menu.getParentId().equals(PARENT_ID) && TYPE_DIR.equals(menu.getMenuType());
+        return !menu.getParentId().equals(CommonConstant.PARENT_ID) && CommonConstant.TYPE_DIR.equals(menu.getMenuType());
     }
 
 }

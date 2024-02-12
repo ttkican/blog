@@ -25,9 +25,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.ican.enums.ChatTypeEnum.HISTORY_RECORD;
-import static com.ican.enums.ChatTypeEnum.ONLINE_COUNT;
-
 /**
  * WebSocket服务
  *
@@ -92,7 +89,7 @@ public class WebsocketService {
         ChatRecordDTO chatRecordDTO = getChatRecordList(ipAddress);
         // 发送消息
         WebsocketMessageDTO websocketMessageDTO = WebsocketMessageDTO.builder()
-                .type(HISTORY_RECORD.getType())
+                .type(ChatTypeEnum.HISTORY_RECORD.getType())
                 .data(chatRecordDTO)
                 .build();
         sendMessage(session, JSON.toJSONString(websocketMessageDTO));
@@ -185,7 +182,7 @@ public class WebsocketService {
     private void updateOnlineCount() {
         // 获取当前在线人数
         WebsocketMessageDTO messageDTO = WebsocketMessageDTO.builder()
-                .type(ONLINE_COUNT.getType())
+                .type(ChatTypeEnum.ONLINE_COUNT.getType())
                 .data(ONLINE_NUM)
                 .build();
         // 广播消息

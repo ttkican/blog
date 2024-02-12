@@ -1,6 +1,7 @@
 package com.ican.strategy.impl;
 
 import com.ican.config.properties.QqProperties;
+import com.ican.constant.SocialLoginConstant;
 import com.ican.enums.LoginTypeEnum;
 import com.ican.exception.ServiceException;
 import com.ican.model.dto.*;
@@ -16,8 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Objects;
-
-import static com.ican.constant.SocialLoginConstant.*;
 
 /**
  * Qq登录策略
@@ -53,9 +52,9 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
     public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialToken) {
         // 定义请求参数
         MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(3);
-        queryMap.set(QQ_OPEN_ID, socialToken.getOpenId());
-        queryMap.set(ACCESS_TOKEN, socialToken.getAccessToken());
-        queryMap.set(OAUTH_CONSUMER_KEY, qqProperties.getAppId());
+        queryMap.set(SocialLoginConstant.QQ_OPEN_ID, socialToken.getOpenId());
+        queryMap.set(SocialLoginConstant.ACCESS_TOKEN, socialToken.getAccessToken());
+        queryMap.set(SocialLoginConstant.OAUTH_CONSUMER_KEY, qqProperties.getAppId());
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getUserInfoUrl());
         URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
         // 获取QQ返回的用户信息
@@ -79,12 +78,12 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
             // 根据code换取accessToken
             MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(6);
             // Gitee的Token请求参数
-            queryMap.set(GRANT_TYPE, qqProperties.getGrantType());
-            queryMap.set(CLIENT_ID, qqProperties.getAppId());
-            queryMap.set(CLIENT_SECRET, qqProperties.getAppKey());
-            queryMap.set(CODE, code);
-            queryMap.set(REDIRECT_URI, qqProperties.getRedirectUrl());
-            queryMap.set(FMT, "json");
+            queryMap.set(SocialLoginConstant.GRANT_TYPE, qqProperties.getGrantType());
+            queryMap.set(SocialLoginConstant.CLIENT_ID, qqProperties.getAppId());
+            queryMap.set(SocialLoginConstant.CLIENT_SECRET, qqProperties.getAppKey());
+            queryMap.set(SocialLoginConstant.CODE, code);
+            queryMap.set(SocialLoginConstant.REDIRECT_URI, qqProperties.getRedirectUrl());
+            queryMap.set(SocialLoginConstant.FMT, "json");
             UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getAccessTokenUrl());
             URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
             return restTemplate.getForObject(uri, TokenDTO.class);
@@ -104,8 +103,8 @@ public class QqLoginStrategyImpl extends AbstractLoginStrategyImpl {
             // 返回用户OpenId
             MultiValueMap<String, String> queryMap = new LinkedMultiValueMap<>(2);
             // 请求参数
-            queryMap.set(ACCESS_TOKEN, accessToken);
-            queryMap.set(FMT, "json");
+            queryMap.set(SocialLoginConstant.ACCESS_TOKEN, accessToken);
+            queryMap.set(SocialLoginConstant.FMT, "json");
             UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(qqProperties.getUserOpenIdUrl());
             URI uri = uriComponentsBuilder.queryParams(queryMap).build().toUri();
             return restTemplate.getForObject(uri, QqTokenDTO.class);

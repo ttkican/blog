@@ -3,6 +3,7 @@ package com.ican.strategy.impl;
 import com.ican.exception.ServiceException;
 import com.ican.strategy.UploadStrategy;
 import com.ican.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.io.InputStream;
  *
  * @author ican
  */
+@Slf4j
 @Service
 public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
 
@@ -34,7 +36,7 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
             // 返回文件访问路径
             return getFileAccessUrl(path + fileName);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("uploadFile fail, error is {}", e.getMessage());
             throw new ServiceException("文件上传失败");
         }
     }

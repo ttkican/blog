@@ -9,7 +9,6 @@ import com.ican.model.vo.query.FriendQuery;
 import com.ican.model.vo.request.FriendReq;
 import com.ican.model.vo.response.FriendBackResp;
 import com.ican.model.vo.response.FriendResp;
-import com.ican.service.FriendService;
 import com.ican.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

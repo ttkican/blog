@@ -12,6 +12,7 @@ import cn.hutool.json.JSONUtil;
 import com.ican.interceptor.AccessLimitInterceptor;
 import com.ican.interceptor.PageableInterceptor;
 import com.ican.model.vo.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import static com.ican.enums.StatusCodeEnum.UNAUTHORIZED;
  * @author ican
  * @date 2022/11/28 22:12
  **/
+@Slf4j
 @Component
 public class SaTokenConfig implements WebMvcConfigurer {
 

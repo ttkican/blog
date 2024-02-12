@@ -1,6 +1,6 @@
 package com.ican.utils;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author ican
  */
-@Log4j2
+@Slf4j
 public class FileUtils {
 
     /**
@@ -47,30 +47,6 @@ public class FileUtils {
             extension = MimeTypeUtils.getExtension(Objects.requireNonNull(file.getContentType()));
         }
         return extension;
-    }
-
-    /**
-     * 转换file
-     *
-     * @param multipartFile 文件
-     * @return {@link File} 临时文件
-     */
-    public static File multipartFileToFile(MultipartFile multipartFile) {
-        File tempFile = null;
-        try {
-            // 获取文件md5值
-            String md5 = getMd5(multipartFile.getInputStream());
-            // 获取文件扩展名
-            String extName = getExtension(multipartFile);
-            // 重新生成文件名
-            String fileName = md5 + extName;
-            // 创建临时文件
-            tempFile = File.createTempFile(fileName, extName);
-            multipartFile.transferTo(tempFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tempFile;
     }
 
     /**

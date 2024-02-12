@@ -4,8 +4,11 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ican.constant.CommonConstant;
+import com.ican.constant.RedisConstant;
 import com.ican.entity.Article;
 import com.ican.entity.SiteConfig;
+import com.ican.enums.ArticleStatusEnum;
 import com.ican.mapper.*;
 import com.ican.model.vo.response.ArticleStatisticsResp;
 import com.ican.model.vo.response.BlogBackInfoResp;
@@ -23,10 +26,6 @@ import org.springframework.util.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.CommonConstant.FALSE;
-import static com.ican.constant.RedisConstant.*;
-import static com.ican.enums.ArticleStatusEnum.PUBLIC;
 
 /**
  * 博客服务
@@ -74,24 +73,24 @@ public class BlogInfoService {
         String uuid = ipAddress + browser + os;
         String md5 = DigestUtils.md5DigestAsHex(uuid.getBytes());
         // 判断是否访问
-        if (!redisService.hasSetValue(UNIQUE_VISITOR, md5)) {
+        if (!redisService.hasSetValue(RedisConstant.UNIQUE_VISITOR, md5)) {
             // 访问量+1
-            redisService.incr(BLOG_VIEW_COUNT, 1);
+            redisService.incr(RedisConstant.BLOG_VIEW_COUNT, 1);
             // 保存唯一标识
-            redisService.setSet(UNIQUE_VISITOR, md5);
+            redisService.setSet(RedisConstant.UNIQUE_VISITOR, md5);
         }
     }
 
     public BlogInfoResp getBlogInfo() {
         // 文章数量
         Long articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
-                .eq(Article::getStatus, PUBLIC.getStatus()).eq(Article::getIsDelete, FALSE));
+                .eq(Article::getStatus, ArticleStatusEnum.PUBLIC.getStatus()).eq(Article::getIsDelete, CommonConstant.FALSE));
         // 分类数量
         Long categoryCount = categoryMapper.selectCount(null);
         // 标签数量
         Long tagCount = tagMapper.selectCount(null);
         // 博客访问量
-        Integer count = redisService.getObject(BLOG_VIEW_COUNT);
+        Integer count = redisService.getObject(RedisConstant.BLOG_VIEW_COUNT);
         String viewCount = Optional.ofNullable(count).orElse(0).toString();
         // 网站配置
         SiteConfig siteConfig = siteConfigService.getSiteConfig();
@@ -106,14 +105,14 @@ public class BlogInfoService {
 
     public BlogBackInfoResp getBlogBackInfo() {
         // 访问量
-        Integer viewCount = redisService.getObject(BLOG_VIEW_COUNT);
+        Integer viewCount = redisService.getObject(RedisConstant.BLOG_VIEW_COUNT);
         // 留言量
         Long messageCount = messageMapper.selectCount(null);
         // 用户量
         Long userCount = userMapper.selectCount(null);
         // 文章量
         Long articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
-                .eq(Article::getIsDelete, FALSE));
+                .eq(Article::getIsDelete, CommonConstant.FALSE));
         // 分类数据
         List<CategoryResp> categoryRespList = categoryMapper.selectCategoryVO();
         // 标签数据
@@ -125,7 +124,7 @@ public class BlogInfoService {
         // 文章统计
         List<ArticleStatisticsResp> articleStatisticsList = articleMapper.selectArticleStatistics();
         // 查询redis访问量前五的文章
-        Map<Object, Double> articleMap = redisService.zReverseRangeWithScore(ARTICLE_VIEW_COUNT, 0, 4);
+        Map<Object, Double> articleMap = redisService.zReverseRangeWithScore(RedisConstant.ARTICLE_VIEW_COUNT, 0, 4);
         BlogBackInfoResp blogBackInfoResp = BlogBackInfoResp.builder()
                 .articleStatisticsList(articleStatisticsList)
                 .tagVOList(tagVOList)
@@ -145,7 +144,7 @@ public class BlogInfoService {
     }
 
     public String getAbout() {
-        SiteConfig siteConfig = redisService.getObject(SITE_SETTING);
+        SiteConfig siteConfig = redisService.getObject(RedisConstant.SITE_SETTING);
         return siteConfig.getAboutMe();
     }
 

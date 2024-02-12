@@ -1,5 +1,6 @@
 package com.ican.strategy.impl;
 
+import com.ican.constant.ElasticConstant;
 import com.ican.mapper.ArticleMapper;
 import com.ican.model.vo.response.ArticleSearchResp;
 import com.ican.strategy.SearchStrategy;
@@ -10,9 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.ican.constant.ElasticConstant.POST_TAG;
-import static com.ican.constant.ElasticConstant.PRE_TAG;
 
 /**
  * MySQL搜索策略
@@ -46,10 +44,10 @@ public class MysqlSearchStrategyImpl implements SearchStrategy {
                         int postIndex = postLength > 175 ? last + 175 : last + postLength;
                         String postText = article.getArticleContent().substring(index, postIndex);
                         // 文章内容高亮
-                        articleContent = (preText + postText).replaceAll(keyword, PRE_TAG + keyword + POST_TAG);
+                        articleContent = (preText + postText).replaceAll(keyword, ElasticConstant.PRE_TAG + keyword + ElasticConstant.POST_TAG);
                     }
                     // 文章标题高亮
-                    String articleTitle = article.getArticleTitle().replaceAll(keyword, PRE_TAG + keyword + POST_TAG);
+                    String articleTitle = article.getArticleTitle().replaceAll(keyword, ElasticConstant.PRE_TAG + keyword + ElasticConstant.POST_TAG);
                     return ArticleSearchResp.builder()
                             .id(article.getId())
                             .articleTitle(articleTitle)

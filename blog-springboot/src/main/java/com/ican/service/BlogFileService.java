@@ -12,6 +12,7 @@ import com.ican.model.vo.request.FolderReq;
 import com.ican.model.vo.response.FileResp;
 import com.ican.strategy.context.UploadStrategyContext;
 import com.ican.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,7 @@ import static com.ican.constant.CommonConstant.TRUE;
  *
  * @author ican
  */
+@Slf4j
 @Service
 public class BlogFileService extends ServiceImpl<BlogFileMapper, BlogFile> {
 
@@ -70,11 +72,15 @@ public class BlogFileService extends ServiceImpl<BlogFileMapper, BlogFile> {
         return new PageResult<>(fileRespList, count);
     }
 
-    public void uploadFile(MultipartFile file, String path) {
+    public void uploadFile(MultipartFile file, String filePath) {
+        String uploadPath = "/".equals(filePath) ? filePath : filePath + "/";
+        // 上传文件
+        String url = uploadStrategyContext.executeUploadStrategy(file, uploadPath);
+        saveBlogFile(file, url, filePath);
+    }
+
+    public void saveBlogFile(MultipartFile file, String url, String filePath) {
         try {
-            String uploadPath = "/".equals(path) ? path : path + "/";
-            // 上传文件
-            String url = uploadStrategyContext.executeUploadStrategy(file, uploadPath);
             // 获取文件md5值
             String md5 = FileUtils.getMd5(file.getInputStream());
             // 获取文件扩展名
@@ -82,20 +88,22 @@ public class BlogFileService extends ServiceImpl<BlogFileMapper, BlogFile> {
             BlogFile existFile = blogFileMapper.selectOne(new LambdaQueryWrapper<BlogFile>()
                     .select(BlogFile::getId)
                     .eq(BlogFile::getFileName, md5)
-                    .eq(BlogFile::getFilePath, path));
-            Assert.isNull(existFile, "文件已存在");
+                    .eq(BlogFile::getFilePath, filePath));
+            if (Objects.nonNull(existFile)) {
+                return;
+            }
             // 保存文件信息
             BlogFile newFile = BlogFile.builder()
                     .fileUrl(url)
                     .fileName(md5)
-                    .filePath(path)
+                    .filePath(filePath)
                     .extendName(extName)
                     .fileSize((int) file.getSize())
                     .isDir(FALSE)
                     .build();
             blogFileMapper.insert(newFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("saveBlogFile is error, {}", e.getMessage());
         }
     }
 
@@ -177,7 +185,7 @@ public class BlogFileService extends ServiceImpl<BlogFileMapper, BlogFile> {
                 // 下载压缩包
                 downloadFile(filePath, blogFile.getFileName() + ".zip");
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("downloadFile fail, {}", e.getMessage());
             } finally {
                 if (dest.exists()) {
                     dest.delete();
