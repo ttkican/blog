@@ -65,8 +65,8 @@
     <!-- 添加或修改对话框 -->
     <el-dialog :title="title" v-model="addOrUpdate" width="600px" append-to-body>
       <el-form ref="carouselFormRef" label-width="80px" :model="carouselForm" :rules="rules">
-        <el-form-item label="缩略图" prop="imgUrl">
-          <el-upload drag :show-file-list="false" :headers="authorization" action="/api/admin/article/upload"
+        <el-form-item label="轮播图" prop="imgUrl">
+          <el-upload drag :show-file-list="false" :headers="authorization" action="/api/admin/carousel/upload"
             accept="image/*" :before-upload="beforeUpload" :on-success="handleSuccess">
             <el-icon class="el-icon--upload" v-if="carouselForm.imgUrl === ''"><upload-filled /></el-icon>
             <div class="el-upload__text" v-if="carouselForm.imgUrl === ''">

@@ -1,5 +1,5 @@
 <template>
-  <div class="brand-container">
+  <div ref="brandRef" class="brand-container">
     <div class="brand">
       <!-- 标题 -->
       <p class="artboard">{{ blog.blogInfo.siteConfig.siteName }}</p>
@@ -29,11 +29,14 @@ const obj = reactive({
   backSpeed: 100,
   sentencePause: false,
 });
+const brandRef = ref<HTMLElement>();
 const { blog } = useStore();
 const scrollDown = () => {
-  window.scrollTo({
-    behavior: "smooth",
-    top: document.documentElement.clientHeight,
+  nextTick(() => {
+    window.scrollTo({
+      behavior: "smooth",
+      top: brandRef.value?.clientHeight,
+    });
   });
 };
 const fetchData = () => {
@@ -63,7 +66,7 @@ onMounted(() => {
   flex-direction: column;
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 70vh;
   min-height: 10rem;
   color: var(--header-text-color);
 }
