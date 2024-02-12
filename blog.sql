@@ -114,6 +114,20 @@ INSERT INTO `t_blog_file` VALUES (117, 'https://static.ttkwsd.top/config/05409c1
 INSERT INTO `t_blog_file` VALUES (118, 'https://static.ttkwsd.top/config/d6a00d059a1e9729e763469deb4870df.jpg', 'd6a00d059a1e9729e763469deb4870df', 203270, 'jpg', '/config', 0, '2023-03-10 23:00:06', NULL);
 
 -- ----------------------------
+-- Table structure for t_carousel
+-- ----------------------------
+DROP TABLE IF EXISTS `t_carousel`;
+CREATE TABLE `t_carousel`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '轮播图地址',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否显示 (0否 1是)',
+  `remark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for t_category
 -- ----------------------------
 DROP TABLE IF EXISTS `t_category`;
