@@ -1,8 +1,8 @@
 <template>
   <div class="imgs">
     <ul>
-      <li class="item" v-for="(image, index) in imageList" :key="index" :style="{
-        'background-image': 'url(' + image + ')'
+      <li class="item" v-for="carousel of carouselList" :key="carousel.id" :style="{
+        'background-image': 'url(' + carousel.imgUrl + ')'
       }">
       </li>
     </ul>
@@ -10,15 +10,14 @@
 </template>
 
 <script setup lang="ts">
-
-const imageList = [
-  "https://static.ttkwsd.top/articles/379ce4b2ddf4b087441c196fbffa2f3b.jpg",
-  "https://static.ttkwsd.top/articles/80ae8255603788a1305d4bcc177097a2.jpg",
-  "https://static.ttkwsd.top/articles/6becdfb5062ec2e1f9b9b16dd4b65d7e.jpg",
-  "https://static.ttkwsd.top/articles/2ce1129fceee7f14cb4cf554ed167534.jpg",
-  "https://static.ttkwsd.top/articles/84aae58f4246f8419cf018d7d7f6bae8.jpg",
-  "https://static.ttkwsd.top/articles/5b43ce3015351615d3654b8cac53c525.jpg"
-]
+import { getCarouselList } from "@/api/carousel";
+import { Carousel } from "@/api/carousel/types";
+const carouselList = ref<Carousel[]>([]);
+onMounted(() => {
+  getCarouselList().then(({ data }) => {
+    carouselList.value = data.data;
+  })
+});
 </script>
 
 <style lang="scss" scoped>
