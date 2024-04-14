@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
+import { useBlogStore } from "@/store";
 import dayjs from "dayjs";
-const { blog } = useStore();
+const blog = useBlogStore();
 const runTime = ref("");
 setInterval(() => {
   const days = dayjs().diff(blog.blogInfo.siteConfig.createSiteTime, "days");

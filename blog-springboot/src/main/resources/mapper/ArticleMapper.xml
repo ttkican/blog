@@ -76,7 +76,7 @@
         LEFT JOIN t_article_tag tat ON a.id = tat.article_id
         <where>
             is_delete = #{param.isDelete}
-            <if test="param.keyword != null and para.keyword != ''">
+            <if test="param.keyword != null and param.keyword != ''">
                 and article_title like concat('%',#{param.keyword},'%')
             </if>
             <if test="param.status != null">

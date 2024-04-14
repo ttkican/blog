@@ -24,9 +24,10 @@
 <script setup lang="ts">
 import { addMessage, getMessageList } from "@/api/message";
 import { Message } from "@/api/message/types";
-import useStore from "@/store";
+import { useBlogStore, useUserStore } from "@/store";
 import vueDanmaku from "vue3-danmaku";
-const { blog, user } = useStore();
+const user = useUserStore();
+const blog = useBlogStore();
 const messageContent = ref("");
 const show = ref(false);
 const danmaku = ref();

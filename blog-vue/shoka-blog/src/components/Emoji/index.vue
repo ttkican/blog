@@ -39,9 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import emojiList from "@/utils/emoji";
+import { emojiList } from "@/utils/emoji";
 import { textList } from "@/utils/text";
-import tvList from "@/utils/tv";
+import { tvList } from "@/utils/tv";
 const emojiType = ref(0);
 const emit = defineEmits(["addEmoji", "chooseType"]);
 const addEmoji = (key: string) => {

@@ -72,9 +72,10 @@
 <script setup lang="ts">
 import { getCommentList, getReplyList, likeComment } from '@/api/comment';
 import { Comment, CommentQuery, Reply } from '@/api/comment/types';
-import useStore from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 import { formatDateTime } from '@/utils/date';
-const { user, app } = useStore();
+const user = useUserStore();
+const app = useAppStore();
 const replyRef = ref<any>([]);
 const pageRef = ref<any>([]);
 const readMoreRef = ref<any>([]);

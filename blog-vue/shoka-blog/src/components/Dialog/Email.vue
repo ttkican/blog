@@ -18,9 +18,10 @@
 import { getCode } from '@/api/login';
 import { updateUserEmail } from '@/api/user';
 import { EmailForm } from '@/api/user/types';
-import useStore from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 import { useIntervalFn } from '@vueuse/core';
-const { app, user } = useStore();
+const user = useUserStore();
+const app = useAppStore();
 const data = reactive({
   timer: 0,
   flag: false,

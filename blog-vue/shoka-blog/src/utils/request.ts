@@ -1,9 +1,14 @@
-import useStore from "@/store";
+import { useUserStore } from "@/store";
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { getServiceEnvConfig } from "~/.env-config";
 import { getToken, token_prefix } from "./token";
 
+const { url, proxyPattern } = getServiceEnvConfig(import.meta.env);
+
+const isHttpProxy = import.meta.env.VITE_HTTP_PROXY === "Y";
+
 const requests = axios.create({
-  baseURL: "/api",
+  baseURL: isHttpProxy ? proxyPattern : url,
   timeout: 10000,
   // 请求头
   headers: {
@@ -36,7 +41,7 @@ requests.interceptors.response.use(
         window.$message?.error(response.data.msg);
         break;
       case 402:
-        const { user } = useStore();
+        const user = useUserStore();
         user.forceLogOut();
         window.$message?.error(response.data.msg);
         break;

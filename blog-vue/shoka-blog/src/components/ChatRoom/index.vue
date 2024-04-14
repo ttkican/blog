@@ -45,11 +45,12 @@
 
 <script setup lang="ts">
 import { Record } from "@/model";
-import useStore from "@/store";
+import { useBlogStore, useUserStore } from "@/store";
 import { formatDateTime } from '@/utils/date';
-import emojiList from "@/utils/emoji";
-import tvList from "@/utils/tv";
-const { user, blog } = useStore();
+import { emojiList } from "@/utils/emoji";
+import { tvList } from "@/utils/tv";
+const user = useUserStore();
+const blog = useBlogStore();
 const data = reactive({
   show: false,
   ipAddress: "",
@@ -179,7 +180,7 @@ const handleSend = () => {
     if (emojiType.value === 1) {
       if (tvList[str] === undefined) {
         return str;
-      }      
+      }
       return (
         "<img src='" +
         tvList[str] +

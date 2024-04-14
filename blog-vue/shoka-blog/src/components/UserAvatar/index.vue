@@ -25,11 +25,11 @@
 
 <script setup lang="ts">
 import { updateUserAvatar } from "@/api/user";
-import useStore from "@/store";
+import { useUserStore } from "@/store";
 import { UploadCustomRequestOptions } from "naive-ui";
 import { VueCropper } from 'vue-cropper';
 import 'vue-cropper/dist/index.css';
-const { user } = useStore();
+const user = useUserStore();
 const dialogVisible = ref(false);
 const cropperRef = ref();
 const options = reactive({

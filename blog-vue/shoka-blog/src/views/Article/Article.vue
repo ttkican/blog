@@ -125,11 +125,13 @@
 import { getArticle, likeArticle } from "@/api/article";
 import { ArticleInfo, ArticlePagination } from "@/api/article/types";
 import { CategoryVO } from "@/api/category/types";
-import useStore from "@/store";
+import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { formatDate } from "@/utils/date";
 import { Share } from 'vue3-social-share';
 import 'vue3-social-share/lib/index.css';
-const { app, blog, user } = useStore();
+const user = useUserStore();
+const app = useAppStore();
+const blog = useBlogStore();
 const articleRef = ref();
 const route = useRoute();
 const articleHref = window.location.href;

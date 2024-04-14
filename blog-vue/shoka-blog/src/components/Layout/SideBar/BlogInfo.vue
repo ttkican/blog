@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-const { blog } = useStore();
+import { useBlogStore } from "@/store";
+const blog = useBlogStore();
 const blogInfo = [
   { path: "/archive", count: blog.blogInfo.articleCount, name: "文章" },
   { path: "/category", count: blog.blogInfo.categoryCount, name: "分类" },

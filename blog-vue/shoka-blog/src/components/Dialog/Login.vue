@@ -27,9 +27,11 @@
 import { login } from "@/api/login";
 import { LoginForm } from "@/api/login/types";
 import config from "@/assets/js/config";
-import useStore from "@/store";
+import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { setToken } from "@/utils/token";
-const { app, user, blog } = useStore();
+const app = useAppStore();
+const user = useUserStore();
+const blog = useBlogStore();
 const route = useRoute();
 const loading = ref(false);
 const loginForm = ref<LoginForm>({

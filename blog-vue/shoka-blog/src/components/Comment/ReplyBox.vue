@@ -22,10 +22,12 @@
 <script setup lang="ts">
 import { addComment } from "@/api/comment";
 import { CommentForm } from "@/api/comment/types";
-import useStore from "@/store";
-import emojiList from "@/utils/emoji";
-import tvList from "@/utils/tv";
-const { user, blog, app } = useStore();
+import { useAppStore, useBlogStore, useUserStore } from "@/store";
+import { emojiList } from "@/utils/emoji";
+import { tvList } from "@/utils/tv";
+const user = useUserStore();
+const blog = useBlogStore();
+const app = useAppStore();
 const lineStyle = {
   lineHeight: "normal",
   borderColor: "#ed6ea0",

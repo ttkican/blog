@@ -17,8 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
+import { useBlogStore } from "@/store";
 import EasyTyper from "easy-typer-js";
+const blog = useBlogStore();
 const obj = reactive({
   output: "",
   isEnd: false,
@@ -30,7 +31,6 @@ const obj = reactive({
   sentencePause: false,
 });
 const brandRef = ref<HTMLElement>();
-const { blog } = useStore();
 const scrollDown = () => {
   nextTick(() => {
     window.scrollTo({

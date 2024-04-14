@@ -41,10 +41,11 @@
 <script setup lang="ts">
 import { getTalk, likeTalk } from "@/api/talk";
 import { Talk } from "@/api/talk/types";
-import useStore from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 import { formatDateTime } from "@/utils/date";
+const user = useUserStore();
+const app = useAppStore();
 const route = useRoute();
-const { user, app } = useStore();
 const isLike = computed(() => (id: number) => user.talkLikeSet.indexOf(id) != -1 ? "like-flag" : "");
 const data = reactive({
   commentCount: 0,

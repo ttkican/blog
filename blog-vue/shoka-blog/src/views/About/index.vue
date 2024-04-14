@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-const { blog } = useStore();
+import { useBlogStore } from "@/store";
+const blog = useBlogStore();
 </script>
 
 <style scoped>

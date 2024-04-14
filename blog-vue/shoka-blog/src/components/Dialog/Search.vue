@@ -35,9 +35,9 @@
 <script setup lang="ts">
 import { searchArticle } from "@/api/article";
 import { ArticleSearch } from "@/api/article/types";
-import useStore from "@/store";
+import { useAppStore } from "@/store";
 import { debouncedWatch } from "@vueuse/core";
-const { app } = useStore();
+const app = useAppStore();
 const dialogVisible = computed({
   get: () => app.searchFlag,
   set: (value) => app.searchFlag = value,

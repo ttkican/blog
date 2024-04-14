@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
+import { useBlogStore } from "@/store";
 import { formatDate } from "@/utils/date";
 const route = useRoute();
-const { blog } = useStore();
+const blog = useBlogStore();
 const isMessage = computed(() => route.path == "/message");
 </script>
 
