@@ -11,9 +11,9 @@
 
 <script setup lang="ts">
 import { giteeLogin, githubLogin, qqLogin } from "@/api/login";
-import useStore from "@/store";
+import { useUserStore } from "@/store";
 import { setToken } from "@/utils/token";
-const { user } = useStore();
+const user = useUserStore();
 const router = useRouter();
 const route = useRoute();
 onMounted(() => {

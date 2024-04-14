@@ -1,0 +1,207 @@
+server:
+  # 端口
+  port: 8080
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # 应用名称
+  application:
+    name: BlogApplication
+  # mysql配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    username: root
+    password: 12345
+    druid:
+      # 初始连接数
+      initial-size: 10
+      # 最小连接池数量
+      min-idle: 10
+      # 最大连接池数量
+      max-active: 150
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 600000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      max-evictable-idle-time-millis: 900000
+      # 配置检测连接是否有效
+      validation-query: SELECT 1 FROM DUAL
+      # 配置检测连接是否有效时间
+      validation-query-timeout: 500
+      # 在获取连接后，确定是否要进行连接空间时间的检查
+      test-while-idle: true
+      # 设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+      test-on-borrow: false
+      # 设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+      test-on-return: false
+  # 文件上传限制
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  # redis配置
+  redis:
+    # Redis服务器地址
+    host: localhost
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 150
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 5000ms
+        # 连接池中的最大空闲连接
+        max-idle: 100
+        # 连接池中的最小空闲连接
+        min-idle: 50
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          # 重试间隔时间
+          initial-interval: 3000
+          # 最大重试次数
+          max-attempts: 3
+  # 邮箱配置
+  mail:
+    host: smtp.qq.com
+    # 用户名
+    username:
+    # 授权码
+    password:
+# 博客链接
+blog:
+  url: https://www.ttkwsd.top/
+# 线程池配置
+thread:
+  pool:
+    core-pool-size: 5
+    max-pool-size: 10
+    queue-capacity: 50
+    keep-alive-seconds: 60
+# 搜索模式 可选 elasticsearch、mysql
+search:
+  mode: mysql
+# 文件上传策略 local、oss、cos
+upload:
+  strategy: local
+  local:
+    # nginx映射本地文件路径
+    url: https://static.ttkwsd.top/
+    # 本地文件存储路径
+    path: /usr/local/upload/
+  # oss存储
+  oss:
+    url: https://ican2023.oss-cn-hangzhou.aliyuncs.com/
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    bucketName: ican2023
+    accessKeyId: LTAI5t8Dyz7FADG5S6Vcb92E
+    accesskeySecret: Jsb53tjXz7o4sezQvpmUrdVZAMMjYp
+  # cos存储
+  cos:
+    url: https://ican-1312757424.cos.ap-shanghai.myqcloud.com/
+    secretId: AKIDe7MM7fx0oNhlaAUZPzJODm6B1bw2sTou
+    secretKey: uYxhCRRBfutc5JH0ThfOs76qKYXGjxvd
+    region: ap-shanghai
+    bucketName: ican-1312757424
+  # qiniu存储(七牛云)
+  qiniu:
+    url: https://Bucket域名/  # 访问域名(给存储桶绑定的二级域名)
+    bucketName: 空间名称bucketName # 空间名称bucketName
+    region: qiniu配置region # 存储区域 华南(huanan) 华北(huabei)...
+    accessKey: qiniu配置accessKey  #accessKey
+    secretKey: qiniu配置secretKey  #secretKey
+# mybatisPlus配置
+mybatis-plus:
+  # mapper映射地址
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类扫描包路径
+  type-aliases-package: com.ican.entity
+  configuration:
+    # sql打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 数据库表前缀
+      table-prefix: t_
+# elasticsearch配置
+elasticsearch:
+  username: elastic
+  password: password
+  hostname: localhost
+  port: 9200
+  scheme: http
+  connTimeout: 1000
+  socketTimeout: 30000
+  connectionRequestTimeout: 5000
+# Sa-Token 配置 (文档: https://sa-token.cc)
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: Authorization
+  # token前缀
+  token-prefix: Bearer
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 1800
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  active-timeout: -1
+  # 关闭自动续签
+  auto-renew: false
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # token风格
+  token-style: uuid
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # 同一账号最大登录数量
+  max-login-count: 20
+  # 是否从cookie中读取token
+  is-read-cookie: false
+  # 是否从请求体里读取token
+  is-read-body: false
+  # 是否从header中读取token
+  is-read-header: true
+  # 是否输出操作日志
+  is-log: false
+# 第三方登录
+oauth:
+  gitee:
+    client-id: sdfasdfasdfasd
+    client-secret: dsfasdfasdf
+    grant_type: authorization_code
+    redirect-url: https://www.ttkwsd.top/oauth/login/gitee
+    access-token-url: https://gitee.com/oauth/token
+    user-info-url: https://gitee.com/api/v5/user?access_token={access_token}
+  github:
+    client-id: sadfasdfasdf
+    client-secret: dsfasdfasdf
+    redirect-url: https://www.ttkwsd.top/oauth/login/github
+    access-token-url: https://github.com/login/oauth/access_token
+    user-info-url: https://api.github.com/user
+  qq:
+    app-id: 1324324
+    app-key: abgffdsfasdf
+    grant_type: authorization_code
+    redirect-url: https://www.ttkwsd.top/oauth/login/qq
+    access-token-url: https://graph.qq.com/oauth2.0/token
+    user-openid-url: https://graph.qq.com/oauth2.0/me
+    user-info-url: https://graph.qq.com/user/get_user_info
+# B站图片上传链接
+bili-url: https://api.bilibili.com/x/dynamic/feed/draw/upload_bfs

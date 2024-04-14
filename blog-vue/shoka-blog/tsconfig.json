@@ -1,23 +1,24 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "suppressImplicitAnyIndexErrors": true,
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "strict": true,
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [ "src/*" ],
-    }
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "**/*.d.ts","src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"module": "ESNext",
+		"target": "ESNext",
+		"lib": ["DOM", "ESNext"],
+		"strict": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"jsx": "preserve",
+		"moduleResolution": "node",
+		"isolatedModules": true,
+		"resolveJsonModule": true,
+		"noUnusedLocals": true,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"~/*": ["./*"],
+			"@/*": ["./src/*"]
+		},
+		"types": ["vite/client", "node", "unplugin-icons/types/vue"]
+	},
+	"exclude": ["node_modules", "dist", "src/utils/emoji.ts", "src/utils/tv.ts"]
 }

@@ -45,8 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-const { user, app, blog } = useStore();
+import { useAppStore, useBlogStore, useUserStore } from "@/store";
+const user = useUserStore();
+const app = useAppStore();
+const blog = useBlogStore();
 const router = useRouter();
 const route = useRoute();
 const menuList = [

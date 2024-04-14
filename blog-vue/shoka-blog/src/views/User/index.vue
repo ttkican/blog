@@ -45,10 +45,11 @@
 <script setup lang="ts">
 import { updateUserInfo } from "@/api/user";
 import { UserInfo } from "@/api/user/types";
-import useStore from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 import { FormInst } from 'naive-ui';
+const user = useUserStore();
+const app = useAppStore();
 const formInstRef = ref<FormInst | null>(null)
-const { user, app } = useStore();
 const router = useRouter();
 const rules = {
   nickname: {

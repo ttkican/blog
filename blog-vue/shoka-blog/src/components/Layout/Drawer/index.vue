@@ -43,11 +43,13 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
+import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { useWindowSize } from "@vueuse/core";
 const route = useRoute();
 const router = useRouter();
-const { app, blog, user } = useStore();
+const app = useAppStore();
+const blog = useBlogStore();
+const user = useUserStore();
 const { width } = useWindowSize();
 const menuList = [
   {

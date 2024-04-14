@@ -1,5 +1,5 @@
-import router from "@/router";
-import useStore from "@/store";
+import { router } from "@/router";
+import { useUserStore } from "@/store";
 import { getToken } from "@/utils/token";
 import NProgress from "nprogress";
 
@@ -13,11 +13,11 @@ NProgress.configure({
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  const { user } = useStore();
+  const user = useUserStore();
   if (to.meta.title) {
     document.title = to.meta.title as string;
   }
-  if (getToken()) {    
+  if (getToken()) {
     if (user.id === undefined) {
       user
         .GetUserInfo()

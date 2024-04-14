@@ -9,9 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-
-const { app } = useStore();
+import { useAppStore } from "@/store";
+const app = useAppStore();
 
 const drawerVisible = computed(() => (value: boolean) => value ? "toggle close" : "toggle");
 </script>

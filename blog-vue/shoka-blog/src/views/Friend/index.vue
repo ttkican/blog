@@ -49,8 +49,8 @@
 <script setup lang="ts">
 import { getFriendList } from "@/api/friend";
 import { Friend } from "@/api/friend/types";
-import useStore from "@/store";
-const { blog } = useStore();
+import { useBlogStore } from "@/store";
+const blog = useBlogStore();
 const commentType = ref(2);
 const friendList = ref<Friend[]>([]);
 onMounted(() => {

@@ -9,9 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import useStore from "@/store";
-const { blog } = useStore();
-const isShowSocial = computed(() => (social: string) => blog.blogInfo.siteConfig.socialList.includes(social));
+import { useBlogStore } from "@/store";
+const blog = useBlogStore();
+const socialList = blog.blogInfo.siteConfig.socialList;
+const isShowSocial = computed(() => (social: string) => {
+	if (socialList) {
+		return socialList.includes(social);
+	}
+});
 const showSocialList = [
   {
     type: "github",
