@@ -1,6 +1,6 @@
 package com.ican.model.vo.request;
 
-import com.ican.annotation.CommentType;
+import com.ican.annotation.EnumValid;
 import com.ican.validator.CommentProvider;
 import com.ican.validator.groups.ArticleTalk;
 import com.ican.validator.groups.Link;
@@ -40,7 +40,7 @@ public class CommentReq {
     /**
      * 评论类型 (1文章 2友链 3说说)
      */
-    @CommentType(values = {1, 2, 3}, message = "评论类型只能为1、2、3")
+    @EnumValid(values = {1, 2, 3}, message = "评论类型只能为1、2、3")
     @NotNull(message = "评论类型不能为空")
     @ApiModelProperty(value = "评论类型 (1文章 2友链 3说说)", required = true)
     private Integer commentType;
