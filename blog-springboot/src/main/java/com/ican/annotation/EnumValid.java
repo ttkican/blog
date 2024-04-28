@@ -1,6 +1,6 @@
 package com.ican.annotation;
 
-import com.ican.validator.CommentTypeValidator;
+import com.ican.validator.EnumValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,10 +12,10 @@ import java.lang.annotation.*;
  * @author ican
  **/
 @Documented
-@Constraint(validatedBy = {CommentTypeValidator.class})
+@Constraint(validatedBy = {EnumValidator.class})
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommentType {
+public @interface EnumValid {
 
     String message() default "{javax.validation.constraints.NotBlank.message}";
 

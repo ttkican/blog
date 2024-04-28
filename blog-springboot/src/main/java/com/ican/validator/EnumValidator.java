@@ -1,6 +1,6 @@
 package com.ican.validator;
 
-import com.ican.annotation.CommentType;
+import com.ican.annotation.EnumValid;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -8,11 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 评论类型校验器
+ * 枚举类型校验器
  *
  * @author ican
  **/
-public class CommentTypeValidator implements ConstraintValidator<CommentType, Integer> {
+public class EnumValidator implements ConstraintValidator<EnumValid, Integer> {
 
     private final Set<Integer> set = new HashSet<>();
 
@@ -22,7 +22,7 @@ public class CommentTypeValidator implements ConstraintValidator<CommentType, In
      * @param constraintAnnotation 评论类型注解
      */
     @Override
-    public void initialize(CommentType constraintAnnotation) {
+    public void initialize(EnumValid constraintAnnotation) {
         for (int value : constraintAnnotation.values()) {
             set.add(value);
         }
