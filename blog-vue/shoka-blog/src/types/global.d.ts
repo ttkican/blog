@@ -11,6 +11,11 @@ declare module "*.vue" {
 	export default component;
 }
 
+interface ImportMeta {
+	readonly env: Env.ImportMeta;
+}
+
+
 declare module "APlayer";
 declare module "@kangc/v-md-editor";
 declare module "@kangc/v-md-editor/lib/preview";

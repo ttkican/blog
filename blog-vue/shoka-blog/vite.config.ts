@@ -1,40 +1,36 @@
+import dayjs from "dayjs";
+import { fileURLToPath } from "node:url";
 import { defineConfig, loadEnv } from "vite";
-import { getServiceEnvConfig } from "./.env-config";
 import {
 	createViteProxy,
-	getRootPath,
-	getSrcPath,
-	setupVitePlugins,
+	setupVitePlugins
 } from "./build";
 export default defineConfig((configEnv) => {
 	const viteEnv = loadEnv(
 		configEnv.mode,
 		process.cwd()
-	) as ImportMetaEnv;
+	) as Env.ImportMeta;
 
-	const rootPath = getRootPath();
-	const srcPath = getSrcPath();
-
-	const isOpenProxy = viteEnv.VITE_HTTP_PROXY === "Y";
-	const envConfig = getServiceEnvConfig(viteEnv);
+	const buildTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
 	return {
 		base: viteEnv.VITE_BASE_URL,
 		resolve: {
 			alias: {
-				"~": rootPath,
-				"@": srcPath,
+				"~": fileURLToPath(new URL("./", import.meta.url)),
+				"@": fileURLToPath(new URL("./src", import.meta.url)),
 			},
 		},
 		define: {
 			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+			BUILD_TIME: JSON.stringify(buildTime),
 		},
 		plugins: setupVitePlugins(viteEnv),
 		server: {
 			host: "0.0.0.0",
 			port: 1314,
 			open: true,
-			proxy: createViteProxy(isOpenProxy, envConfig),
+			proxy: createViteProxy(viteEnv),
 		},
 		build: {
 			reportCompressedSize: false,

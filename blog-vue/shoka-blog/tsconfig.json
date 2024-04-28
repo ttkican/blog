@@ -1,24 +1,31 @@
 {
 	"compilerOptions": {
+		"target": "ESNext",
+		"jsx": "preserve",
+		"jsxImportSource": "vue",
+		"lib": ["DOM", "ESNext"],
 		"baseUrl": ".",
 		"module": "ESNext",
-		"target": "ESNext",
-		"lib": ["DOM", "ESNext"],
-		"strict": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"jsx": "preserve",
 		"moduleResolution": "node",
-		"isolatedModules": true,
-		"resolveJsonModule": true,
-		"noUnusedLocals": true,
-		"strictNullChecks": true,
-		"forceConsistentCasingInFileNames": true,
 		"paths": {
-			"~/*": ["./*"],
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"~/*": ["./*"]
 		},
-		"types": ["vite/client", "node", "unplugin-icons/types/vue"]
+		"resolveJsonModule": true,
+		"types": [
+			"vite/client",
+			"node",
+			"unplugin-icons/types/vue",
+			"naive-ui/volar"
+		],
+		"strict": true,
+		"strictNullChecks": true,
+		"noUnusedLocals": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true
 	},
-	"exclude": ["node_modules", "dist", "src/utils/emoji.ts", "src/utils/tv.ts"]
+	"include": ["./**/*.ts", "./**/*.tsx", "./**/*.vue"],
+	"exclude": ["node_modules", "dist"]
 }
