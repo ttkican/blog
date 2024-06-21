@@ -4,6 +4,7 @@ import cn.dev33.satoken.listener.SaTokenListener;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ican.entity.User;
 import com.ican.mapper.UserMapper;
@@ -47,7 +48,7 @@ public class MySaTokenListener implements SaTokenListener {
         // 解析browser和os
         Map<String, String> userAgentMap = UserAgentUtils.parseOsAndBrowser(request.getHeader("User-Agent"));
         // 获取登录ip地址
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = ServletUtil.getClientIP(request);
         // 获取登录地址
         String ipSource = IpUtils.getIpSource(ipAddress);
         // 获取登录时间

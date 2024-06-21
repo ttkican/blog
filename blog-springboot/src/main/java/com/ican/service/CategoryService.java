@@ -1,28 +1,28 @@
 package com.ican.service;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.entity.Article;
 import com.ican.entity.Category;
 import com.ican.mapper.ArticleMapper;
 import com.ican.mapper.CategoryMapper;
-import com.ican.model.vo.response.ArticleConditionList;
-import com.ican.model.vo.response.ArticleConditionResp;
+import com.ican.model.vo.response.*;
 import com.ican.model.vo.PageResult;
 import com.ican.model.vo.query.ArticleConditionQuery;
 import com.ican.model.vo.query.CategoryQuery;
 import com.ican.model.vo.request.CategoryReq;
-import com.ican.model.vo.response.CategoryBackResp;
-import com.ican.model.vo.response.CategoryOptionResp;
-import com.ican.model.vo.response.CategoryResp;
 import com.ican.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 分类服务
@@ -39,6 +39,8 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
     @Autowired
     private ArticleMapper articleMapper;
 
+    private static final int maxDeep = 3;
+
     public PageResult<CategoryBackResp> listCategoryBackVO(CategoryQuery categoryQuery) {
         // 查询分类数量
         Long count = categoryMapper.selectCount(new LambdaQueryWrapper<Category>()
@@ -49,7 +51,24 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
         }
         // 分页查询分类列表
         List<CategoryBackResp> categoryList = categoryMapper.selectBackCategoryList(categoryQuery);
-        return new PageResult<>(categoryList, count);
+        // 当前分类id列表
+        Set<Integer> categoryIdList = categoryList.stream()
+                .map(CategoryBackResp::getId)
+                .collect(Collectors.toSet());
+        List<CategoryBackResp> res = categoryList.stream().map(category -> {
+            Integer parentId = category.getParentId();
+            // parentId不在当前分类id列表，说明为父级分类id，根据此id作为递归的开始条件节点
+            if (!categoryIdList.contains(parentId)) {
+                categoryIdList.add(parentId);
+                return recurCategoryList(categoryList, parentId, 0, maxDeep);
+            }
+            return new ArrayList<CategoryBackResp>();
+        }).collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
+        // 执行分页
+        int fromIndex = categoryQuery.getCurrent();
+        int size = categoryQuery.getSize();
+        int toIndex = categoryList.size() - fromIndex > size ? fromIndex + size : res.size();
+        return new PageResult<>(res.subList(fromIndex, toIndex), (long) res.size());
     }
 
     public void addCategory(CategoryReq category) {
@@ -110,6 +129,47 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
                 .articleConditionVOList(articleConditionList)
                 .name(name)
                 .build();
+    }
+
+    /**
+     * 递归生成分类列表
+     *
+     * @param parentId     父分类id
+     * @param categoryList 分类列表
+     * @return 分类列表
+     */
+    private List<CategoryBackResp> recurCategoryList(List<CategoryBackResp> categoryList, Integer parentId, int currentDeep, int maxDeep) {
+        List<CategoryBackResp> tree = new ArrayList<>();
+        if (maxDeep < 0) {
+            return tree;
+        }
+        if (currentDeep == maxDeep) {
+            return tree;
+        } else {
+            for (CategoryBackResp category : categoryList) {
+                if (category.getParentId().equals(parentId)) {
+                    category.setChildren(recurCategoryList(categoryList, category.getId(), currentDeep + 1, maxDeep));
+                    tree.add(category);
+                }
+            }
+        }
+        return tree;
+    }
+
+    @SuppressWarnings("all")
+    private List<Tree<String>> recurCategoryList(List<CategoryBackResp> categoryList) {
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        treeNodeConfig.setIdKey("id");
+        treeNodeConfig.setParentIdKey("parentId");
+        treeNodeConfig.setChildrenKey("children");
+        treeNodeConfig.setDeep(3);
+        return TreeUtil.build(categoryList, "0", treeNodeConfig, ((treeNode, tree) -> {
+            tree.setId(treeNode.getId().toString());
+            tree.setParentId(treeNode.getParentId().toString());
+            tree.putExtra("categoryName", treeNode.getCategoryName());
+            tree.putExtra("articleCount", treeNode.getArticleCount());
+            tree.putExtra("createTime", treeNode.getCreateTime());
+        }));
     }
 
 }

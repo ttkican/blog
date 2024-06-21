@@ -1,5 +1,6 @@
 package com.ican.interceptor;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;
 import com.ican.annotation.AccessLimit;
 import com.ican.model.vo.Result;
@@ -42,7 +43,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             if (accessLimit != null) {
                 int seconds = accessLimit.seconds();
                 int maxCount = accessLimit.maxCount();
-                String ip = IpUtils.getIpAddress(request);
+                String ip = ServletUtil.getClientIP(request);
                 String method = request.getMethod();
                 String requestUri = request.getRequestURI();
                 String redisKey = ip + ":" + method + ":" + requestUri;

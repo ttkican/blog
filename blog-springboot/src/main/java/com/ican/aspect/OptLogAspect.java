@@ -1,6 +1,7 @@
 package com.ican.aspect;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;
 import com.ican.annotation.OptLogger;
 import com.ican.entity.OperationLog;
@@ -107,7 +108,7 @@ public class OptLogAspect {
         // 请求用户昵称
         operationLog.setNickname("阿冬");
         // 操作ip和操作地址
-        String ip = IpUtils.getIpAddress(request);
+        String ip = ServletUtil.getClientIP(request);
         operationLog.setIpAddress(ip);
         operationLog.setIpSource(IpUtils.getIpSource(ip));
         // 执行耗时

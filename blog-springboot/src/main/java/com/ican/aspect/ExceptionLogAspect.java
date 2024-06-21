@@ -1,5 +1,6 @@
 package com.ican.aspect;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson2.JSON;
 import com.ican.entity.ExceptionLog;
 import com.ican.manager.AsyncManager;
@@ -84,7 +85,7 @@ public class ExceptionLogAspect {
         // 请求方式
         exceptionLog.setRequestMethod(Objects.requireNonNull(request).getMethod());
         // 操作ip和操作地址
-        String ip = IpUtils.getIpAddress(request);
+        String ip = ServletUtil.getClientIP(request);
         exceptionLog.setIpAddress(ip);
         exceptionLog.setIpSource(IpUtils.getIpSource(ip));
         // 操作系统和浏览器

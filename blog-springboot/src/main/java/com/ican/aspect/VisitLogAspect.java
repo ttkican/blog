@@ -1,5 +1,6 @@
 package com.ican.aspect;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.ican.annotation.VisitLogger;
 import com.ican.entity.VisitLog;
 import com.ican.manager.AsyncManager;
@@ -51,7 +52,7 @@ public class VisitLogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         VisitLog visitLog = new VisitLog();
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = ServletUtil.getClientIP(request);
         String ipSource = IpUtils.getIpSource(ipAddress);
         // 解析browser和os
         Map<String, String> userAgentMap = UserAgentUtils.parseOsAndBrowser(request.getHeader("User-Agent"));

@@ -31,7 +31,7 @@ public class GiteeProperties {
     /**
      * Gitee回调域名
      */
-    private String redirectUrl;
+    private String redirectUri;
 
     /**
      * Gitee访问令牌地址

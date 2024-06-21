@@ -73,13 +73,12 @@ public class GiteeLoginStrategyImpl extends AbstractLoginStrategyImpl {
         giteeData.add(SocialLoginConstant.CLIENT_ID, giteeProperties.getClientId());
         giteeData.add(SocialLoginConstant.CLIENT_SECRET, giteeProperties.getClientSecret());
         giteeData.add(SocialLoginConstant.GRANT_TYPE, giteeProperties.getGrantType());
-        giteeData.add(SocialLoginConstant.REDIRECT_URI, giteeProperties.getRedirectUrl());
+        giteeData.add(SocialLoginConstant.REDIRECT_URI, giteeProperties.getRedirectUri());
         giteeData.add(SocialLoginConstant.CODE, code);
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(giteeData, null);
         try {
             return restTemplate.exchange(giteeProperties.getAccessTokenUrl(),
                     HttpMethod.POST,
-                    requestEntity,
+                    new HttpEntity<>(giteeData, null),
                     TokenDTO.class).getBody();
         } catch (Exception e) {
             throw new ServiceException("Gitee登录错误");

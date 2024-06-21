@@ -65,19 +65,19 @@ spring:
         max-idle: 100
         # 连接池中的最小空闲连接
         min-idle: 50
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    listener:
-      simple:
-        retry:
-          enabled: true
-          # 重试间隔时间
-          initial-interval: 3000
-          # 最大重试次数
-          max-attempts: 3
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
+#    listener:
+#      simple:
+#        retry:
+#          enabled: true
+#          # 重试间隔时间
+#          initial-interval: 3000
+#          # 最大重试次数
+#          max-attempts: 3
   # 邮箱配置
   mail:
     host: smtp.qq.com
@@ -142,16 +142,16 @@ mybatis-plus:
     db-config:
       # 数据库表前缀
       table-prefix: t_
-# elasticsearch配置
-elasticsearch:
-  username: elastic
-  password: password
-  hostname: localhost
-  port: 9200
-  scheme: http
-  connTimeout: 1000
-  socketTimeout: 30000
-  connectionRequestTimeout: 5000
+## elasticsearch配置
+#elasticsearch:
+#  username: elastic
+#  password: password
+#  hostname: localhost
+#  port: 9200
+#  scheme: http
+#  connTimeout: 1000
+#  socketTimeout: 30000
+#  connectionRequestTimeout: 5000
 # Sa-Token 配置 (文档: https://sa-token.cc)
 sa-token:
   # token名称 (同时也是cookie名称)
@@ -186,7 +186,7 @@ oauth:
     client-id: sdfasdfasdfasd
     client-secret: dsfasdfasdf
     grant_type: authorization_code
-    redirect-url: https://www.ttkwsd.top/oauth/login/gitee
+    redirect-uri: https://www.ttkwsd.top/oauth/login/gitee
     access-token-url: https://gitee.com/oauth/token
     user-info-url: https://gitee.com/api/v5/user?access_token={access_token}
   github:

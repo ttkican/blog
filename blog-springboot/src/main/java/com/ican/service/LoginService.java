@@ -7,7 +7,6 @@ import cn.hutool.core.lang.Validator;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.ican.constant.CommonConstant;
-import com.ican.constant.MqConstant;
 import com.ican.constant.RedisConstant;
 import com.ican.entity.SiteConfig;
 import com.ican.entity.User;
@@ -22,11 +21,12 @@ import com.ican.model.vo.request.LoginReq;
 import com.ican.model.vo.request.RegisterReq;
 import com.ican.strategy.context.SocialLoginStrategyContext;
 import com.ican.utils.SecurityUtils;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,14 +44,20 @@ public class LoginService {
     @Autowired
     private UserRoleMapper userRoleMapper;
 
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private EmailService emailService;
 
     @Autowired
     private RedisService redisService;
 
     @Autowired
     private SocialLoginStrategyContext socialLoginStrategyContext;
+
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     public String login(LoginReq login) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
@@ -76,7 +82,8 @@ public class LoginService {
                 .content("您的验证码为 " + code + " 有效期为" + RedisConstant.CODE_EXPIRE_TIME + "分钟")
                 .build();
         // 验证码存入消息队列
-        rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);
+//        rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);
+        CompletableFuture.runAsync(() -> emailService.sendSimpleMail(mailDTO), threadPoolTaskExecutor);
         // 验证码存入redis
         redisService.setObject(RedisConstant.CODE_KEY + username, code, RedisConstant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }

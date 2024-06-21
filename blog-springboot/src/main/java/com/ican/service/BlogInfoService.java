@@ -2,6 +2,7 @@ package com.ican.service;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ican.constant.CommonConstant;
@@ -64,7 +65,7 @@ public class BlogInfoService {
 
     public void report() {
         // 获取用户ip
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = ServletUtil.getClientIP(request);
         Map<String, String> userAgentMap = UserAgentUtils.parseOsAndBrowser(request.getHeader("User-Agent"));
         // 获取访问设备
         String browser = userAgentMap.get("browser");

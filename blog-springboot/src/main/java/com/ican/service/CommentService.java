@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.constant.CommonConstant;
-import com.ican.constant.MqConstant;
 import com.ican.constant.RedisConstant;
 import com.ican.entity.*;
 import com.ican.enums.CommentTypeEnum;
@@ -23,9 +22,9 @@ import com.ican.model.vo.request.CommentReq;
 import com.ican.model.vo.response.*;
 import com.ican.utils.HTMLUtils;
 import com.ican.utils.PageUtils;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -62,8 +61,14 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
     @Autowired
     private RedisService redisService;
 
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private EmailService emailService;
+
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     public PageResult<CommentBackResp> listCommentBackVO(CommentQuery commentQuery) {
         // 查询后台评论数量
@@ -102,7 +107,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 .getNickname();
         // 通知用户
         if (siteConfig.getEmailNotice().equals(CommonConstant.TRUE)) {
-            CompletableFuture.runAsync(() -> notice(newComment, fromNickname));
+            CompletableFuture.runAsync(() -> notice(newComment, fromNickname), threadPoolTaskExecutor);
         }
     }
 
@@ -306,7 +311,8 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
                 mailDTO.setContentMap(contentMap);
             }
             // 发送HTML邮件
-            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_HTML_KEY, mailDTO);
+//            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_HTML_KEY, mailDTO);
+            CompletableFuture.runAsync(() -> emailService.sendHtmlMail(mailDTO), threadPoolTaskExecutor);
         } else {
             // 审核提醒
             String adminEmail = userMapper.selectOne(new LambdaQueryWrapper<User>()
@@ -316,7 +322,8 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
             mailDTO.setSubject(CommonConstant.CHECK_REMIND);
             mailDTO.setContent("您收到一条新的回复，请前往后台管理页面审核");
             // 发送普通邮件
-            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);
+//            rabbitTemplate.convertAndSend(MqConstant.EMAIL_EXCHANGE, MqConstant.EMAIL_SIMPLE_KEY, mailDTO);
+            CompletableFuture.runAsync(() -> emailService.sendSimpleMail(mailDTO), threadPoolTaskExecutor);
         }
     }
 }

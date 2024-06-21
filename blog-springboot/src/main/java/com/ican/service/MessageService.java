@@ -1,5 +1,6 @@
 package com.ican.service;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ican.constant.CommonConstant;
@@ -62,7 +63,7 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
     public void addMessage(MessageReq message) {
         SiteConfig siteConfig = siteConfigService.getSiteConfig();
         Integer messageCheck = siteConfig.getMessageCheck();
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = ServletUtil.getClientIP(request);
         String ipSource = IpUtils.getIpSource(ipAddress);
         Message newMessage = BeanCopyUtils.copyBean(message, Message.class);
         newMessage.setMessageContent(HTMLUtils.filter(message.getMessageContent()));
