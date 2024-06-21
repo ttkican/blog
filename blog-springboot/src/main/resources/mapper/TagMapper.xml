@@ -23,13 +23,6 @@
         LIMIT #{param.current},#{param.size}
     </select>
 
-    <select id="selectTagList" resultType="com.ican.entity.Tag">
-        select id, tag_name from t_tag where tag_name in
-        <foreach collection="tagNameList" item="tagName" open="(" separator="," close=")">
-            #{tagName}
-        </foreach>
-    </select>
-
     <select id="selectTagNameByArticleId" resultType="java.lang.String">
         SELECT tag_name
         FROM t_tag t

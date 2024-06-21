@@ -277,36 +277,39 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
                 .eq(ArticleTag::getArticleId, articleId));
         // 标签名列表
         List<String> tagNameList = article.getTagNameList();
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            return;
+        }
+        // 查询出已存在的标签
+        List<Tag> existTagList = tagMapper.selectList(new LambdaQueryWrapper<Tag>()
+                .select(Tag::getId, Tag::getTagName)
+                .in(Tag::getTagName, tagNameList));
+        List<String> existTagNameList = existTagList.stream()
+                .map(Tag::getTagName)
+                .collect(Collectors.toList());
+        List<Integer> existTagIdList = existTagList.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+        // 移除已存在的标签列表
+        tagNameList.removeAll(existTagNameList);
+        // 含有新标签
         if (CollectionUtils.isNotEmpty(tagNameList)) {
-            // 查询出已存在的标签
-            List<Tag> existTagList = tagMapper.selectTagList(tagNameList);
-            List<String> existTagNameList = existTagList.stream()
-                    .map(Tag::getTagName)
+            // 新标签列表
+            List<Tag> newTagList = tagNameList.stream()
+                    .map(item -> Tag.builder()
+                            .tagName(item)
+                            .build())
                     .collect(Collectors.toList());
-            List<Integer> existTagIdList = existTagList.stream()
+            // 批量保存新标签
+            tagService.saveBatch(newTagList);
+            // 获取新标签id列表
+            List<Integer> newTagIdList = newTagList.stream()
                     .map(Tag::getId)
                     .collect(Collectors.toList());
-            // 移除已存在的标签列表
-            tagNameList.removeAll(existTagNameList);
-            // 含有新标签
-            if (CollectionUtils.isNotEmpty(tagNameList)) {
-                // 新标签列表
-                List<Tag> newTagList = tagNameList.stream()
-                        .map(item -> Tag.builder()
-                                .tagName(item)
-                                .build())
-                        .collect(Collectors.toList());
-                // 批量保存新标签
-                tagService.saveBatch(newTagList);
-                // 获取新标签id列表
-                List<Integer> newTagIdList = newTagList.stream()
-                        .map(Tag::getId)
-                        .collect(Collectors.toList());
-                // 新标签id添加到id列表
-                existTagIdList.addAll(newTagIdList);
-            }
-            // 将所有的标签绑定到文章标签关联表
-            articleTagMapper.saveBatchArticleTag(articleId, existTagIdList);
+            // 新标签id添加到id列表
+            existTagIdList.addAll(newTagIdList);
         }
+        // 将所有的标签绑定到文章标签关联表
+        articleTagMapper.saveBatchArticleTag(articleId, existTagIdList);
     }
 }

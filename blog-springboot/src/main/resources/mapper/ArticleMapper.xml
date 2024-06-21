@@ -24,7 +24,7 @@
         <id column="id" property="id"/>
         <result column="article_cover" property="articleCover"/>
         <result column="article_title" property="articleTitle"/>
-        <result column="article_content" property="articleContent"/>
+        <result column="article_desc" property="articleDesc"/>
         <result column="is_top" property="isTop"/>
         <result column="create_time" property="createTime"/>
         <association property="category" javaType="com.ican.model.vo.response.CategoryOptionResp">
@@ -159,6 +159,7 @@
                category_id,
                article_cover,
                article_title,
+               article_desc,
                article_content,
                article_type,
                is_top,
@@ -186,31 +187,29 @@
 
     <select id="selectArticleHomeList" resultMap="articleHomeVO">
         SELECT a.id,
-               article_cover,
-               article_title,
-               SUBSTR(article_content, 1, 500) AS article_content,
+               a.article_cover,
+               a.article_title,
+               a.article_desc,
                a.create_time,
                a.article_type,
                a.is_top,
                a.category_id,
-               category_name,
-               t.id                            AS tag_id,
+               c.category_name,
+               t.id AS tag_id,
                t.tag_name
-        FROM (
-                 SELECT id,
-                        article_cover,
-                        article_title,
-                        article_content,
-                        article_type,
-                        is_top,
-                        create_time,
-                        category_id
-                 FROM t_article
-                 WHERE is_delete = 0
-                   AND `status` = 1
-                 ORDER BY is_top DESC,
-                          id DESC LIMIT #{param.current}, #{param.size}
-             ) a
+        FROM (SELECT id,
+                     article_cover,
+                     article_title,
+                     article_desc,
+                     article_type,
+                     is_top,
+                     create_time,
+                     category_id
+              FROM t_article
+              WHERE is_delete = 0
+                AND `status` = 1
+              ORDER BY is_top DESC,
+                       id DESC LIMIT #{param.current}, #{param.size}) a
                  INNER JOIN t_category c ON a.category_id = c.id
                  INNER JOIN t_article_tag tat ON a.id = tat.article_id
                  INNER JOIN t_tag t ON t.id = tat.tag_id

@@ -133,6 +133,10 @@ export interface ArticleForm {
    */
   articleTitle: string;
   /**
+   * 文章摘要
+   */
+  articleDesc: string;
+  /**
    * 文章内容
    */
   articleContent: string;

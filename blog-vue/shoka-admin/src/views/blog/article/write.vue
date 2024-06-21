@@ -17,8 +17,8 @@
             <el-form ref="articleFormRef" label-width="80px" :model="articleForm" :rules="rules">
                 <!-- 文章分类 -->
                 <el-form-item label="文章分类" prop="categoryName">
-                    <el-tag type="success" v-show="articleForm.categoryName" :disable-transitions="true" :closable="true"
-                        @close="removeCategory">
+                    <el-tag type="success" v-show="articleForm.categoryName" :disable-transitions="true"
+                        :closable="true" @close="removeCategory">
                         {{ articleForm.categoryName }}
                     </el-tag>
                     <!-- 分类选项 -->
@@ -86,7 +86,8 @@
                 <el-form-item label="缩略图" prop="articleCover">
                     <el-upload drag :show-file-list="false" :headers="authorization" action="/api/admin/article/upload"
                         accept="image/*" :before-upload="beforeUpload" :on-success="handleSuccess">
-                        <el-icon class="el-icon--upload" v-if="articleForm.articleCover === ''"><upload-filled /></el-icon>
+                        <el-icon class="el-icon--upload"
+                            v-if="articleForm.articleCover === ''"><upload-filled /></el-icon>
                         <div class="el-upload__text" v-if="articleForm.articleCover === ''">
                             将文件拖到此处，或<em>点击上传</em>
                         </div>
@@ -108,6 +109,10 @@
                         <el-radio :label="2">私密</el-radio>
                         <el-radio :label="3">草稿</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item label="文章摘要" prop="articleDesc">
+                    <el-input v-model="articleForm.articleDesc" resize="none" maxlength="100"
+                        :autosize="{ minRows: 5, maxRows: 5 }" style="width: 300px" show-word-limit type="textarea" />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -149,6 +154,7 @@ const { tag } = useStore();
 const rules = reactive<FormRules>({
     categoryName: [{ required: true, message: "文章分类不能为空", trigger: "blur" }],
     tagNameList: [{ required: true, message: "文章标签不能为空", trigger: "blur" }],
+    articleDesc: [{ required: true, message: "文章概要不能为空", trigger: "blur" }],
 });
 const authorization = computed(() => {
     return {
@@ -162,6 +168,20 @@ const tagClass = computed(() => {
         return index !== -1 ? "tag-item-select" : "tag-item";
     };
 });
+
+const initArticle = {
+    id: undefined,
+    articleCover: "",
+    articleTitle: articleTitle.value,
+    articleContent: "",
+    articleDesc: "",
+    categoryName: "",
+    tagNameList: [],
+    articleType: 1,
+    isTop: 0,
+    isRecommend: 0,
+    status: 1,
+} as ArticleForm;
 const data = reactive({
     addOrUpdate: false,
     typeList: [
@@ -178,18 +198,7 @@ const data = reactive({
             label: "翻译",
         },
     ],
-    articleForm: {
-        id: undefined,
-        articleCover: "",
-        articleTitle: articleTitle.value,
-        articleContent: "",
-        categoryName: "",
-        tagNameList: [],
-        articleType: 1,
-        isTop: 0,
-        isRecommend: 0,
-        status: 1,
-    } as ArticleForm,
+    articleForm: initArticle,
     categoryList: [] as CategoryVO[],
     tagList: [] as TagVO[],
     categoryName: "",
@@ -236,8 +245,23 @@ const openModel = () => {
     getTagOption().then(({ data }) => {
         tagList.value = data.data;
     });
+    if (articleForm.value.articleDesc === "") {
+        articleForm.value.articleDesc = removeSpecialChars(articleForm.value.articleContent);
+    }
     addOrUpdate.value = true;
 };
+const removeSpecialChars = (str: string) => {
+    // 移除所有HTML标签
+    var cleanedStr = str.replace(/<[^>]*>?/g, "");
+    // 移除所有空格、星号、井号、[]、换行、制表符
+    cleanedStr = cleanedStr.replace(/[\s\*#\[\]]/g, "");
+    // 移除所有()和其中内容
+    cleanedStr = cleanedStr.replace(/\([^\)]*\)/g, "");
+    // 移除所有换行、制表符
+    cleanedStr = cleanedStr.replace(/[\n\t]+/g, "");
+    return cleanedStr.substring(0, 100);
+}
+
 const removeTag = (item: string) => {
     const index = articleForm.value.tagNameList.indexOf(item);
     articleForm.value.tagNameList.splice(index, 1);
@@ -263,11 +287,7 @@ const searchTag = (keyword: string, cb: (arg: TagVO[]) => void) => {
     cb(results);
 };
 const createTagFilter = (queryString: string) => {
-    return (restaurant: TagVO) => {
-        return (
-            restaurant.tagName.indexOf(queryString) !== -1
-        )
-    }
+    return (restaurant: TagVO) => restaurant.tagName.indexOf(queryString) !== -1;
 };
 const removeCategory = () => {
     articleForm.value.categoryName = "";
@@ -319,55 +339,36 @@ const beforeUpload = (rawFile: UploadRawFile) => {
 };
 const submitForm = () => {
     articleFormRef.value?.validate((valid) => {
-        if (valid) {
-            if (articleForm.value.id !== undefined) {
-                updateArticle(articleForm.value).then(({ data }) => {
-                    if (data.flag) {
-                        notifySuccess(data.msg);
-                        tag.delView({ path: `/article/write/${articleForm.value.id}` });
-                        router.push({ path: "/article/list" });
-                        articleForm.value = {
-                            id: undefined,
-                            articleCover: "",
-                            articleTitle: articleTitle.value,
-                            articleContent: "",
-                            categoryName: "",
-                            tagNameList: [],
-                            articleType: 1,
-                            isTop: 0,
-                            isRecommend: 0,
-                            status: 1,
-                        };
-                    }
-                    addOrUpdate.value = false;
-                });
-            } else {
-                addArticle(articleForm.value).then(({ data }) => {
-                    if (data.flag) {
-                        notifySuccess(data.msg);
-                        tag.delView({ path: "/article/write" });
-                        router.push({ path: "/article/list" });
-                        articleForm.value = {
-                            id: undefined,
-                            articleCover: "",
-                            articleTitle: articleTitle.value,
-                            articleContent: "",
-                            categoryName: "",
-                            tagNameList: [],
-                            articleType: 1,
-                            isTop: 0,
-                            isRecommend: 0,
-                            status: 1,
-                        };
-                    }
-                    addOrUpdate.value = false;
-                });
-            }
+        if (!valid) {
+            return;
+        }
+        if (articleForm.value.id !== undefined) {
+            updateArticle(articleForm.value).then(({ data }) => {
+                if (data.flag) {
+                    notifySuccess(data.msg);
+                    tag.delView({ path: `/article/write/${articleForm.value.id}` });
+                    router.push({ path: "/article/list" });
+                    articleForm.value = initArticle;
+                }
+                addOrUpdate.value = false;
+            });
+        } else {
+            addArticle(articleForm.value).then(({ data }) => {
+                if (data.flag) {
+                    notifySuccess(data.msg);
+                    tag.delView({ path: "/article/write" });
+                    router.push({ path: "/article/list" });
+                    articleForm.value = initArticle;
+                }
+                addOrUpdate.value = false;
+            });
         }
     })
 };
 onMounted(() => {
     if (articleId) {
+        console.log("sadfasdfas", articleId);
+
         editArticle(Number(articleId)).then(({ data }) => {
             if (data.flag) {
                 articleForm.value = data.data;

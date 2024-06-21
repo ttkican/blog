@@ -29,14 +29,6 @@ public interface TagMapper extends BaseMapper<Tag> {
     List<TagBackResp> selectBackTagList(@Param("param") TagQuery tagQuery);
 
     /**
-     * 根据标签名查询标签
-     *
-     * @param tagNameList 标签名列表
-     * @return 标签
-     */
-    List<Tag> selectTagList(List<String> tagNameList);
-
-    /**
      * 批量保存新标签
      *
      * @param newTagList 新标签

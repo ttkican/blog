@@ -50,6 +50,11 @@ public class Article {
     private String articleTitle;
 
     /**
+     * 文章摘要
+     */
+    private String articleDesc;
+
+    /**
      * 文章内容
      */
     private String articleContent;

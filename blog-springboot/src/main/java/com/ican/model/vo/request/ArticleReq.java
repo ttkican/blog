@@ -36,6 +36,13 @@ public class ArticleReq {
     private String articleTitle;
 
     /**
+     * 文章概要
+     */
+    @NotBlank(message = "文章概要不能为空")
+    @ApiModelProperty(value = "文章概要", required = true)
+    private String articleDesc;
+
+    /**
      * 文章内容
      */
     @NotBlank(message = "文章内容不能为空")

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,10 +36,10 @@ public class ArticleHomeResp {
     private String articleTitle;
 
     /**
-     * 文章内容
+     * 文章概要
      */
-    @ApiModelProperty(value = "文章内容")
-    private String articleContent;
+    @ApiModelProperty(value = "文章概要")
+    private String articleDesc;
 
     /**
      * 文章分类

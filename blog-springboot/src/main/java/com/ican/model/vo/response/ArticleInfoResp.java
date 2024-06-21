@@ -42,6 +42,12 @@ public class ArticleInfoResp {
     private String articleTitle;
 
     /**
+     * 文章概要
+     */
+    @ApiModelProperty(value = "文章概要")
+    private String articleDesc;
+
+    /**
      * 文章内容
      */
     @ApiModelProperty(value = "文章内容")

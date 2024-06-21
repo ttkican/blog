@@ -35,7 +35,7 @@
   </div>
   <div class="bg">
     <div class="main-container" v-if="article">
-      <div class="left-container" :class="app.sideFlag ? 'test' : ''">
+      <div class="left-container" :class="app.sideFlag ? 'w-full' : ''">
         <div class="article-container">
           <v-md-preview ref="articleRef" class="md" v-viewer :text="article.articleContent"></v-md-preview>
           <div class="article-post">
@@ -112,7 +112,7 @@
           </div>
         </div>
       </div>
-      <div class="right-container" :class="app.sideFlag ? 'temp' : ''">
+      <div class="right-container" :class="app.sideFlag ? 'hidden' : ''">
         <div class="side-card">
           <Catalog v-if="articleLoaded" :domRef="articleRef"></Catalog>
         </div>
