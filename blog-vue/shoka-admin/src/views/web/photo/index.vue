@@ -186,12 +186,16 @@ const {
     albumInfo,
     uploadList,
 } = toRefs(data);
-watch(photoList, () => {
-    photoIdList.value = [];
-    photoList.value.forEach(item => {
-        photoIdList.value.push(item.id);
+watch(
+    () => photoList.value,
+    (newValue) => {
+        photoIdList.value = [];
+        if (newValue && newValue.length > 0) {
+            newValue.forEach(item => {
+                photoIdList.value.push(item.id);
+            });
+        }
     });
-});
 const handleSizeChange = (size: number) => {
     queryParams.value.size = size;
     getList();
