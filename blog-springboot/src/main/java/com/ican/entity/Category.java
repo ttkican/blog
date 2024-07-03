@@ -35,6 +35,11 @@ public class Category {
     private String categoryName;
 
     /**
+     * 父级ID
+     */
+    private Integer parentId;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

@@ -55,15 +55,16 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
         Set<Integer> categoryIdList = categoryList.stream()
                 .map(CategoryBackResp::getId)
                 .collect(Collectors.toSet());
-        List<CategoryBackResp> res = categoryList.stream().map(category -> {
-            Integer parentId = category.getParentId();
-            // parentId不在当前分类id列表，说明为父级分类id，根据此id作为递归的开始条件节点
-            if (!categoryIdList.contains(parentId)) {
-                categoryIdList.add(parentId);
-                return recurCategoryList(categoryList, parentId, 0, maxDeep);
-            }
-            return new ArrayList<CategoryBackResp>();
-        }).collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
+        List<CategoryBackResp> res = categoryList.stream()
+                .map(category -> {
+                    Integer parentId = category.getParentId();
+                    // parentId不在当前分类id列表，说明为父级分类id，根据此id作为递归的开始条件节点
+                    if (!categoryIdList.contains(parentId)) {
+                        categoryIdList.add(parentId);
+                        return recurCategoryList(categoryList, parentId, 0, maxDeep);
+                    }
+                    return new ArrayList<CategoryBackResp>();
+                }).collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
         // 执行分页
         int fromIndex = categoryQuery.getCurrent();
         int size = categoryQuery.getSize();

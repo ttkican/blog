@@ -3,7 +3,7 @@
 <mapper namespace="com.ican.mapper.CategoryMapper">
 
     <select id="selectBackCategoryList" resultType="com.ican.model.vo.response.CategoryBackResp">
-        SELECT c.id, c.category_name,COUNT( a.id ) AS article_count,c.create_time
+        SELECT c.id, c.category_name, COUNT( a.id ) AS article_count, c.parent_id, c.create_time
         FROM t_category c
         LEFT JOIN t_article a
         ON c.id = a.category_id
@@ -14,7 +14,6 @@
         </where>
         GROUP BY c.id
         ORDER BY c.id DESC
-        LIMIT #{param.current},#{param.size}
     </select>
 
     <select id="selectCategoryVO" resultType="com.ican.model.vo.response.CategoryResp">
